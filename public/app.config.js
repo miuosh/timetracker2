@@ -1,6 +1,6 @@
 angular.module('app')
-.config(configure)
-
+.config(configure);
+/*
 configure.$inject =
     ['routerHelperProvider', 'exceptionHandlerProvider', 'toastr'];
 
@@ -18,4 +18,9 @@ function configure (routerHelperProvider, exceptionHandlerProvider, toastr) {
             docTitle: 'NG-Modular: '
         });
     }
+}
+*/
+
+function configure() {
+
 }

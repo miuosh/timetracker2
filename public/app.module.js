@@ -1,11 +1,10 @@
 angular.module('app', [
   /* AngularJS modules */
   'ngMaterial',
-  'ngSanitaze',
-  'ngAnimate'
+  'ngSanitize',
+  'ngAnimate',
     /* app.feature modules */
   'app.layout'
   /* cross.app modules */
 
-])
-.config();
+]);
