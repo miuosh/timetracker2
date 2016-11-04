@@ -24,7 +24,7 @@ var bases = {
 };
 
 var paths = {
- scripts: ['*.js', '*/**/*.js'],
+ scripts: ['app.module.js','*.js', '*/**/*.js'],
  //libs: ['scripts/libs/jquery/dist/jquery.js', 'scripts/libs/underscore/underscore.js', 'scripts/backbone/backbone.js'],
  styles: ['stylesheets/**/*.css'],
  html: ['index.html'],
@@ -50,12 +50,6 @@ gulp.task('scripts', ['clean'], function() {
             // Doesn't work with resolve, so we must be explicit there
             add: true
         }))
-  // Annotate before uglify so the code get's min'd properly.
-  .pipe(ngAnnotate({
-        // true helps add where @ngInject is not used. It infers.
-        // Doesn't work with resolve, so we must be explicit there
-        add: true
-    }))
  .pipe(bytediff.start())
  .pipe(uglify( {mangle: true} ))
  .pipe(bytediff.stop())
