@@ -1,26 +1,34 @@
-angular.module('app')
-.config(configure);
-/*
-configure.$inject =
-    ['routerHelperProvider', 'exceptionHandlerProvider', 'toastr'];
 
-function configure (routerHelperProvider, exceptionHandlerProvider, toastr) {
-    exceptionHandlerProvider.configure(config.appErrorPrefix);
-    configureStateHelper();
+(function(){
+  'use strict';
 
-    toastr.options.timeOut = 4000;
-    toastr.options.positionClass = 'toast-bottom-right';
+  angular.module('app')
+  .config(configure);
+  /*
+  configure.$inject =
+      ['routerHelperProvider', 'exceptionHandlerProvider', 'toastr'];
 
-    ////////////////
+  function configure (routerHelperProvider, exceptionHandlerProvider, toastr) {
+      exceptionHandlerProvider.configure(config.appErrorPrefix);
+      configureStateHelper();
 
-    function configureStateHelper() {
-        routerHelperProvider.configure({
-            docTitle: 'NG-Modular: '
-        });
-    }
-}
-*/
+      toastr.options.timeOut = 4000;
+      toastr.options.positionClass = 'toast-bottom-right';
 
-function configure() {
+      ////////////////
 
-}
+      function configureStateHelper() {
+          routerHelperProvider.configure({
+              docTitle: 'NG-Modular: '
+          });
+      }
+  }
+  */
+
+  function configure() {
+
+  }
+
+
+
+})();

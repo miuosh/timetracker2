@@ -1,5 +1,8 @@
 var assert = require('assert');
 
+/*
+  Simple test to check karma is running properly.
+*/
 describe('First test', function() {
   var counter;
 
