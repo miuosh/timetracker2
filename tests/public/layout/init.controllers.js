@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe("sideNavCtrl", function() {
+describe("Layout", function() {
   var controller,
       scope;
 
@@ -13,7 +13,7 @@ describe("sideNavCtrl", function() {
         });
   }));
 
-  it('should have a SideNavCtrl controller', function() {
+  it('should have a SideNav controller', function() {
       expect(controller).toBeDefined();
   });
 

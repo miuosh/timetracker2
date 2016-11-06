@@ -10,11 +10,12 @@
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 </head>
 <body ng-app="app" ng-cloak>
-<div ng-controller="SideNavController as vm">
-<p>
-    {{vm.name}}
-</p>
+<div layout="row">
+  <div ng-include="'layout/sidenav.html'"></div>
+  <div ng-include="'layout/dashboard.html'"></div>
+
 </div>
+
 
 
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -29,7 +30,17 @@
   <!-- <script src="layout/main-container.controller.js"></script> -->
  <!-- My application  -->
  <!-- build:js -->
+
+ <!-- layout module -->
+  <script src="layout/layout.module.js"></script>
   <script src="layout/sidenav.controller.js"></script>
+  <script src="layout/dashboard.controller.js"></script>
+  <!-- app.core modules -->
+  <script src="app.core.js"></script>
+  <!-- services -->
+  <script src="services/dataservice.js"></script>
+
+  <!-- root module -->
   <script src="app.module.js"></script>
   <script src="app.config.js"></script>
   <script src="app.run.js"></script>

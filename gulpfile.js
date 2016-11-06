@@ -124,7 +124,7 @@ return gulp.src(paths.html, {cwd: bases.app})
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: "build"
+            baseDir: "public"
         }
     });
      gulp.watch("public/*.html").on("change", reload);

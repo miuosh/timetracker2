@@ -27,7 +27,9 @@ module.exports = function(config) {
       './../node_modules/angular-material/angular-material.js',
       './../node_modules/angular-material/angular-material-mocks.js',
       './../node_modules/angular-sanitize/angular-sanitize.js',
-      /* my scripts */
+      /* MY APP */
+      /* layout*/
+      './../public/layout/layout.module.js',
       './../public/layout/sidenav.controller.js',
 
       './../public/app.module.js',
