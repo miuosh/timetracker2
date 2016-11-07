@@ -1,18 +1,78 @@
 var express = require('express');
 var router = express.Router();
 
+var join = require('path').join;
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-//res.send('hello world');
+var isAuthenticated = function (req, res, next) {
+	// if user is authenticated in the session, call the next() to call the next request handler
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+	if (req.isAuthenticated())
+		return next();
+	// if the user is not authenticated then redirect him to the login page
+	res.redirect('/');
+};
 
-var root = join(__dirname, '/..');
-	root = join(root, '/public/');
-	var message = req.flash('message');
-	//res.send({message : message});
-	res.sendFile('index.html', { root: root, message: message} );
-});
+module.exports = function(passport){
 
+	/* GET login page. */
+	router.get('/', isAuthenticated, function(req, res) {
+    	var root = join(__dirname, '/..');
+		root = join(root, '/public/');
+		var message = req.flash('message');
+		//res.send({message : message});
+		res.sendFile('index.html', { root: root, message: message} );
 
+	});
 
-module.exports = router;
+	/* GET Login Page */
+	router.get('/login', function(req, res){
+		var root = join(__dirname, '/..');
+		root = join(root, '/public/');
+		var message = req.flash('message');
+		//res.send({message : message});
+		res.sendFile('index.html', { root: root, message: message} );
+
+	});
+
+	/* Handle Login POST */
+	router.post('/login', passport.authenticate('login', {
+		successRedirect: '/home',
+		failureRedirect: '/',
+		failureFlash : true
+	}));
+
+	/* GET Registration Page */
+	router.get('/signup', function(req, res){
+		//res.render('register',{message: req.flash('message')});
+		var root = join(__dirname, '/..');
+		root = join(root, '/public/');
+		var message = req.flash('message');
+		//res.send({message : message});
+		res.sendFile('register.html', { root: root, message: message} );
+
+	});
+
+	/* Handle Registration POST */
+	router.post('/signup', passport.authenticate('signup', {
+		successRedirect: '/home',
+		failureRedirect: '/signup',
+		failureFlash : true
+	}));
+
+	/* GET Home Page */
+	router.get('/home', isAuthenticated, function(req, res){
+		//res.render('tasks', { user: req.user });
+		var root = join(__dirname, '/..');
+		root = join(root, '/public/');
+		res.sendFile('home.html', { root: root});
+	});
+
+	/* Handle Logout */
+	router.get('/signout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+
+	return router;
+}

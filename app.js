@@ -7,8 +7,22 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var tasks = require('./routes/tasks');
 
 var app = express();
+
+// Configure Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+
+var flash = require('connect-flash');
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * Init - use SQLite or MongoDB
+ * dbType = [mongo, sqlite]
+ */
+var dbType = "mongo";
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,9 +38,54 @@ app.use(express.static(path.join(__dirname, '')))
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.static(path.join(__dirname, '/node_modules')));
 
+// Using the flash middleware provided by connect-flash to store messages in session
+ // and displaying in templates
+app.use(flash());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/tasks', tasks);
+
+// DATABASE CONNECTION
+
+// MongoDB
+  var dbConfig = require('./db.js');
+  var mongoose = require('mongoose');
+  mongoose.Promise = global.Promise;
+  // MongoDB - connect to DB
+  mongoose.connect(dbConfig.url, function(err) {
+    if (err) console.error(err);
+  });
+
+  // CONNECTION EVENTS
+  // When successfully connected
+  mongoose.connection.on('connected', function () {
+    console.log('Mongoose default connection open to ' + dbConfig.url);
+  });
+
+  // If the connection throws an error
+  mongoose.connection.on('error',function (err) {
+    console.log('Mongoose default connection error: ' + err);
+  });
+
+  // When the connection is disconnected
+  mongoose.connection.on('disconnected', function () {
+    console.log('Mongoose default connection disconnected');
+  });
+
+  // If the Node process ends, close the Mongoose connection
+  process.on('SIGINT', function() {
+    mongoose.connection.close(function () {
+      console.log('Mongoose default connection disconnected through app termination');
+      process.exit(0);
+    })
+  });
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

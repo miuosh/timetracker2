@@ -8,12 +8,17 @@
 
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css">
+
 </head>
 <body ng-app="app" ng-cloak>
-<div layout="row">
-  <div ng-include="'layout/sidenav.html'"></div>
-  <div ng-include="'layout/dashboard.html'"></div>
-
+<div layout="row"  layout-align="start stretch">
+  <!-- left side nav -->
+  <div ng-include="'layout/sidenav.html'" ng-controller="SideNavController as vm"></div>
+  <!-- dashboard -->
+  <div flex="80" layout-margin ng-include="'layout/dashboard.html'" ng-controller="DashboardController as vm"></div>
 </div>
 
 
@@ -27,8 +32,10 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.min.js"></script>
 
-  <!-- <script src="layout/main-container.controller.js"></script> -->
+
+   <!-- <script type="text/javascript" ng-src="https://raw.githubusercontent.com/daniel-nagy/md-data-table/master/dist/md-data-table.min.js"></script> -->
  <!-- My application  -->
+
  <!-- build:js -->
 
  <!-- layout module -->

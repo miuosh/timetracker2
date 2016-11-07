@@ -1,5 +1,53 @@
-<div ng-controller="DashboardController as vm">
-  <p>
-    {{ vm.name }}
-  </p>
+<div class="md-whiteframe-4dp" >
+  <br />
+
+  <!-- add new task form -->
+  <md-content id="newTaskBar" layout-gt-sm="row"   layout-align="center center">
+
+    <md-input-container flex="60">
+      <label>Opis zadania</label>
+      <input type="text" name="desc" ng-model="newTask.desc">
+    </md-input-container>
+
+    <md-input-container flex="30">
+      <label>Kategoria</label>
+      <input type="text" name="category" ng-model="newTask.category">
+    </md-input-container>
+
+    <md-input-container>
+      <a href="#"><i class="material-icons">add_circle</i></a>
+    </md-input-container>
+
+  </md-content>
+  <br />
+
+<!-- Tasks table -->
+<table class="mdl-data-table" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Opis</th>
+      <th>Kategoria</th>
+      <th>Data utworzenia</th>
+      <th>Data modyfikacji</th>
+      <th>Czas trwania</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in vm.tasks">
+      <td>{{ item.desc }}</td>
+      <td>{{ item.category }}</td>
+      <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+      <td>{{ item.duration }}</td>
+      <td>
+        <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary" style="background-color:#4CAF50">START</md-button>
+        <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary" style="background-color:#F44336">STOP</md-button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
 </div>
