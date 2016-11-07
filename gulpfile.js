@@ -128,5 +128,6 @@ gulp.task('browser-sync', function() {
         }
     });
      gulp.watch("public/*.html").on("change", reload);
+     gulp.watch("public/**/*.html").on("change", reload);
      gulp.watch("public/**/*.js").on("change", reload);
 });

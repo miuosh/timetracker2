@@ -10,17 +10,25 @@ var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 	// if the user is not authenticated then redirect him to the login page
-	res.redirect('/');
+	console.log('not authenticated');
+	var message = req.flash('message');
+	res.redirect('/login');
 };
+
+var getRoot = function() {
+	var root = join(__dirname, '/..');
+	root = join(root, '/public/');
+	return root;
+}
 
 module.exports = function(passport){
 
 	/* GET login page. */
 	router.get('/', isAuthenticated, function(req, res) {
-    	var root = join(__dirname, '/..');
+		var message = req.flash('message');
+		var root = join(__dirname, '/..');
 		root = join(root, '/public/');
 		var message = req.flash('message');
-		//res.send({message : message});
 		res.sendFile('index.html', { root: root, message: message} );
 
 	});
@@ -30,15 +38,16 @@ module.exports = function(passport){
 		var root = join(__dirname, '/..');
 		root = join(root, '/public/');
 		var message = req.flash('message');
+		console.log('Flash message: ' + message);
 		//res.send({message : message});
-		res.sendFile('index.html', { root: root, message: message} );
+		res.sendFile('login.html', { root: root, message: message} );
 
 	});
 
 	/* Handle Login POST */
 	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/home',
-		failureRedirect: '/',
+		successRedirect: '/',
+		failureRedirect: '/login',
 		failureFlash : true
 	}));
 

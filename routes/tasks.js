@@ -3,11 +3,6 @@ var router = express.Router();
 var User = require('../models/user');
 var Task = require('../models/task');
 
-//Middle ware that is specific to this router
-router.use(function timeLog(req, res, next) {
-  //console.log('Time: ', Date.now());
-  next();
-});
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
@@ -24,7 +19,7 @@ var isAuthenticated = function (req, res, next) {
 
         var task = User.find( {'username': req.user.username}, function (err, user) {
             //console.log('user ID: ' + user[0]._id);
-            Task.find({'task._creator': user[0]._id }, function(err, tasks) {
+            Task.find({'_creator': user[0]._id }, function(err, tasks) {
                 if (err) console.error(err);
                 res.send(JSON.stringify(tasks));
             });
@@ -63,7 +58,7 @@ var isAuthenticated = function (req, res, next) {
      // console.log('ld: ' +  lastDayOfMonth.toISOString());
       console.log(userID);
 
-      Task.find( { "task._creator": userID ,"task.updated":  { "$gte": fromDate, "$lte": lastDayOfMonth } }, function(err, data) {
+      Task.find( { "_creator": userID ,"updated":  { "$gte": fromDate, "$lte": lastDayOfMonth } }, function(err, data) {
           if (err) {
               console.log(err);
               res.send('error - cannot get report');
@@ -170,15 +165,15 @@ var isAuthenticated = function (req, res, next) {
         var promise =  Task.find({'_id': id }, function(err, data) {
             if (err) console.error(err);
             var task = data[0];
-            task.task.isPerforming = task.task.isPerforming ? false : true;
+            task.isPerforming = task.isPerforming ? false : true;
             var currentTime = new Date();
-            if (!task.task.isPerforming) {
-                var currentDuration = (currentTime - task.task.updated) / 1000; // ms -> sec
-                var lastDuration = task.task.duration;
-                task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+            if (!task.isPerforming) {
+                var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
+                var lastDuration = task.duration;
+                task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
             }
 
-            task.task.updated = currentTime;
+            task.updated = currentTime;
             task.save(function(err) {
                 if (err) {
                     console.error(err);
@@ -196,15 +191,15 @@ var isAuthenticated = function (req, res, next) {
            Task.find({'_id': id }, function(err, data) {
             if (err) console.error(err);
             var task = data[0];
-            task.task.isPerforming = task.task.isPerforming ? false : true;
+            task.isPerforming = task.isPerforming ? false : true;
             var currentTime = new Date();
-            if (!task.task.isPerforming) {
-                var currentDuration = (currentTime - task.task.updated) / 1000; // ms -> sec
-                var lastDuration = task.task.duration;
-                task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+            if (!task.isPerforming) {
+                var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
+                var lastDuration = task.duration;
+                task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
             }
 
-            task.task.updated = currentTime;
+            task.updated = currentTime;
             task.save(function(err) {
                 if (err) {
                     console.error(err);
@@ -221,7 +216,7 @@ var isAuthenticated = function (req, res, next) {
     function stopTasksInProgress(user) {
         // find all tasks in progress
 
-        Task.find({ 'task.isPerforming': true, 'task._creator': user}, function(err, data) {
+        Task.find({ 'isPerforming': true, 'task._creator': user}, function(err, data) {
             console.log(data);
             if (err) {
                 console.log(err);
@@ -237,19 +232,19 @@ var isAuthenticated = function (req, res, next) {
 
     function getStopTasksInProgressPromiseTest(id, user) {
 
-        var findPromise = Task.find({'task.isPerforming': true, 'task._creator': user}).exec();
+        var findPromise = Task.find({'isPerforming': true, 'task._creator': user}).exec();
         var savePromises = [];
         promiseFind.then(function(data) {
             console.log(data);
               data.forEach(function (task) {
-                    task.task.isPerforming = task.task.isPerforming ? false : true;
+                    task.isPerforming = task.isPerforming ? false : true;
                     var currentTime = new Date();
-                    if (!task.task.isPerforming) {
-                        var currentDuration = (currentTime - task.task.updated) / 1000; // ms -> sec
-                        var lastDuration = task.task.duration;
-                        task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+                    if (!task.isPerforming) {
+                        var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
+                        var lastDuration = task.duration;
+                        task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
                     }
-                    task.task.updated = currentTime;
+                    task.updated = currentTime;
                     savePromises.push( task.save().exec() );
                 }, this);
 
@@ -262,19 +257,19 @@ var isAuthenticated = function (req, res, next) {
 
 
     function getStopTasksInProgressPromise(id, user) {
-        var promise = Task.find({'task.isPerforming': true, 'task._creator': user}, function(err, data) {
+        var promise = Task.find({'isPerforming': true, '_creator': user}, function(err, data) {
             if (err) {
                 console.log(err);
             } else {
                 data.forEach(function (task) {
-                    task.task.isPerforming = task.task.isPerforming ? false : true;
+                    task.isPerforming = task.isPerforming ? false : true;
                     var currentTime = new Date();
-                    if (!task.task.isPerforming) {
-                        var currentDuration = (currentTime - task.task.updated) / 1000; // ms -> sec
-                        var lastDuration = task.task.duration;
+                    if (!task.isPerforming) {
+                        var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
+                        var lastDuration = task.duration;
                         task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
                     }
-                    task.task.updated = currentTime;
+                    task.updated = currentTime;
                     task.save(function(err){
                         if (err) {
                             console.log('save error.. ' + err);
@@ -292,7 +287,7 @@ var isAuthenticated = function (req, res, next) {
     function getRunningTaskPromise(id, user) {
          //var promise = Task.find({ 'task.isPerforming': true, 'task._creator': user}).exec();
 
-        var promise = Task.find({ 'task.isPerforming': true, 'task._creator': user }, function (err, data) {
+        var promise = Task.find({ 'isPerforming': true, '_creator': user }, function (err, data) {
             //console.log(data);
             if (err) {
                 console.log(err);
@@ -317,14 +312,12 @@ var isAuthenticated = function (req, res, next) {
                     }
                     //console.log(user[0]._id);
                     var task = new Task({
-                        task: {
                             desc: req.body.desc,
                             category: req.body.category,
                             creationDate: new Date(),
                             updated: new Date(),
                             isPerforming: false,
                             _creator: user[0]._id
-                        }
                     });
                     task.save( function(err) {
                         if (err) { throw err; }
