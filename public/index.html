@@ -9,34 +9,17 @@
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css"> -->
+  <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script> -->
+  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css"> -->
 
 </head>
 <body ng-app="app" ng-cloak>
 <div layout="row"  layout-align="start stretch">
   <!-- left side nav -->
-  <div ng-include="'layout/sidenav.html'" ng-controller="SideNavController as vm"></div>
+  <div id="left-sidebar" layout="column" flex="15" class="md-whiteframe-4dp" ng-include="'layout/sidenav.html'" ng-controller="SideNavController as vm"></div>
   <!-- dashboard -->
-  <div flex="80" layout-margin ng-include="'layout/dashboard.html'" ng-controller="DashboardController as vm"></div>
-</div>
-
-<div layout="row" layout-margin>
-  <div class="md-whiteframe-4dp" layout="column">
-    <md-content>
-      <form action="/login" method="post" name="loginForm">
-        <md-input-container class="md-block" layout="row">
-          <label>Login</label>
-          <input type="text" name="username" />
-        </md-input-container>
-
-        <md-input-container class="md-block" layout="row">
-          <label>Hasło</label>
-          <input type="password" name="password">
-      </form>
-    </md-content>
-  </div>
-
+  <div layout="column" flex="80" layout-margin ng-include="'layout/dashboard.html'" ng-controller="DashboardController as vm"></div>
 </div>
 
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>

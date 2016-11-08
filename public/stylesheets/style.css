@@ -7,3 +7,19 @@ body {
 a {
   color: #00B7FF;
 }
+
+#left-navbar {
+  background-color:#1A237E;
+}
+
+#left-navmenu, #left-sidebar {
+  background-color:#303F9F;
+}
+
+.btn-menu {
+  color: white;
+}
+
+table {
+  
+}

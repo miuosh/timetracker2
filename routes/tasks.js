@@ -300,7 +300,7 @@ var isAuthenticated = function (req, res, next) {
     }
 
     router.post('/', function(req, res) {
-
+			console.log(req.body);
         var user = User.find( { 'username': req.user.username }, function(err, user) {
             // In case of any error, return using the done method
                     if (err)
@@ -331,7 +331,7 @@ var isAuthenticated = function (req, res, next) {
     });
 
 
-    /** DELETE Task of given ID */
+    // /** DELETE Task of given ID */
     router.delete('/:id', isAuthenticated, function(req, res) {
         var id = req.params.id;
         Task.remove({ _id: id }, function(err) {
@@ -345,14 +345,16 @@ var isAuthenticated = function (req, res, next) {
         });
     });
 
-    router.delete('/', isAuthenticated, function(req, res) {
+    router.post('/remove', isAuthenticated, function(req, res) {
         var IDs = req.body;
+				console.log('Delete ids: ');
+				console.log(IDs);
         Task.remove({ '_id': { $in: IDs } }, function(err){
             if (err) {
                 console.error(err);
                 res.send({message: 'Cannot delete selected tasks' + err} );
             } else {
-                console.log(req.session.passport.user + 'removed' + IDs);
+                console.log(req.session.passport.user + ' removed: ' + IDs);
                 res.send({ message: 'Usunięto' });
             }
         });

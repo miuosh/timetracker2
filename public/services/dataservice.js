@@ -3,7 +3,7 @@
 
   angular.module('app.core')
   .constant('dataUrl', {
-    'url' : 'tasks/tasks/'
+    'url' : '/tasks/'
   })
   .factory('dataservice', dataservice);
 
@@ -13,33 +13,53 @@
   function dataservice($http, dataUrl) {
     return {
       getTasks: getTasks,
-      getTask: getTask
+      getTask: getTask,
+      addTask: addTask,
+      removeTasks: removeTasks,
+      toggleTask: toogleTask
     };
 
 
 ///////////////////////////////////
 
-    function getTasksComplete(response) {
-      return response.data.result;
+    function successCallback(response) {
+      console.log(response.data);
+      return response.data;
     }
 
-    function getTasksFailed(err) {
-      console.log('Error load Tasks data: ');
+    function errorCallback(err) {
+      console.log('Error: ');
       console.log(err);
     }
 
     function getTasks() {
       return $http.get(dataUrl.url)
-                    .then(getTasksComplete)
-                    .catch(getTasksFailed);
+                    .then(successCallback)
+                    .catch(errorCallback);
     }
 
     function getTask(id) {
       return $http.get(dataUrl.url + ':' + id)
-                    .then(getTasksComplete)
-                    .catch(getTasksFailed);
+                    .then(successCallback)
+                    .catch(errorCallback);
     }
 
+    function addTask(task) {
+      return $http.post(dataUrl.url, task, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
 
+    function removeTasks(ids) {
+      return $http.post(dataUrl.url + 'remove', JSON.stringify(ids), { headers:  {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function toogleTask(id) {
+      return $http.post(dataUrl.url + ':' + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
   } //#dataservice
 })();
