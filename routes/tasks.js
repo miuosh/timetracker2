@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
+var Account = require('../models/account');
 var Task = require('../models/task');
-
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
@@ -17,7 +16,7 @@ var isAuthenticated = function (req, res, next) {
     /** GET all tasks */
     router.get('/', function(req, res) {
 
-        var task = User.find( {'username': req.user.username}, function (err, user) {
+        var task = Account.find( {'username': req.user.username}, function (err, user) {
             //console.log('user ID: ' + user[0]._id);
             Task.find({'_creator': user[0]._id }, function(err, tasks) {
                 if (err) console.error(err);
@@ -300,8 +299,7 @@ var isAuthenticated = function (req, res, next) {
     }
 
     router.post('/', function(req, res) {
-			console.log(req.body);
-        var user = User.find( { 'username': req.user.username }, function(err, user) {
+        var user = Account.find( { 'username': req.user.username }, function(err, user) {
             // In case of any error, return using the done method
                     if (err)
                         console.error(err);
