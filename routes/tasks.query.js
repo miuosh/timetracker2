@@ -1,73 +1,44 @@
-var Q = require('q');
 var Task = require('../models/task');
 
 module.exports = {
 
-  //all functions returns promises
-  getTasks: function(){
-
+  getAllTasks: function() {
+    var promise = Task.find({}).exec();
+    return promise;
   },
 
-  getUserTasks: function(userid) {
-    var query = Task.find({'_creator': userid}).exec();
-    return query;
+  getUserTasks: function(userId) {
+    var promise = Task.find({'_creator': userId}).exec();
+    return promise;
   },
 
-  stopUserTasks: function(userid) {
-/*
-    var deferred = Q.defer();
-    var query = Task.find({'_creator': userid}).exec();
+  stopAllUserTasks: function(userId) {
+  var promise = Task.find({'_creator': userId, 'isPerforming': true }).exec();
 
-
-    query.then(function(data, err) {
-      if (err) {
-        deferred.reject(err);
-      }
-      var len = data.length;
-      var saveTasksPromises = [];
-      for(var i = len; i--; ) {
-        console.log(data[i]._id);
-        var task = data[i];
-        task.isPerforming = false;
-        saveTasksPromises.push(task.save());
-      }
-      return saveTasksPromises;
-      })
-      .then(function(data, err) {
-        var all = Q.all(data);
-        all.then(function(data, err) {
-          if(err) {
-            deferred.reject(err);
+    return promise.then(function(data) {
+          var len = data.length;
+          var saveTasksPromises = [];
+          for(var i = len; i--; ) {
+            var task = data[i];
+            task.isPerforming = false;
+            task.updated = new Date();
+            saveTasksPromises.push(task.save());
           }
-          deferred.resolve(data);
-        })
-
+          return Promise.all(saveTasksPromises); // all .save execute in parallel
       });
-      return deferred.promise;
-*/
+  },// #stopUserTasks
 
-var deferred = Q.defer();
-  var promise = Task.find({'_creator': userid, 'isPerforming': false }).exec();
 
-  promise.then(function(data) {
-      var len = data.length;
-      var saveTasksPromises = [];
+  startUserTask: function(userId, taskId) {
+  var promise = Task.find({'_id': taskId ,'_creator': userId, 'isPerforming': false }).exec()
 
-      for(var i = len; i--; ) {
-        var task = data[i];
-        task.isPerforming = false;
-        saveTasksPromises.push(task.save());
-        //saveTasksPromises.push(Task.save({'_id': data[i]._id, 'isPerforming': false}));
-      }
-      return Q.all(saveTasksPromises);
-    })
-    .then(function(data) {
-      deferred.resolve(data);
-    })
-    .catch(function(err) {
-      deferred.reject(err);
+    return promise.then(function(data){
+      var task = data[0];
+      task.isPerforming = true;
+      task.updated = new Date();
+
+      return task.save();
     });
-    return deferred.promise;
-  }// #stopUserTasks
+  }// #startUserTask
 
 }// #module.exports

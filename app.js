@@ -71,18 +71,32 @@ app.use('/tasks/', tasks);
     // When successfully connected
     mongoose.connection.on('connected', function () {
       console.log('Mongoose default connection open to ' + dbConfig.url);
-      var query = require('./routes/tasks.query');
-      var p = query.stopUserTasks("582afb3800c1bc1f203edf39");
-      p.then(function(data, err) {
-        if(err) {
-          console.log('Promise error: ')
-          console.log(err);
-        } else {
-          console.log('Promise success: ')
+
+        var query = require('./routes/tasks.query');
+        var p = query.stopAllUserTasks("58288531bdaf7916a89deac9");
+
+          p.then(function(data) {
+              console.log('Promise success: ');
+              console.log(data);
+            })
+            .catch(function(e) {
+              console.log(e)}
+            );
+
+        var s = query.startUserTask("58288531bdaf7916a89deac9", '123')
+
+        s.then(function(data) {
+          console.log('Promise startUserTask: ');
           console.log(data);
-        }
-      })
-    });
+          })
+          .catch(function(e) {
+            console.log('Promise startUserTask error: ');
+            console.log(e.message);
+          })
+
+
+      })// #connected
+
 
     // If the connection throws an error
     mongoose.connection.on('error',function (err) {
