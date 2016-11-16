@@ -10,5 +10,6 @@ module.exports = mongoose.model('Task',{
     updated: { type: Date, default: Date.now },
     duration: { type: Number, default: 0 },
     isPerforming: { type: Boolean, default: false},
-    _creator: String
+    _creator: String,
+    isCompleted: { type: Boolean, default: false}
 });

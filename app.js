@@ -20,6 +20,9 @@ var Task = require('./models/task');
 
 var app = express();
 
+
+mongoose.Promise = global.Promise;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -68,6 +71,17 @@ app.use('/tasks/', tasks);
     // When successfully connected
     mongoose.connection.on('connected', function () {
       console.log('Mongoose default connection open to ' + dbConfig.url);
+      var query = require('./routes/tasks.query');
+      var p = query.stopUserTasks("582afb3800c1bc1f203edf39");
+      p.then(function(data, err) {
+        if(err) {
+          console.log('Promise error: ')
+          console.log(err);
+        } else {
+          console.log('Promise success: ')
+          console.log(data);
+        }
+      })
     });
 
     // If the connection throws an error

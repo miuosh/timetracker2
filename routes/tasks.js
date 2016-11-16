@@ -3,6 +3,8 @@ var router = express.Router();
 var Account = require('../models/account');
 var Task = require('../models/task');
 
+var query = require('./tasks.query');
+
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
@@ -73,7 +75,7 @@ var isAuthenticated = function (req, res, next) {
     /**
      *  TODO - res.send (values after complete all promises)
      */
-    router.post('/toogle/:id', isAuthenticated, function(req, res) {
+    router.post('/toggle/:id', isAuthenticated, function(req, res) {
         var id = req.params.id;
         var userID = req.session.passport.user;
         console.log('User: ' + req.session.passport.user);
@@ -108,7 +110,7 @@ var isAuthenticated = function (req, res, next) {
                task.save(function (err) {
                    if (err) {
                        console.error(err);
-                       //res.send('Cannot toogle task');
+                       //res.send('Cannot toggle task');
                    } else {
                        console.log('Modyfikacja: Task _ID:' + task._id + ' updated succesfully!');
                        // res.send(JSON.stringify(task));
@@ -176,7 +178,7 @@ var isAuthenticated = function (req, res, next) {
             task.save(function(err) {
                 if (err) {
                     console.error(err);
-                    //res.send('Cannot toogle task');
+                    //res.send('Cannot toggle task');
                 } else {
                     console.log('Task _ID:' + id + ' updated succesfully!');
                    // res.send(JSON.stringify(task));
@@ -202,7 +204,7 @@ var isAuthenticated = function (req, res, next) {
             task.save(function(err) {
                 if (err) {
                     console.error(err);
-                    //res.send('Cannot toogle task');
+                    //res.send('Cannot toggle task');
                 } else {
                     console.log('Task _ID:' + id + ' updated succesfully!');
                    // res.send(JSON.stringify(task));
@@ -373,4 +375,11 @@ var isAuthenticated = function (req, res, next) {
 
         res.send(cat);
     });
+
+		router.post('/toggle-test/:id', function(req, res) {
+			query.stopUserTasks(req.body.id);
+			res.send({message: 'Testowanie zakończone'});
+			
+		})
+
 module.exports = router;

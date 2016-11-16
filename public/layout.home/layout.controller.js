@@ -7,11 +7,11 @@
   /* @ngInject */
 
   function layoutController() {
-    var lvm = this;
-    lvm.name = "layoutController";
+    var vm = this;
+    vm.name = "layoutController";
 
     // init value
-    lvm.subPage = '/layout.home/dashboard.html';
+    vm.subPage = '/layout.home/dashboard.html';
 
   }
 

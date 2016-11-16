@@ -16,7 +16,8 @@
       getTask: getTask,
       addTask: addTask,
       removeTasks: removeTasks,
-      toggleTask: toogleTask
+      toggleTask: toggleTask,
+      toggleTaskTest: toggleTaskTest
     };
 
 
@@ -56,8 +57,14 @@
                     .catch(errorCallback);
     }
 
-    function toogleTask(id) {
-      return $http.post(dataUrl.url + ':' + id)
+    function toggleTask(id) {
+      return $http.post(dataUrl.url + 'toggle/' + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function toggleTaskTest(id) {
+      return $http.post(dataUrl.url + 'toggle-test/' + id)
                     .then(successCallback)
                     .catch(errorCallback);
     }

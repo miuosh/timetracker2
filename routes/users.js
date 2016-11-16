@@ -8,7 +8,6 @@ router.post('/register', function(req, res) {
 
   Account.register(new Account({
      username: req.body.username,
-     password: req.body.password,
      email: req.body.email
    }), req.body.password , function(err, account) {
     if (err) {
