@@ -29,6 +29,7 @@
     vm.startTimer = startTimer;
     vm.stopTimer = stopTimer;
 
+    vm.countDuration = countDuration;
 //    Testing
 //     vm.tasks = [
 //   { "_id" : "57fcf254c5798b1024f32f50", "desc" : "nowe zadanie użytkownika test2", "category" : "brak", "_creator" : "57fba6b4ed88582af063aa19", "isPerforming" : false, "updated" : "2016-10-11T14:08:20.388Z", "creationDate" : "2016-10-11T14:08:20.388Z" , "__v" : 0 },
@@ -47,9 +48,11 @@
     /////////////////////
 
     function loadTasks() {
-      return getTasks().then(function() {
+      return getTasks().then(function(data) {
         console.log('Loading tasks...');
+        return data;
       })
+
     }// #loadTasks
 
 ////////////////////////////////////////////////////////
@@ -59,14 +62,29 @@
             vm.tasks = data;
             return vm.tasks;
           })
-    }
+          .then(function(data) {
+              vm.stopTimer();
+              console.log('Init timers');
+              var len = data.length;
+              for (var i = len; i--; ) {
+                if(data[i].isPerforming) {
+                  vm.countDuration(data[i]);
+                  vm.startTimer(data[i]);
+                }
+            }
+            return data;
+          })
+          .catch(function(err) {
+            console.error(err);
+            return err;
+          })
+  }// #getTasks
 
     function addTask(task) {
       return dataservice.addTask(task)
               .then(function(data) {
                 if(angular.isArray(vm.tasks)) {
                   vm.tasks.unshift(data)
-                  console.log(vm.tasks);
                   return vm.tasks;
                 }
               })
@@ -91,10 +109,8 @@
 
 
     function toggleTask(item) {
-      console.log(item);
       return dataservice.toggleTask(item._id)
                 .then(function(data) {
-                  console.log(data);
                   return data;
                 }).then(function(data) {
                   return getTasks();
@@ -103,22 +119,22 @@
     }// #toogleTask
 
     function startTimer(item) {
+      console.log(item);
       var intervalPromise = $interval(function() {
         item.duration++;
-        console.log('tick');
       }, 1000)
 
       var taskID = item._id;
       vm.intervalsID.push({ intervalPromise, taskID });
+      return intervalPromise;
     } // #startTimer
 
     function stopTimer() {
+      console.log('Stop timers');
       var len = vm.intervalsID.length;
         for (var i = len; i-- ;  ) {
-            if (vm.intervalsID[i].taskID === item._id){
                 $interval.cancel(vm.intervalsID[i].promiseID);
-                $scope.intervalsID.splice(i, 1);
-            }
+                vm.intervalsID.splice(i, 1);
         }
     }// #stopTimer
 
@@ -127,6 +143,19 @@
         vm.stopTimer();
         console.log('DashboardController scope destroyed.');
       })
+    }
+
+    function countDuration(item) {
+      var currentTime = new Date();
+      //console.log('currentTime: ' + currentTime);
+      //console.log('item.updated: ' + item.updated);
+      var updated = new Date(item.updated);
+      //console.log('new item.updated: ' + item.updated);
+      var currentDuration = (currentTime - updated) / 1000; // ms -> sec
+      //console.log('currentDuration: ' + currentDuration);
+      var lastDuration = item.duration;
+      item.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+      return item;
     }
 
 

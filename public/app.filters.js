@@ -7,7 +7,7 @@
   /* @ngInject */
 
   function formatDuration() {
-    return formatTime(duration) {
+    return function formatTime(duration) {
       var seconds_num,
             seconds,
             minutes,
@@ -23,6 +23,7 @@
 
         return hours + ':' + minutes + '.' + seconds;
     };
+
   }// #formatDuration
 
 })();
