@@ -17,7 +17,6 @@
       addTask: addTask,
       removeTasks: removeTasks,
       toggleTask: toggleTask,
-      toggleTaskTest: toggleTaskTest
     };
 
 
@@ -63,10 +62,5 @@
                     .catch(errorCallback);
     }
 
-    function toggleTaskTest(id) {
-      return $http.post(dataUrl.url + 'toggle-test/' + id)
-                    .then(successCallback)
-                    .catch(errorCallback);
-    }
   } //#dataservice
 })();

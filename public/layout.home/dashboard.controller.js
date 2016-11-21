@@ -26,7 +26,6 @@
     vm.addTask = addTask;
     vm.removeTasks = removeTasks;
     vm.toggleTask = toggleTask;
-    vm.toggleTaskTest = toggleTaskTest;
     vm.startTimer = startTimer;
     vm.stopTimer = stopTimer;
 
@@ -97,17 +96,8 @@
                 .then(function(data) {
                   console.log(data);
                   return data;
-                });
-
-    }// #toogleTask
-
-
-    function toggleTaskTest(item) {
-      console.log(item);
-      return dataservice.toggleTaskTest(item._id)
-                .then(function(data) {
-                  console.log(data);
-                  return data;
+                }).then(function(data) {
+                  return getTasks();
                 });
 
     }// #toogleTask

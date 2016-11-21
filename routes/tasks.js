@@ -15,30 +15,57 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 };
 
-    /** GET all tasks */
-    router.get('/', function(req, res) {
+/** GET all tasks */
+router.get('/', isAuthenticated, function(req, res) {
 
-        var task = Account.find( {'username': req.user.username}, function (err, user) {
-            //console.log('user ID: ' + user[0]._id);
-            Task.find({'_creator': user[0]._id }, function(err, tasks) {
-                if (err) console.error(err);
-                res.send(JSON.stringify(tasks));
-            });
+	var getTasksPromise = query.getUserTasks(req.user.id );
+	getTasksPromise.then(function(data){
+		res.send(data);
+	})
+	.catch(function(err) {
+		res.send(JSON.stringify(err));
+	})
+}); //#get '/'
 
-        });
+/** GET Task of given :id */
+router.get('/:id', function(req, res) {
+        var getTaskPromise = query.getUserTask(req.user.id, req.params.id);
+				getTaskPromise.then(function(data) {
+					res.send(JSON.stringify(data));
+				})
+				.catch(function(err) {
+					console.log(err);
+					res.send(JSON.stringify({err: { message: 'Cannot get task of given id.'}}))
+				})
     });
 
-    /** GET Task of given :id */
-    router.get('/:id', function(req, res) {
-            Task.find({'_id': req.params.id }, function(err, task) {
-                if (err) {
-                    console.error(err);
-                    req.flash("error", 'Cannot find task of given ID');
-                }
-                res.send(JSON.stringify(task));
-            });
 
-        });
+router.post('/toggle/:id', isAuthenticated, function(req, res) {
+
+		// var toggleTaskPromise = query.toggleUserTask(req.user.id, req.params.id);
+		// console.log(toggleTaskPromise);
+		// toggleTaskPromise.then(function(data) {
+		// 	res.send(JSON.stringify(data));
+		// })
+		// .catch(function(err) {
+		// 	res.send(JSON.stringify({err: {message: 'Cannot toggle task of given id.'}}))
+		// })
+		// stopAllUserTasks działa
+		var stop = query.toggleUserTask(req.user.id, req.params.id);
+		stop.then(function(data) {
+				console.log('tooggle resolved: ');
+				console.log(data);
+				res.status(200);
+				res.send(JSON.stringify(data));
+		})
+		.catch(function(err) {
+			console.log(err);
+			res.status(500);
+			res.send(err);
+		})
+
+
+});
 
  /**
   *  GET Report
@@ -70,235 +97,6 @@ var isAuthenticated = function (req, res, next) {
       })
 
   });
-
-    /** POST - Update task of given :id */
-    /**
-     *  TODO - res.send (values after complete all promises)
-     */
-    router.post('/toggle/:id', isAuthenticated, function(req, res) {
-        var id = req.params.id;
-        var userID = req.session.passport.user;
-        console.log('User: ' + req.session.passport.user);
-        //stopTasksInProgress(userID);
-        //updateTask(id);
-
-        // find all document that is running and update .isPerforming field to false, count duration
-        // set current task .isPerforming field to true, count duration
-        /**
-         * findall and update
-         * then update current
-         */
-
-        /*
-        // Kod działający bez zwracania wartości
-        var data = [];
-       var promise = getRunningTaskPromise(null,userID);
-       promise.then(function (tasks) {
-           tasks.forEach(function (task) {
-               console.log('modyfikacja uruchomionego zadania: ' + task._id);
-               //???
-               // modify the isPerforming fields
-               task.task.isPerforming = task.task.isPerforming ? false : true;
-               var currentTime = new Date();
-               if (!task.task.isPerforming) {
-                   var currentDuration = (currentTime - task.task.updated) / 1000; // ms -> sec
-                   var lastDuration = task.task.duration;
-                   task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-               }
-
-               task.task.updated = currentTime;
-               task.save(function (err) {
-                   if (err) {
-                       console.error(err);
-                       //res.send('Cannot toggle task');
-                   } else {
-                       console.log('Modyfikacja: Task _ID:' + task._id + ' updated succesfully!');
-                       // res.send(JSON.stringify(task));
-                       //data.push(task);
-                   }
-               });
-           });
-
-       })
-       .then(function() {
-           console.log('update....' + id);
-           console.log('tasks...');
-           console.log(tasks);
-           updateTask(id);
-        })
-       .then(function(){
-           console.log('res.send');
-           Task.find({'_creator': id},function (err, data) {
-               res.send(JSON.stringify(data));
-           });
-       });
-            */
-
-        var promise = getStopTasksInProgressPromise(null, userID);
-
-
-        var updatePromise = updateTaskPromise(id);
-
-        Promise.all([promise, updatePromise]).then(function(tasks) {
-            // first element is empty if no running tasks
-            console.log('Task[0].length: ' + tasks[0].length);
-            /**
-             * if first promise return [] => no tasks to stop
-             * send only second promise return value
-             */
-            console.log(tasks[0]);
-            console.log(tasks[1]);
-            res.send( JSON.stringify(tasks) );
-
-            console.log(tasks);
-             console.log('Zakończono modyfikacje');
-
-        });
-
-    }); //post
-
-    // 2 opcja
-    // utworzenie tablicy promises ktore wykonują save
-    // użycie Promise.all(tablica). then( updateCurrent() )
-    // res.send (???)
-
-    function updateTaskPromise(id) {
-        var promise =  Task.find({'_id': id }, function(err, data) {
-            if (err) console.error(err);
-            var task = data[0];
-            task.isPerforming = task.isPerforming ? false : true;
-            var currentTime = new Date();
-            if (!task.isPerforming) {
-                var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
-                var lastDuration = task.duration;
-                task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-            }
-
-            task.updated = currentTime;
-            task.save(function(err) {
-                if (err) {
-                    console.error(err);
-                    //res.send('Cannot toggle task');
-                } else {
-                    console.log('Task _ID:' + id + ' updated succesfully!');
-                   // res.send(JSON.stringify(task));
-                }
-            });
-        }).exec(); // find _id
-        return promise;
-
-    }
-    function updateTask(id) {
-           Task.find({'_id': id }, function(err, data) {
-            if (err) console.error(err);
-            var task = data[0];
-            task.isPerforming = task.isPerforming ? false : true;
-            var currentTime = new Date();
-            if (!task.isPerforming) {
-                var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
-                var lastDuration = task.duration;
-                task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-            }
-
-            task.updated = currentTime;
-            task.save(function(err) {
-                if (err) {
-                    console.error(err);
-                    //res.send('Cannot toggle task');
-                } else {
-                    console.log('Task _ID:' + id + ' updated succesfully!');
-                   // res.send(JSON.stringify(task));
-                }
-            });
-        }); // find _id
-
-    }
-
-    function stopTasksInProgress(user) {
-        // find all tasks in progress
-
-        Task.find({ 'isPerforming': true, 'task._creator': user}, function(err, data) {
-            console.log(data);
-            if (err) {
-                console.log(err);
-            } else {
-                data.forEach(function (element) {
-                    updateTask(element._id);
-                }, this);
-            }
-
-        });
-
-    }
-
-    function getStopTasksInProgressPromiseTest(id, user) {
-
-        var findPromise = Task.find({'isPerforming': true, 'task._creator': user}).exec();
-        var savePromises = [];
-        promiseFind.then(function(data) {
-            console.log(data);
-              data.forEach(function (task) {
-                    task.isPerforming = task.isPerforming ? false : true;
-                    var currentTime = new Date();
-                    if (!task.isPerforming) {
-                        var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
-                        var lastDuration = task.duration;
-                        task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-                    }
-                    task.updated = currentTime;
-                    savePromises.push( task.save().exec() );
-                }, this);
-
-        });
-
-        var promises = savePromises.unshift(findPromise);
-        console.log(promises);
-        return promises;
-    }
-
-
-    function getStopTasksInProgressPromise(id, user) {
-        var promise = Task.find({'isPerforming': true, '_creator': user}, function(err, data) {
-            if (err) {
-                console.log(err);
-            } else {
-                data.forEach(function (task) {
-                    task.isPerforming = task.isPerforming ? false : true;
-                    var currentTime = new Date();
-                    if (!task.isPerforming) {
-                        var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
-                        var lastDuration = task.duration;
-                        task.task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-                    }
-                    task.updated = currentTime;
-                    task.save(function(err){
-                        if (err) {
-                            console.log('save error.. ' + err);
-                        } else {
-                            console.log('Task saved: ' + id);
-                        }
-
-                    });
-                }, this);
-            }
-        }).exec();
-        return promise;
-    }
-
-    function getRunningTaskPromise(id, user) {
-         //var promise = Task.find({ 'task.isPerforming': true, 'task._creator': user}).exec();
-
-        var promise = Task.find({ 'isPerforming': true, '_creator': user }, function (err, data) {
-            //console.log(data);
-            if (err) {
-                console.log(err);
-            } else {
-
-            }
-
-        });
-         return promise;
-    }
 
     router.post('/', function(req, res) {
         var user = Account.find( { 'username': req.user.username }, function(err, user) {
@@ -376,10 +174,5 @@ var isAuthenticated = function (req, res, next) {
         res.send(cat);
     });
 
-		router.post('/toggle-test/:id', function(req, res) {
-			query.stopUserTasks(req.body.id);
-			res.send({message: 'Testowanie zakończone'});
-			
-		})
 
 module.exports = router;

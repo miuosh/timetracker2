@@ -53,9 +53,9 @@
       <td>{{ item.duration }}</td>
       <td>
         <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary"
-         style="background-color:#4CAF50" ng-click="vm.toggleTaskTest(item)">START</md-button>
+         style="background-color:#4CAF50" ng-click="vm.toggleTask(item)">START</md-button>
         <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary"
-         style="background-color:#F44336" ng-click="vm.toggleTaskTest(item)">STOP</md-button>
+         style="background-color:#F44336" ng-click="vm.toggleTask(item)">STOP</md-button>
       </td>
     </tr>
   </tbody>
