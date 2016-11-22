@@ -6,6 +6,7 @@
     'ngMaterial',
     'ngSanitize',
     'ngAnimate',
+    'ngMessages',
     /* Cross-app modules */
     'app.auth'
     /* 3rd party modules */

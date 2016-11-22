@@ -152,8 +152,9 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
                 console.error(err);
                 res.send({message: 'Cannot delete selected tasks' + err} );
             } else {
-                console.log(req.session.passport.user + ' removed: ' + IDs);
-                res.send({ message: 'Usunięto' });
+                console.log('User: ' + req.session.passport.user + ' - removed: ' + IDs);
+								res.status(200);
+                res.send({ message: 'Task removed.' });
             }
         });
 
@@ -170,7 +171,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
             "Testy"];
 
 
-
+				res.status(200);
         res.send(cat);
     });
 

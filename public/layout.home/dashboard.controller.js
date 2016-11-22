@@ -7,7 +7,7 @@
   /* @ngInject */
   DashboardController.$inject = ['$scope', '$interval', 'dataservice'];
   /*
-  1. dodać funkcję odliczania czasu
+  1. dodać funkcję odliczania czasu - done
   2. sformatować tabele
   3. zrobić stronicowanie
   4. filtrowanie po kolumnie
@@ -22,6 +22,7 @@
     vm.name = "DashboardController";
     vm.tasks = {};
     vm.intervalsID = [];
+    vm.newTask = {};
 
     vm.addTask = addTask;
     vm.removeTasks = removeTasks;
@@ -64,7 +65,7 @@
           })
           .then(function(data) {
               vm.stopTimer();
-              console.log('Init timers');
+              //console.log('Init timers');
               var len = data.length;
               for (var i = len; i--; ) {
                 if(data[i].isPerforming) {
@@ -87,6 +88,12 @@
                   vm.tasks.unshift(data)
                   return vm.tasks;
                 }
+              })
+              .then(function(data) {
+                vm.newTask = angular.copy({});
+                $scope.newTaskForm.$setPristine();
+                $scope.newTaskForm.$setUntouched();
+
               })
     }
 
@@ -119,7 +126,7 @@
     }// #toogleTask
 
     function startTimer(item) {
-      console.log(item);
+      //console.log(item);
       var intervalPromise = $interval(function() {
         item.duration++;
       }, 1000)

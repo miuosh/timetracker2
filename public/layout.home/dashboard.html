@@ -2,23 +2,33 @@
   <br />
 
   <!-- add new task form -->
-  <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
-    <md-input-container flex="60">
-      <label>Opis zadania</label>
-      <input type="text" name="desc" ng-model="newTask.desc">
-    </md-input-container>
+  <form name="newTaskForm" ng-submit="vm.addTask(vm.newTask)" autocomplete="off">
+    <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
+      <md-input-container flex="60">
+        <label>Opis zadania</label>
+        <input type="text" name="desc" ng-model="vm.newTask.desc" required md-no-asterisk autocomplete="off">
+        <div ng-messages="newTaskForm.desc.$error" role="alert">
+            <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      </md-input-container>
 
-    <md-input-container flex="30">
-      <label>Kategoria</label>
-      <input type="text" name="category" ng-model="newTask.category">
-    </md-input-container>
+      <md-input-container flex="30">
+        <label>Kategoria</label>
+        <input type="text" name="category" ng-model="vm.newTask.category" required md-no-asterisk autocomplete="off">
+        <div ng-messages="newTaskForm.category.$error" role="alert">
+            <div ng-message="required">Wpisz lub wybierz kategorię.</div>
+        </div>
+      </md-input-container>
 
-    <md-input-container>
-      <md-button class="md-fab" aria-label="add-task" ng-click="vm.addTask(newTask)">
-            <md-icon><i class="material-icons">add</i></md-icon>
-        </md-button>
-    </md-input-container>
-  </md-content>
+      <md-input-container>
+        <md-button type="submit" class="md-fab" aria-label="add-task" >
+              <md-icon><i class="material-icons">add</i></md-icon>
+          </md-button>
+      </md-input-container>
+    </md-content>
+
+  </form>
+
   <br />
 
 <!-- Table menu -->
