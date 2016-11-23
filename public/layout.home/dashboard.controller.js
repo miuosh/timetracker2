@@ -66,17 +66,20 @@
           .then(function(data) {
               vm.stopTimer();
               //console.log('Init timers');
-              var len = data.length;
-              for (var i = len; i--; ) {
-                if(data[i].isPerforming) {
-                  vm.countDuration(data[i]);
-                  vm.startTimer(data[i]);
+              if (angular.isArray(data)) {
+                  var len = data.length;
+                  for (var i = len; i--; ) {
+                    if(data[i].isPerforming) {
+                      vm.countDuration(data[i]);
+                      vm.startTimer(data[i]);
+                    }
                 }
-            }
+              }
+
             return data;
           })
           .catch(function(err) {
-            console.error(err);
+            console.log(err);
             return err;
           })
   }// #getTasks
@@ -90,10 +93,10 @@
                 }
               })
               .then(function(data) {
+                //clear new task fields
                 vm.newTask = angular.copy({});
                 $scope.newTaskForm.$setPristine();
                 $scope.newTaskForm.$setUntouched();
-
               })
     }
 

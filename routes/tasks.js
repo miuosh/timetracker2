@@ -101,7 +101,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
     router.post('/', function(req, res) {
 
 			if(!req.body.desc || !req.body.category) {
-				res.status(400);
+				//res.status(400);
 				res.send({message: 'Fill all required data in form!'});
 			}
         var user = Account.find( { 'username': req.user.username }, function(err, user) {

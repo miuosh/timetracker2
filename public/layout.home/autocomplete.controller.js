@@ -34,6 +34,12 @@
 
     function newState(state) {
       alert("Dodaj nową kategorie");
+      console.log('newState: ' + state);
+      console.log(self.states);
+      self.states.push({
+        value: state.toLowerCase(),
+        display: state
+      })
     }
 
     // ******************************
@@ -41,7 +47,7 @@
         // ******************************
 
         /**
-         * Search for states... use $timeout to simulate
+         * Search for... use $timeout to simulate
          * remote dataservice call.
          */
         function querySearch (query) {
@@ -57,6 +63,7 @@
         }
 
         function searchTextChange(text) {
+
           $log.info('Text changed to ' + text);
         }
 
