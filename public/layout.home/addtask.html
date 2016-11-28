@@ -1,0 +1,37 @@
+<!-- add new task form -->
+<form name="newTaskForm" ng-submit="at.addTask(at.newTask)" autocomplete="off">
+  <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
+    <md-input-container flex="60">
+      <label>Opis zadania</label>
+      <input type="text" name="desc" ng-model="at.newTask.desc" required md-no-asterisk autocomplete="off">
+      <div ng-messages="newTaskForm.desc.$error" role="alert">
+          <div ng-message="required">Pole nie może być puste.</div>
+      </div>
+    </md-input-container>
+
+      <!-- project -->
+      <md-input-container>
+        <label>Projekt...</label>
+        <input type="text" name="project" ng-model="at.newTask.project" required md-no-asterisk autocomplete="off">
+        <div ng-messages="newTaskForm.project.$error" role="alert">
+          <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      </md-input-container>
+
+      <!-- category -->
+      <md-input-container>
+        <label>Kategoria...</label>
+        <input type="text" name="category" ng-model="at.newTask.category" required md-no-asterisk autocomplete="off">
+        <div ng-messages="newTaskForm.category.$error" role="alert">
+          <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      </md-input-container>
+
+    <md-input-container>
+      <md-button type="submit" class="md-fab" aria-label="add-task" >
+            <md-icon><i class="material-icons">add</i></md-icon>
+        </md-button>
+    </md-input-container>
+  </md-content>
+
+</form>

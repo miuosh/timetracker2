@@ -14,6 +14,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var tasks = require('./routes/tasks')
+var addtask = require('./routes/addtask')
+var edittask = require('./routes/edittask')
 
 var Account = require('./models/account');
 var Task = require('./models/task');
@@ -51,6 +53,8 @@ passport.deserializeUser(Account.deserializeUser());
 
 app.use('/users/', users);
 app.use('/tasks/', tasks);
+app.use('/addtask/', addtask);
+app.use('/edittask/', edittask);
 
 
 // MongoDB

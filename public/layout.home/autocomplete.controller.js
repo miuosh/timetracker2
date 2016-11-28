@@ -90,8 +90,10 @@
          */
          function createFilterFor(query) {
            var lowercaseQuery = angular.lowercase(query);
-
+          console.log('state1:' + state);
+          console.log('query:' + state);
             return function filterFn(state) {
+              console.log('state2:' + state);
               return (state.value.indexOf(lowercaseQuery) === 0);
             };
 

@@ -8,8 +8,8 @@ module.exports = {
   startUserTask: startUserTask,
   stopUserTask: stopUserTask,
   stopAllPerfomingUserTasks: stopAllPerfomingUserTasks,
-  toggleUserTask: toggleUserTask
-
+  toggleUserTask: toggleUserTask,
+  setAsCompleted: setAsCompleted
 
 }
 
@@ -156,4 +156,17 @@ module.exports = {
         task.updated = currentTime;
       return task.save();
     });
-  }
+
+
+    function setAsCompleted(userid, taskid) {
+      var promise = getUserTask(userid, taskId);
+
+      promise.then(function(data) {
+        var task = data[0];
+        task.isCompleted = true;
+        return task.save();
+      })
+      .catch(function(err) {
+        return err;
+      });
+    };

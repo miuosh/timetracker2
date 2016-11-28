@@ -17,6 +17,9 @@
       addTask: addTask,
       removeTasks: removeTasks,
       toggleTask: toggleTask,
+      getCategories: getCategories,
+      getProjects: getProjects,
+      setAsCompleted: setAsCompleted
     };
 
 
@@ -30,6 +33,7 @@
     function errorCallback(err) {
       console.log('Error: ');
       console.log(err);
+      return err;
     }
 
     function getTasks() {
@@ -60,6 +64,25 @@
       return $http.post(dataUrl.url + 'toggle/' + id)
                     .then(successCallback)
                     .catch(errorCallback);
+    }
+
+    function getCategories() {
+      return $http.get( '/addtask/categories/')
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+
+    function getProjects() {
+          return $http.get('/addtask/projects/')
+                        .then(successCallback)
+                        .catch(errorCallback);
+    }
+
+    function setAsCompleted() {
+          return $http.post('/edittask/setAsCompleted/')
+                        .then(successCallback)
+                        .catch(errorCallback);
     }
 
   } //#dataservice

@@ -1,70 +1,13 @@
 <div class="md-whiteframe-4dp" layout-padding ng-controller="DashboardController as vm">
   <br />
 
-  <!-- add new task form -->
-  <form name="newTaskForm" ng-submit="vm.addTask(vm.newTask)" autocomplete="off">
-    <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
-      <md-input-container flex="60">
-        <label>Opis zadania</label>
-        <input type="text" name="desc" ng-model="vm.newTask.desc" required md-no-asterisk autocomplete="off">
-        <div ng-messages="newTaskForm.desc.$error" role="alert">
-            <div ng-message="required">Pole nie może być puste.</div>
-        </div>
-      </md-input-container>
-      {{ vm.newTask.category.display }}
-        <!-- autocomplete -->
-        <div flex= "30" ng-controller="autocompleteController as ctrl">
-
-        <!-- md-input-name - nazwa pola input - ng-messages
-             md-selected-item - wybrane pole - można przypisać do modelu
-             md-selected-item-change - zmiana wybranego elementu
-             md-search-text - powiązanie z modelem do wyszukania
-             md-search-text-change - wywoływane z każdą zmianą wpisywanej frazy
-             md-items - iterowanie po wynikach wyszukiwania
-             md-item-text - wyrażenie ktore konwertuje obiekt 'item' na pojedynczy string
-        -->
-        <md-autocomplete required
-             ng-disabled="ctrl.isDisabled"
-             md-no-cache="ctrl.noCache"
-             md-input-name="category"
-             md-selected-item="vm.newTask.category"
-             md-selected-item-change="ctrl.selectedItemChange(item)"
-             md-item-text="item.display"
-             md-search-text="ctrl.searchText"
-             md-items="item in ctrl.querySearch(ctrl.searchText)"
-             md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-             md-min-length="0"
-             md-no-asterisk
-             md-select-on-focus
-             md-escape-options="none"
-             md-floating-label="Kategoria..">
-              <md-item-template>
-                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
-              </md-item-template>
-              <md-not-found>
-                Nie znaleziono: "{{ctrl.searchText}}".
-                <a ng-click="ctrl.newState(ctrl.searchText)">Dodaj nową!</a>
-              </md-not-found>
-              <div ng-messages="newTaskForm.category.$error">
-                <div ng-message="required">Pole nie może być puste.</div>
-              </div>
-          </md-autocomplete>
-
-        </div>
-
-      <md-input-container>
-        <md-button type="submit" class="md-fab" aria-label="add-task" >
-              <md-icon><i class="material-icons">add</i></md-icon>
-          </md-button>
-      </md-input-container>
-    </md-content>
-
-  </form>
+  <div ng-include="'./layout.home/addtask.html'" ng-controller="AddTaskController as at" ></div>
 
   <br />
 
 <!-- Table menu -->
 <div layout layout-align="end" flex="90">
+  <md-button class="md-hue-1" ng-click="vm.setAsCompleted()">Oznacz jako ukończone.</md-button>
   <md-button class="md-icon-button md-hue-1" ng-click="vm.removeTasks()"><md-icon><i class="material-icons" id="delete_icon">delete</i></md-icon> </md-button>
 </div>
 
@@ -76,6 +19,7 @@
         <md-checkbox> </md-checkbox>
       </th>
       <th>Opis</th>
+      <th>Projekt</th>
       <th>Kategoria</th>
       <th>Data utworzenia</th>
       <th>Data modyfikacji</th>
@@ -89,6 +33,7 @@
         <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
       </td>
       <td>{{ item.desc }}</td>
+      <td>{{ item.project }}</td>
       <td>{{ item.category }}</td>
       <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
       <td>{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>

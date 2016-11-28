@@ -98,40 +98,32 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
   });
 
-    router.post('/', function(req, res) {
-
-			if(!req.body.desc || !req.body.category) {
-				//res.status(400);
+    router.post('/', isAuthenticated, function(req, res) {
+			var body = req.body;
+			console.log(req.user.id);
+			console.log(body);
+			if(typeof body.desc !== 'string'||	typeof body.category!=='string' || typeof body.project!=='string') {
+				res.status(400);
 				res.send({message: 'Fill all required data in form!'});
+			} else {
+							var task = new Task({
+											desc: req.body.desc,
+											category: req.body.category,
+											project: req.body.project,
+											creationDate: new Date(),
+											updated: new Date(),
+											isPerforming: false,
+											_creator: req.user.id
+							});
+							task.save( function(err) {
+									if (err) { throw err; }
+									else {
+											res.send(JSON.stringify(task));
+											console.log('Task saved.'); }
+							});
 			}
-        var user = Account.find( { 'username': req.user.username }, function(err, user) {
-            // In case of any error, return using the done method
-                    if (err)
-                        console.error(err);
-                    // Username does not exist, log the error and redirect back
-                    if (!user){
-                        console.log('User Not Found with username '+ username);
-                        req.flash("error", 'User Not Found with username');
-                    }
-                    //console.log(user[0]._id);
-                    var task = new Task({
-                            desc: req.body.desc,
-                            category: req.body.category,
-                            creationDate: new Date(),
-                            updated: new Date(),
-                            isPerforming: false,
-                            _creator: user[0]._id
-                    });
-                    task.save( function(err) {
-                        if (err) { throw err; }
-                        else {
-                            res.send(JSON.stringify(task));
-                            console.log('Task saved.'); }
-                    });
-
         });
-        //res.send( { 'message': "Task saved succesfully"});
-    });
+
 
 
     // /** DELETE Task of given ID */
@@ -177,8 +169,12 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 
 				res.status(200);
-        res.send(cat);
+        res.send(JSON.stringify(cat));
     });
+
+		router.get('/projects/', function(req, res) {
+
+		})
 
 
 module.exports = router;
