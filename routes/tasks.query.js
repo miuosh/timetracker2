@@ -156,17 +156,28 @@ module.exports = {
         task.updated = currentTime;
       return task.save();
     });
+  }
 
+  /*
+  @param {Array} - taskIds - array of ids
+  */
+    function setAsCompleted(taskIds) {
 
-    function setAsCompleted(userid, taskid) {
-      var promise = getUserTask(userid, taskId);
+      var promise = Task.find({ '_id': { '$in': taskIds }}).exec();
 
-      promise.then(function(data) {
-        var task = data[0];
-        task.isCompleted = true;
-        return task.save();
-      })
-      .catch(function(err) {
-        return err;
-      });
+    return  promise.then(function(data) {
+            var len = data.length;
+            var editTaskPromise = [];
+            console.log(data);
+            for (var i = len; i--; ) {
+              var task = data[i];
+              task.isCompleted = true;
+              editTaskPromise.push(task.save());
+            }
+
+            return Promise.all(editTaskPromise);
+          })
+          .catch(function(err) {
+            return err;
+          });
     };

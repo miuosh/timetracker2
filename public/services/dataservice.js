@@ -26,7 +26,7 @@
 ///////////////////////////////////
 
     function successCallback(response) {
-      console.log(response.data);
+      //console.log(response.data);
       return response.data;
     }
 
@@ -79,8 +79,8 @@
                         .catch(errorCallback);
     }
 
-    function setAsCompleted() {
-          return $http.post('/edittask/setAsCompleted/')
+    function setAsCompleted(item) {
+          return $http.post('/edittask/setAsCompleted/', item)
                         .then(successCallback)
                         .catch(errorCallback);
     }

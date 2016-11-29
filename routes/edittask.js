@@ -16,22 +16,32 @@ var isAuthenticated = function (req, res, next) {
 };
 
 
-/**
- *  GET categories
- */
 
 router.post('/setAsCompleted', isAuthenticated, function(req, res) {
-    console.log(req.body);
-    query.setAsCompleted(req.body.id, req.user.id)
-      .then(function(data) {
-        res.status(200);
-        res.send(JSON.stringify(data));
-      })
-      .catch(function(err) {
-        res.status(400);
-        res.send(JSON.stringify(err.message));
-      })
-    );
+
+		console.log('User: ' + req.user.id);
+    console.log('Set as completed ' + req.body);
+		
+			query.setAsCompleted(req.body)
+	      .then(function(data) {
+					console.log('setAsCompletePromise resolved');
+					console.log(data);
+	        res.status(200);
+	        res.send(JSON.stringify(data));
+	      })
+	      .catch(function(err) {
+					console.log('setAsCompletePromise rejected' + err);
+	        res.status(400);
+	        res.send(JSON.stringify(err));
+	      })
+
+
+
+    }); // #setAsCompleted
+
+	router.post('/edit/:id', isAuthenticated, function(req, res) {
+
+	} )
 
 
 

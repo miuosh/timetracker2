@@ -66,6 +66,17 @@ router.get('/status', function(req, res) {
   });
 });
 
+router.get('/username', function(req, res) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({
+
+    });
+  }
+  res.status(200).json({
+    username: req.user.username
+  });
+})
+
 
 router.get('/ping', function(req, res) {
   res.status(200).send("pong!");

@@ -16,9 +16,19 @@
           login: login,
           logout: logout,
           register: register,
-          resetPassword: resetPassword
+          resetPassword: resetPassword,
+          getUsername: getUsername
         });
 
+        function getUsername() {
+          return $http.get('/users/username')
+                  .success(function(data) {
+                    username = data.username;
+                  })
+                  .error(function(err) {
+                    console.log(err);
+                  })
+        }
 
         function isLoggedIn() {
           if (user) {

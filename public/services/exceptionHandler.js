@@ -12,8 +12,8 @@
 
   function exceptionHandler($http, dataUrl) {
     return function (exception, cause) {
-      var $rootScope = $rootScope.errors || [];
-      $rootScope.errors.push(exception.message);
+      // var $rootScope = $rootScope.errors || [];
+      // $rootScope.errors.push(exception.message);
       console.log(exception.message);
     };
 

@@ -3,42 +3,41 @@
 
   <div ng-include="'./layout.home/addtask.html'" ng-controller="AddTaskController as at" ></div>
 
-  <br />
-
-<!-- Table menu -->
-<div layout layout-align="end" flex="90">
-  <md-button class="md-hue-1" ng-click="vm.setAsCompleted()">Oznacz jako ukończone.</md-button>
-  <md-button class="md-icon-button md-hue-1" ng-click="vm.removeTasks()"><md-icon><i class="material-icons" id="delete_icon">delete</i></md-icon> </md-button>
-</div>
 
 <!-- Tasks table -->
 <table  cellspacing="0" width="100%" layout-padding>
+
+  <caption>
+    <md-button class="md-primary" ng-click="vm.setAsCompleted()">Oznacz jako ukończone</md-button>
+    <md-button class="md-primary" ng-click="vm.removeTasks($event)">Usuń</md-button>
+  </caption>
+
   <thead>
     <tr>
       <th >
-        <md-checkbox> </md-checkbox>
+
       </th>
       <th>Opis</th>
       <th>Projekt</th>
       <th>Kategoria</th>
-      <th>Data utworzenia</th>
+      <!-- <th>Data utworzenia</th> -->
       <th>Data modyfikacji</th>
       <th>Czas trwania</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="item in vm.tasks">
-      <td>
+    <tr ng-repeat="item in vm.tasks" ng-if="!item.isCompleted">
+      <td class="table-checkbox">
         <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
       </td>
-      <td>{{ item.desc }}</td>
-      <td>{{ item.project }}</td>
-      <td>{{ item.category }}</td>
-      <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-      <td>{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-      <td>{{ item.duration | formatDuration }}</td>
-      <td>
+      <td class="table-desc">{{ item.desc }}</td>
+      <td class="table-project">{{ item.project }}</td>
+      <td class="table-category">{{ item.category }}</td>
+      <!-- <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td> -->
+      <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+      <td class="table-duration">{{ item.duration | formatDuration }}</td>
+      <td class="table-toggle">
         <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary"
          style="background-color:#4CAF50" ng-click="vm.toggleTask(item)">START</md-button>
         <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary"

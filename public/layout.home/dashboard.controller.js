@@ -5,7 +5,7 @@
   .controller('DashboardController', DashboardController);
 
   /* @ngInject */
-  DashboardController.$inject = ['$scope', '$interval', 'dataservice'];
+  DashboardController.$inject = ['$scope', '$interval','$mdDialog', 'dataservice'];
   /*
   1. dodać funkcję odliczania czasu - done
   2. sformatować tabele
@@ -17,7 +17,7 @@
   8. dodać menu - usuń, status: zakończone
   */
 
-  function DashboardController($scope, $interval, dataservice) {
+  function DashboardController($scope, $interval, $mdDialog, dataservice) {
     var vm = this;
     vm.name = "DashboardController";
     vm.tasks = {};
@@ -30,6 +30,9 @@
     vm.stopTimer = stopTimer;
 
     vm.countDuration = countDuration;
+
+    // filter table
+    vm.sort = sort;
 //    Testing
 //     vm.tasks = [
 //   { "_id" : "57fcf254c5798b1024f32f50", "desc" : "nowe zadanie użytkownika test2", "category" : "brak", "_creator" : "57fba6b4ed88582af063aa19", "isPerforming" : false, "updated" : "2016-10-11T14:08:20.388Z", "creationDate" : "2016-10-11T14:08:20.388Z" , "__v" : 0 },
@@ -83,11 +86,27 @@
           })
   }// #getTasks
 
-    function removeTasks(id) {
-      var ids = getSelectedTasks();
-      return dataservice.removeTasks(ids)
-                .then(getTasks);
-    }
+    function removeTasks(ev) {
+
+      /* Confirm remove tasks */
+
+         // Appending dialog to document.body to cover sidenav in docs app
+         var confirm = $mdDialog.confirm()
+               .title('Czy na pewno usunąć zaznaczone zadania?')
+               .textContent('')
+               .ariaLabel('Usuń zadania')
+               .targetEvent(ev)
+               .ok('Tak, usuń')
+               .cancel('Anuluj');
+
+         $mdDialog.show(confirm).then(function() {
+            var ids = getSelectedTasks();
+           return dataservice.removeTasks(ids)
+                     .then(getTasks);
+         }, function() {
+           console.log('Anulowano usuwanie');
+         });
+    }// #removeTasks
 
     function getSelectedTasks() {
       var ids = [];
@@ -165,6 +184,19 @@
     }
 
 
+    function sort(property) {
 
+    }
+
+    function compare(a, b) {
+      if (a < b) {
+        return -1;
+      if (a > b) {
+        return 1;
+      }
+      return 0;
+    }
   }
+
+  }// #DashboardController
 })();
