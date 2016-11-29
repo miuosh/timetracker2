@@ -1,0 +1,148 @@
+<div class="md-whiteframe-4dp" layout-padding ng-controller="DashboardController as vm" >
+  <br />
+
+<<<<<<< HEAD
+  <!-- add new task form -->
+  <form name="newTaskForm" ng-submit="vm.addTask(vm.newTask)" autocomplete="off" layout="column" layout-md="row" >
+    <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
+      <md-input-container flex="60">
+        <label>Opis zadania</label>
+        <input type="text" name="desc" ng-model="vm.newTask.desc" required md-no-asterisk autocomplete="off">
+        <div ng-messages="newTaskForm.desc.$error" role="alert">
+            <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      </md-input-container>
+      {{ vm.newTask.category.display }}
+        <!-- autocomplete -->
+        <div layout="row" flex= "30" >
+
+        <!-- md-input-name - nazwa pola input - ng-messages
+             md-selected-item - wybrane pole - można przypisać do modelu
+             md-selected-item-change - zmiana wybranego elementu
+             md-search-text - powiązanie z modelem do wyszukania
+             md-search-text-change - wywoływane z każdą zmianą wpisywanej frazy
+             md-items - iterowanie po wynikach wyszukiwania
+             md-item-text - wyrażenie ktore konwertuje obiekt 'item' na pojedynczy string
+        -->
+        <!-- projects autocomplete -->
+        <div ng-controller="autocompleteController as pctrl" ng-init="pctrl.init('true')">
+          <md-autocomplete required
+               ng-disabled="pctrl.isDisabled"
+               md-no-cache="pctrl.noCache"
+               md-input-name="project"
+               md-selected-item="vm.newTask.project"
+               md-selected-item-change="pctrl.selectedItemChange(item)"
+               md-item-text="item.display"
+               md-search-text="pctrl.searchText"
+               md-items="item in pctrl.querySearch(ctrl.searchText)"
+               md-search-text-change="pctrl.searchTextChange(ctrl.searchText)"
+               md-min-length="0"
+               md-no-asterisk
+               md-select-on-focus
+               md-escape-options="none"
+               md-floating-label="Projekt..">
+                <md-item-template>
+                  <span md-highlight-text="pctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                </md-item-template>
+                <md-not-found>
+                  Nie znaleziono: "{{ctrl.searchText}}".
+                  <a ng-click="pctrl.newState(pctrl.searchText)">Dodaj nową!</a>
+                </md-not-found>
+                <div ng-messages="newTaskForm.project.$error">
+                  <div ng-message="required">Pole nie może być puste.</div>
+                </div>
+            </md-autocomplete>
+
+        </div>
+
+        <div ng-controller="autocompleteController as ctrl" ng-init="ctrl.init('false')">
+          <!-- categories autocomplete -->
+          <md-autocomplete required
+               ng-disabled="ctrl.isDisabled"
+               md-no-cache="ctrl.noCache"
+               md-input-name="category"
+               md-selected-item="vm.newTask.category"
+               md-selected-item-change="ctrl.selectedItemChange(item)"
+               md-item-text="item.display"
+               md-search-text="ctrl.searchText"
+               md-items="item in ctrl.querySearch(ctrl.searchText)"
+               md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+               md-min-length="0"
+               md-no-asterisk
+               md-select-on-focus
+               md-escape-options="none"
+               md-floating-label="Kategoria..">
+                <md-item-template>
+                  <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                </md-item-template>
+                <md-not-found>
+                  Nie znaleziono: "{{ctrl.searchText}}".
+                  <a ng-click="ctrl.newState(ctrl.searchText)">Dodaj nową!</a>
+                </md-not-found>
+                <div ng-messages="newTaskForm.category.$error">
+                  <div ng-message="required">Pole nie może być puste.</div>
+                </div>
+            </md-autocomplete>
+        </div>
+        <!-- autocomplete row -->
+      </div>
+
+      <!-- add new Task button -->
+      <md-input-container>
+        <md-button type="submit" class="md-fab" aria-label="add-task" >
+              <md-icon><i class="material-icons">add</i></md-icon>
+          </md-button>
+      </md-input-container>
+    </md-content>
+
+  </form>
+=======
+  <div ng-include="'./layout.home/addtask.html'" ng-controller="AddTaskController as at" ></div>
+>>>>>>> origin/promises
+
+  <br />
+
+<!-- Table menu -->
+<div layout layout-align="end" flex="90">
+  <md-button class="md-hue-1" ng-click="vm.setAsCompleted()">Oznacz jako ukończone.</md-button>
+  <md-button class="md-icon-button md-hue-1" ng-click="vm.removeTasks()"><md-icon><i class="material-icons" id="delete_icon">delete</i></md-icon> </md-button>
+</div>
+
+<!-- Tasks table -->
+<table  cellspacing="0" width="100%" layout-padding>
+  <thead>
+    <tr>
+      <th >
+        <md-checkbox> </md-checkbox>
+      </th>
+      <th>Opis</th>
+      <th>Projekt</th>
+      <th>Kategoria</th>
+      <th>Data utworzenia</th>
+      <th>Data modyfikacji</th>
+      <th>Czas trwania</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in vm.tasks">
+      <td>
+        <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
+      </td>
+      <td>{{ item.desc }}</td>
+      <td>{{ item.project }}</td>
+      <td>{{ item.category }}</td>
+      <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+      <td>{{ item.duration | formatDuration }}</td>
+      <td>
+        <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary"
+         style="background-color:#4CAF50" ng-click="vm.toggleTask(item)">START</md-button>
+        <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary"
+         style="background-color:#F44336" ng-click="vm.toggleTask(item)">STOP</md-button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>

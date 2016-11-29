@@ -24,7 +24,7 @@ var bases = {
 };
 
 var paths = {
- scripts: ['app.module.js','*.js', '*/**/*.js'],
+ scripts: ['app.module.js', '*.js', '*/**/*.js'],
  //libs: ['scripts/libs/jquery/dist/jquery.js', 'scripts/libs/underscore/underscore.js', 'scripts/backbone/backbone.js'],
  styles: ['stylesheets/**/*.css'],
  html: ['index.html'],
@@ -128,5 +128,6 @@ gulp.task('browser-sync', function() {
         }
     });
      gulp.watch("public/*.html").on("change", reload);
+     gulp.watch("public/**/*.html").on("change", reload);
      gulp.watch("public/**/*.js").on("change", reload);
 });

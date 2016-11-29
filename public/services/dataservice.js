@@ -2,30 +2,88 @@
   'user strict';
 
   angular.module('app.core')
+  .constant('dataUrl', {
+    'url' : '/tasks/'
+  })
   .factory('dataservice', dataservice);
 
   /* @ngInject */
+//  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http) {
+  function dataservice($http, dataUrl) {
     return {
-      getTasks: getTasks
+      getTasks: getTasks,
+      getTask: getTask,
+      addTask: addTask,
+      removeTasks: removeTasks,
+      toggleTask: toggleTask,
+      getCategories: getCategories,
+      getProjects: getProjects,
+      setAsCompleted: setAsCompleted
     };
 
-    function getTasks() {
-      return $http.get('tasks/tasks')
-                    .then(getTasksComplete)
-                    .catch(getTasksFailed);
 
-            function getTasksComplete(response) {
-              return response.data.result;
-            }
-            
-            function getTasksFailed(err) {
-              console.log('Error load Tasks data: ' + err);
-            }
+///////////////////////////////////
+
+    function successCallback(response) {
+      //console.log(response.data);
+      return response.data;
     }
 
-  }
+    function errorCallback(err) {
+      console.log('Error: ');
+      console.log(err);
+      return err;
+    }
+
+    function getTasks() {
+      return $http.get(dataUrl.url)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getTask(id) {
+      return $http.get(dataUrl.url + ':' + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function addTask(task) {
+      return $http.post(dataUrl.url, task, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function removeTasks(ids) {
+      return $http.post(dataUrl.url + 'remove', JSON.stringify(ids), { headers:  {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function toggleTask(id) {
+      return $http.post(dataUrl.url + 'toggle/' + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getCategories() {
+      return $http.get( '/addtask/categories/')
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
 
 
+    function getProjects() {
+          return $http.get('/addtask/projects/')
+                        .then(successCallback)
+                        .catch(errorCallback);
+    }
+
+    function setAsCompleted() {
+          return $http.post('/edittask/setAsCompleted/')
+                        .then(successCallback)
+                        .catch(errorCallback);
+    }
+
+  } //#dataservice
 })();

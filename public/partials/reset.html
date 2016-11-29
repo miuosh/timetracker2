@@ -1,0 +1,41 @@
+
+
+      <!-- column 1 -->
+      <div layout-margin layout="row" >
+        <div layout="column" flex="">
+
+        </div>
+
+        <!-- column 2 - loginForm -->
+        <div layout="column" flex="40" >
+            <form method="post" name="resetForm">
+              <h3>Podaj adres e-mail użyty podczas rejestracji.</h3>
+              <br />
+              <div ng-show="vm.error">
+                  {{ vm.errorMessage }}
+              </div>
+              <br />
+              <md-input-container class="md-block" >
+                <label>E-mail</label>
+                <input type="email" name="email" ng-model="vm.resetForm.email">
+              </md-input-container>
+
+              <md-input-container class="md-block" >
+                <md-button class="md-raised md-primary" name="button"
+                  ng-click="vm.reset()">Resetuj hasło</md-button>
+              </md-input-container>
+            </form>
+            <br />
+            <div>
+                <a ng-href="#/">Powrót</a>
+            </div>
+
+        </div>
+
+        <!-- column 3 -->
+        <div layout="column" flex="">
+
+      </div>
+
+
+        </div>
