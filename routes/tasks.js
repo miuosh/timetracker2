@@ -98,39 +98,30 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
   });
 
-    router.post('/', function(req, res) {
+    router.post('/', isAuthenticated,function(req, res) {
+			console.log('Request to add new task');
+			if(!req.body.desc || !req.body.category || typeof req.body.desc != "string" || typeof req.body.category != "string") {
+				res.status(400);
+				console.log('Error: cannot parse req.body')
+				res.send({message: 'Error: cannot parse received data!'});
+			} else {
+										var task = new Task({
+														desc: req.body.desc,
+														category: req.body.category,
+														creationDate: new Date(),
+														updated: new Date(),
+														isPerforming: false,
+														_creator: user[0]._id
+										});
+										task.save( function(err) {
+												if (err) { throw err; }
+												else {
+														res.status(200);
+														res.send(JSON.stringify(task));
+														console.log('Task saved.'); }
+										});
 
-			if(!req.body.desc || !req.body.category) {
-				//res.status(400);
-				res.send({message: 'Fill all required data in form!'});
-			}
-        var user = Account.find( { 'username': req.user.username }, function(err, user) {
-            // In case of any error, return using the done method
-                    if (err)
-                        console.error(err);
-                    // Username does not exist, log the error and redirect back
-                    if (!user){
-                        console.log('User Not Found with username '+ username);
-                        req.flash("error", 'User Not Found with username');
-                    }
-                    //console.log(user[0]._id);
-                    var task = new Task({
-                            desc: req.body.desc,
-                            category: req.body.category,
-                            creationDate: new Date(),
-                            updated: new Date(),
-                            isPerforming: false,
-                            _creator: user[0]._id
-                    });
-                    task.save( function(err) {
-                        if (err) { throw err; }
-                        else {
-                            res.send(JSON.stringify(task));
-                            console.log('Task saved.'); }
-                    });
-
-        });
-        //res.send( { 'message': "Task saved succesfully"});
+			} // #else
     });
 
 
@@ -167,7 +158,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 
     /**
-     *  GET categories
+     *  categories
      */
 
     router.get('/categories/', function(req, res) {
@@ -179,6 +170,29 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 				res.status(200);
         res.send(cat);
     });
+
+		router.post('/categories/',isAuthenticated, function(req, res) {
+			res.send({message: 'OK'})
+		});
+
+		router.post('/categories/remove', isAuthenticated, function(req, res) {
+			res.send({message: 'Removed'});
+		})
+
+		/*
+			projects
+		*/
+
+		router.get('/projects/',isAuthenticated, function(req, res) {
+			res.send({message: 'Projects OK'});
+		});
+
+		router.post('/projects/', isAuthenticated, function(req, res) {
+			res.send({message: 'project added'})
+		});
+
+
+
 
 
 module.exports = router;

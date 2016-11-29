@@ -8,7 +8,8 @@
     'ngAnimate',
     'ngMessages',
     /* Cross-app modules */
-    'app.auth'
+    'app.auth',
+    'toast'
     /* 3rd party modules */
   ]);
 })();

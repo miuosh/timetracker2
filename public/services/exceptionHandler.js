@@ -2,19 +2,15 @@
   'user strict';
 
   angular.module('app.core')
-  .constant('dataUrl', {
-    'url' : '/tasks/'
-  })
   .factory('$exceptionHandler', exceptionHandler);
 
   /* @ngInject */
-  exceptionHandler.$inject = ['$injector'];
+  exceptionHandler.$inject = ['$log'];
 
-  function exceptionHandler($http, dataUrl) {
+  function exceptionHandler($log) {
     return function (exception, cause) {
-      var $rootScope = $rootScope.errors || [];
-      $rootScope.errors.push(exception.message);
-      console.log(exception.message);
+      $log.error("Komunikat: " + exception.message);
+      $log.error("Przyczyna: " + cause);
     };
 
 
@@ -22,5 +18,5 @@
 
 
 
-  } //#dataservice
+  } //#exceptionHandler
 })();

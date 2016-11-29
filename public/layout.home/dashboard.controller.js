@@ -5,7 +5,7 @@
   .controller('DashboardController', DashboardController);
 
   /* @ngInject */
-  DashboardController.$inject = ['$scope', '$interval', 'dataservice'];
+  DashboardController.$inject = ['$scope', '$interval', '$mdToast', 'dataservice', ];
   /*
   1. dodać funkcję odliczania czasu - done
   2. sformatować tabele
@@ -17,7 +17,7 @@
   8. dodać menu - usuń, status: zakończone
   */
 
-  function DashboardController($scope, $interval, dataservice) {
+  function DashboardController($scope, $interval, $mdToast, dataservice ) {
     var vm = this;
     vm.name = "DashboardController";
     vm.tasks = {};
@@ -53,6 +53,10 @@
         console.log('Loading tasks...');
         return data;
       })
+      .catch(function(err) {
+        console.log('Error');
+        console.log(err.message);
+      })
 
     }// #loadTasks
 
@@ -87,8 +91,14 @@
     function addTask(task) {
       return dataservice.addTask(task)
               .then(function(data) {
+
                 if(angular.isArray(vm.tasks)) {
-                  vm.tasks.unshift(data)
+                  if(data.status === 200) {
+                    console.log('New task');
+                    vm.tasks.unshift(data)
+                  } else {
+                    $mdToast.showSimple(data.data.message);
+                  }
                   return vm.tasks;
                 }
               })
@@ -97,6 +107,9 @@
                 vm.newTask = angular.copy({});
                 $scope.newTaskForm.$setPristine();
                 $scope.newTaskForm.$setUntouched();
+              })
+              .catch(function(err) {
+                console.log('error: ' + err.message);
               })
     }
 

@@ -11,5 +11,6 @@ module.exports = mongoose.model('Task',{
     duration: { type: Number, default: 0 },
     isPerforming: { type: Boolean, default: false},
     _creator: String,
-    isCompleted: { type: Boolean, default: false}
+    isCompleted: { type: Boolean, default: false},
+    project: String
 });

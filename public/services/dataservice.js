@@ -23,13 +23,14 @@
 ///////////////////////////////////
 
     function successCallback(response) {
-      console.log(response.data);
+      //console.log(response.data);
       return response.data;
     }
 
     function errorCallback(err) {
       console.log('Error: ');
       console.log(err);
+      return err;
     }
 
     function getTasks() {

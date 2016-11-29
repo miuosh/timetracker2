@@ -26,6 +26,10 @@
     initEvents();
 
 ///////////////////////////////////////////////////////////////////
+  init(state){
+    console.log('init data: ' + state);
+    self.states = loadAll(state);
+  }
     function initEvents() {
       $scope.$on('$destroy', function() {
         console.log('autocompleteController scope destroyed.');
@@ -74,8 +78,14 @@
         /**
          * Build `states` list of key/value pairs
          */
-        function loadAll() {
-          var allStates = 'Instalacja, Konfiguracja, Poprawka, Konsultacja';
+        function loadAll(state) {
+          var allStates = '';
+          if (state) {
+            allStates = 'Instalacja, Konfiguracja, Poprawka, Konsultacja';
+          } else {
+            allStates = 'PGNiG, PGNiG SOD, PSG';
+          }
+
 
           return allStates.split(/, +/g).map( function (state) {
             return {
