@@ -22,11 +22,10 @@
     vm.name = "DashboardController";
     vm.tasks = {};
     vm.intervalsID = [];
-    vm.newTask = {};
 
-    vm.addTask = addTask;
     vm.removeTasks = removeTasks;
     vm.toggleTask = toggleTask;
+    vm.setAsCompleted = setAsCompleted;
     vm.startTimer = startTimer;
     vm.stopTimer = stopTimer;
 
@@ -88,6 +87,7 @@
           })
   }// #getTasks
 
+<<<<<<< HEAD
     function addTask(task) {
       return dataservice.addTask(task)
               .then(function(data) {
@@ -113,6 +113,8 @@
               })
     }
 
+=======
+>>>>>>> origin/promises
     function removeTasks(id) {
       var ids = getSelectedTasks();
       return dataservice.removeTasks(ids)
@@ -166,6 +168,12 @@
         vm.stopTimer();
         console.log('DashboardController scope destroyed.');
       })
+
+      $scope.$on('addNewTask', function (event, data) {
+        console.log('Event: newTask');
+        console.log(data);
+        vm.tasks.unshift(data);
+      })
     }
 
     function countDuration(item) {
@@ -179,6 +187,13 @@
       var lastDuration = item.duration;
       item.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
       return item;
+    }
+
+    function setAsCompleted() {
+      var ids = getSelectedTasks();
+      return dataservice.setAsCompleted(ids)
+                .then(getTasks);
+
     }
 
 

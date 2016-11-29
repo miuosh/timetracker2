@@ -98,6 +98,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
   });
 
+<<<<<<< HEAD
     router.post('/', isAuthenticated,function(req, res) {
 			console.log('Request to add new task');
 			if(!req.body.desc || !req.body.category || typeof req.body.desc != "string" || typeof req.body.category != "string") {
@@ -123,6 +124,34 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 			} // #else
     });
+=======
+    router.post('/', isAuthenticated, function(req, res) {
+			var body = req.body;
+			console.log(req.user.id);
+			console.log(body);
+			if(typeof body.desc !== 'string'||	typeof body.category!=='string' || typeof body.project!=='string') {
+				res.status(400);
+				res.send({message: 'Fill all required data in form!'});
+			} else {
+							var task = new Task({
+											desc: req.body.desc,
+											category: req.body.category,
+											project: req.body.project,
+											creationDate: new Date(),
+											updated: new Date(),
+											isPerforming: false,
+											_creator: req.user.id
+							});
+							task.save( function(err) {
+									if (err) { throw err; }
+									else {
+											res.send(JSON.stringify(task));
+											console.log('Task saved.'); }
+							});
+			}
+        });
+
+>>>>>>> origin/promises
 
 
     // /** DELETE Task of given ID */
@@ -168,9 +197,10 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 
 				res.status(200);
-        res.send(cat);
+        res.send(JSON.stringify(cat));
     });
 
+<<<<<<< HEAD
 		router.post('/categories/',isAuthenticated, function(req, res) {
 			res.send({message: 'OK'})
 		});
@@ -194,5 +224,11 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 
 
+=======
+		router.get('/projects/', function(req, res) {
+
+		})
+
+>>>>>>> origin/promises
 
 module.exports = router;
