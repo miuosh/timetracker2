@@ -54,7 +54,7 @@
       return getTasks().then(function(data) {
         console.log('Loading tasks...');
         return data;
-      })
+      });
 
     }// #loadTasks
 
@@ -83,7 +83,7 @@
           .catch(function(err) {
             console.log(err);
             return err;
-          })
+          });
   }// #getTasks
 
     function removeTasks(ev) {
@@ -110,7 +110,7 @@
 
     function getSelectedTasks() {
       var ids = [];
-      var len = vm.tasks.length
+      var len = vm.tasks.length;
       for (var i = len; i--; ) {
         if (vm.tasks[i].selected){
           ids.push( vm.tasks[i]._id);
@@ -134,10 +134,12 @@
       //console.log(item);
       var intervalPromise = $interval(function() {
         item.duration++;
-      }, 1000)
+      }, 1000);
 
       var taskID = item._id;
-      vm.intervalsID.push({ intervalPromise, taskID });
+      vm.intervalsID.push({
+        intervalPromise: intervalPromise,
+        taskID: taskID });
       return intervalPromise;
     } // #startTimer
 
@@ -154,13 +156,13 @@
       $scope.$on('$destroy', function() {
         vm.stopTimer();
         console.log('DashboardController scope destroyed.');
-      })
+      });
 
       $scope.$on('addNewTask', function (event, data) {
         console.log('Event: newTask');
         console.log(data);
         vm.tasks.unshift(data);
-      })
+      });
     }
 
     function countDuration(item) {
@@ -191,12 +193,12 @@
     function compare(a, b) {
       if (a < b) {
         return -1;
+      }
       if (a > b) {
         return 1;
       }
       return 0;
     }
-  }
 
   }// #DashboardController
 })();

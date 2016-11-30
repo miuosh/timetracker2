@@ -31,7 +31,7 @@
             vm.errorMessage = error.err.message;
             vm.disabled = false;
             vm.registerForm = {};
-          })
+          });
       }
     }
 }());

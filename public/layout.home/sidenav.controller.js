@@ -18,7 +18,7 @@
       return AuthService.getUsername()
               .then(function(data) {
                 vm.username = data;
-              })
+              });
     }
 
 

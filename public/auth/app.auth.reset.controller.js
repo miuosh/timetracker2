@@ -23,7 +23,7 @@
           .catch(function(err) {
             vm.error = true;
             vm.errorMessage = err;
-          })
+          });
       }
     }
 

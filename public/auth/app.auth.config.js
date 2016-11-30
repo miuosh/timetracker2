@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('app.auth')
-  .config(configure)
+  .config(configure);
 
   /* @ngInject */
 configure.$inject = ['$routeProvider'];

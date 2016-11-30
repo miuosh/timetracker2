@@ -22,7 +22,7 @@
       $scope.$on('$destroy', function() {
         //vm.stopTimer();
         console.log('layoutController scope destroyed.');
-      })
+      });
     }
 
   }// #layoutController

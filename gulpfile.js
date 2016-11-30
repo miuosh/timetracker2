@@ -20,7 +20,7 @@ var reload      = browserSync.reload;
 
 var bases = {
  app: 'public/',
- dist: 'build/',
+ dist: 'build/'
 };
 
 var paths = {
@@ -41,7 +41,9 @@ gulp.task('clean', function() {
 // Process scripts and concatenate them into one output file
 gulp.task('scripts', ['clean'], function() {
  gulp.src(paths.scripts, {cwd: bases.app})
- .pipe(jshint())
+ .pipe(jshint({
+   esversion: 6
+ }))
  .pipe(jshint.reporter('default'))
  .pipe(concat('app.min.js', {newLine: ';'}))
         // Annotate before uglify so the code get's min'd properly.
@@ -50,7 +52,9 @@ gulp.task('scripts', ['clean'], function() {
             // Doesn't work with resolve, so we must be explicit there
             add: true
         }))
+  .pipe(gulp.dest(bases.dist + 'scripts/'))
  .pipe(bytediff.start())
+ .pipe(uglify().on('error', function(e){console.log('uglify Error:');console.log(e);})) // notice the error event here
  .pipe(uglify( {mangle: true} ))
  .pipe(bytediff.stop())
  .pipe(gulp.dest(bases.dist + 'scripts/'));

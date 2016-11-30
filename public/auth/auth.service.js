@@ -27,7 +27,7 @@
                   })
                   .error(function(err) {
                     console.log(err);
-                  })
+                  });
         }
 
         function isLoggedIn() {
@@ -49,7 +49,7 @@
                   })
                   .error(function (data) {
                     user = false;
-                  })
+                  });
 
         }// #getUserStatus
 
@@ -70,7 +70,7 @@
           }).error(function(err) {
             user = false;
             deferred.reject(err);
-          })
+          });
           // return promise object
           return deferred.promise;
         } // #login
@@ -87,7 +87,7 @@
           .error(function (err) {
             user = false;
             deferred.reject(err);
-          })
+          });
 
           return deferred.promise;
         }// #logout
@@ -119,7 +119,7 @@
         function resetPassword(email) {
           var deffered = $q.defer();
 
-          $http.post('/users/resetPassword', { email })
+          $http.post('/users/resetPassword',  email )
             .success(function (data, status) {
               if(status === 200 && data.status) {
                 deferred.resolve();

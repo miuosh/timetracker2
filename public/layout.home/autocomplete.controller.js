@@ -29,7 +29,7 @@
     function initEvents() {
       $scope.$on('$destroy', function() {
         console.log('autocompleteController scope destroyed.');
-      })
+      });
     }
 
     function newState(state) {
@@ -39,7 +39,7 @@
       self.states.push({
         value: state.toLowerCase(),
         display: state
-      })
+      });
     }
 
     // ******************************

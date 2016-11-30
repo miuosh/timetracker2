@@ -1,7 +1,7 @@
 (function() {
   'use strict';
     angular.module('app.auth')
-    .controller('loginController', loginController)
+    .controller('loginController', loginController);
 
     loginController.$inject = ['$location', 'AuthService'];
     /* @ngInject */
@@ -9,7 +9,7 @@
     function loginController ($location, AuthService) {
       var vm = this;
       vm.login = login;
-      
+
       ///////////////////////////////
 
       function login() {
@@ -30,7 +30,7 @@
             vm.errorMessage = "Invalid username and/or password";
             vm.disabled = false;
             vm.loginForm = {};
-          })
+          });
       }
 
     }

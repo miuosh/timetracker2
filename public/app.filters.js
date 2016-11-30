@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-  .filter('formatDuration', formatDuration)
+  .filter('formatDuration', formatDuration);
 
   /* @ngInject */
 

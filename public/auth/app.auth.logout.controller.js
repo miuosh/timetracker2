@@ -15,7 +15,7 @@
       AuthService.logout()
         .then(function() {
           $location.path('/login');
-        })
+        });
     }
 
     function isLoggedIn() {

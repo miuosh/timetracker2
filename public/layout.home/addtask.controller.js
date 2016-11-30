@@ -53,7 +53,7 @@
                   console.log('Błąd przy pobieraniu listy projektow');
                   //.log(data.message);
                 }
-              })
+              });
     }
 
 
@@ -69,7 +69,7 @@
                 vm.newTask = angular.copy({});
                 //$scope.newTaskForm.$setPristine();
                 //$scope.newTaskForm.$setUntouched();
-              })
+              });
     }
 
     function searchTextChange(text) {
@@ -88,7 +88,7 @@
       self.states.push({
         value: state.toLowerCase(),
         display: state
-      })
+      });
     }
 
     /**
