@@ -18,24 +18,24 @@ configure.$inject = ['$routeProvider'];
     })
     .when('/login', {
       templateUrl: '/partials/login.html',
-      controller: 'loginController',
+      controller: 'LoginController',
       controllerAs: 'vm',
       access: {restricted: false}
     })
     .when('/logout', {
-      controller: 'logoutController',
+      controller: 'LogoutController',
       controllerAs: 'vm',
       access: {restricted: true}
     })
     .when('/register', {
       templateUrl: '/partials/register.html',
-      controller: 'registerController',
+      controller: 'RegisterController',
       controllerAs: 'vm',
       access: {restricted: false}
     })
     .when('/reset', {
       templateUrl: '/partials/reset.html',
-      controller: 'resetController',
+      controller: 'ResetController',
       controllerAs: 'vm',
       access: {restricted: false}
     })

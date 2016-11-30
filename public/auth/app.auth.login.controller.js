@@ -1,12 +1,12 @@
 (function() {
   'use strict';
     angular.module('app.auth')
-    .controller('loginController', loginController);
+    .controller('LoginController', LoginController);
 
-    loginController.$inject = ['$location', 'AuthService'];
+    LoginController.$inject = ['$location', 'AuthService'];
     /* @ngInject */
 
-    function loginController ($location, AuthService) {
+    function LoginController ($location, AuthService) {
       var vm = this;
       vm.login = login;
 
@@ -34,4 +34,4 @@
       }
 
     }
-}());
+})();

@@ -1,12 +1,12 @@
 (function() {
   'use strict';
   angular.module('app.auth')
-  .controller('logoutController', logoutController);
+  .controller('LogoutController', LogoutController);
 
   /* @ngInject */
-  logoutController.$inject = ['$location', 'AuthService'];
+  LogoutController.$inject = ['$location', 'AuthService'];
 
-  function logoutController($location, AuthService) {
+  function LogoutController($location, AuthService) {
     var vm = this;
     vm.logout = logout;
     vm.isLoggedIn = isLoggedIn;
@@ -22,4 +22,4 @@
       return AuthService.isLoggedIn();
     }
   }
-}());
+})();

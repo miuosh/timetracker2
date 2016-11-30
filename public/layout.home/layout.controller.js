@@ -2,26 +2,26 @@
   'use strict';
 
   angular.module('app.layout')
-  .controller('layoutController', layoutController);
+  .controller('LayoutController', LayoutController);
 
   /* @ngInject */
-  layoutController.$inject = ['$scope'];
+  LayoutController.$inject = ['$scope'];
 
-  function layoutController($scope) {
+  function LayoutController($scope) {
     var vm = this;
-    vm.name = "layoutController";
+    vm.name = "LayoutController";
 
     // init value
     vm.subPage = '/layout.home/dashboard.html';
 
-    console.log('Init layoutController');
+    console.log('Init LayoutController');
 
     initEvents();
 ///////////////////////////////////////////////////////////////////
     function initEvents() {
       $scope.$on('$destroy', function() {
         //vm.stopTimer();
-        console.log('layoutController scope destroyed.');
+        console.log('LayoutController scope destroyed.');
       });
     }
 

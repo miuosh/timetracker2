@@ -24,10 +24,10 @@ var bases = {
 };
 
 var paths = {
- scripts: ['app.module.js', '*.js', '*/**/*.js'],
+ scripts: ['app.module.js','auth/app.auth.module.js', 'layout.home/layout.module.js', '*.js', '*/**/*.js'],
  //libs: ['scripts/libs/jquery/dist/jquery.js', 'scripts/libs/underscore/underscore.js', 'scripts/backbone/backbone.js'],
  styles: ['stylesheets/**/*.css'],
- html: ['index.html'],
+ html: ['*.html', '*/**/*.html'],
  //images: ['images/**/*.png'],
  //extras: ['crossdomain.xml', 'humans.txt', 'manifest.appcache', 'robots.txt', 'favicon.ico'],
 };
@@ -52,7 +52,6 @@ gulp.task('scripts', ['clean'], function() {
             // Doesn't work with resolve, so we must be explicit there
             add: true
         }))
-  .pipe(gulp.dest(bases.dist + 'scripts/'))
  .pipe(bytediff.start())
  .pipe(uglify().on('error', function(e){console.log('uglify Error:');console.log(e);})) // notice the error event here
  .pipe(uglify( {mangle: true} ))

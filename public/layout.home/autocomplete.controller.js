@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('app.layout')
-  .controller('autocompleteController', autocompleteController);
+  .controller('AutocompleteController', AutocompleteController);
 
   /* @ngInject */
-  autocompleteController.$inject = ['$scope', '$log'];
+  AutocompleteController.$inject = ['$scope', '$log'];
 
-  function autocompleteController($scope, $log) {
+  function AutocompleteController($scope, $log) {
     var self = this;
 
     self.simulateQuery = false;

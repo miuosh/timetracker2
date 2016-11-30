@@ -1,11 +1,11 @@
 (function() {
   'use strict';
     angular.module('app.auth')
-    .controller('registerController', registerController);
+    .controller('RegisterController', RegisterController);
 
-    registerController.$inject = ['$location', 'AuthService'];
+    RegisterController.$inject = ['$location', 'AuthService'];
 
-    function registerController($location, AuthService) {
+    function RegisterController($location, AuthService) {
       var vm = this;
       vm.error = false;
       vm.disabled = true;
@@ -34,4 +34,4 @@
           });
       }
     }
-}());
+})();

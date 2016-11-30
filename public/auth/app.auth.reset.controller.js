@@ -1,11 +1,11 @@
 (function() {
   'use strict';
     angular.module('app.auth')
-    .controller('resetController', resetController);
+    .controller('ResetController', ResetController);
 
-    resetController.$inject = ['AuthService'];
+    ResetController.$inject = ['AuthService'];
 
-    function resetController(AuthService) {
+    function ResetController(AuthService) {
       var vm = this;
       vm.reset = reset;
       /*

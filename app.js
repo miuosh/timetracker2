@@ -44,7 +44,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // passport config
 
 passport.use(new LocalStrategy(Account.authenticate()));
@@ -75,30 +74,6 @@ app.use('/edittask/', edittask);
     // When successfully connected
     mongoose.connection.on('connected', function () {
       console.log('Mongoose default connection open to ' + dbConfig.url);
- // tests - remove after move to routes
-        // var query = require('./routes/tasks.query');
-        // var p = query.stopAllUserTasks("58288531bdaf7916a89deac9");
-        //
-        //   p.then(function(data) {
-        //       console.log('Promise success: ');
-        //       console.log(data);
-        //     })
-        //     .catch(function(e) {
-        //       console.log(e)}
-        //     );
-        //
-        // var s = query.startUserTask("58288531bdaf7916a89deac9", '123')
-        //
-        // s.then(function(data) {
-        //   console.log('Promise startUserTask: ');
-        //   console.log(data);
-        //   })
-        //   .catch(function(e) {
-        //     console.log('Promise startUserTask error: ');
-        //     console.log(e.message);
-        //   })
-
-
       })// #connected
 
 
