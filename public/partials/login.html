@@ -1,0 +1,46 @@
+
+
+      <!-- column 1 -->
+      <div layout-margin layout="row" >
+        <div layout="column" flex="">
+
+        </div>
+
+        <!-- column 2 - loginForm -->
+        <div layout="column" flex="" >
+          <div ng-show="vm.error">
+              {{ vm.errorMessage }}
+          </div>
+            <form method="post" name="loginForm">
+              <md-input-container class="md-block" >
+                <label>Login</label>
+                <input type="text" name="username" ng-model="vm.loginForm.username" />
+              </md-input-container>
+
+              <md-input-container class="md-block" >
+                <label>Hasło</label>
+                <input type="password" name="password" ng-model="vm.loginForm.password">
+              </md-input-container>
+
+              <md-input-container class="md-block" >
+                <md-button type="submit" class="md-raised md-primary"
+                  ng-click="vm.login()">Zaloguj</md-button>
+              </md-input-container>
+            </form>
+
+            <div>
+                <a ng-href="#/reset">Nie pamiętam hasła</a>
+            </div>
+            <br />
+            <div>
+                <a ng-href="#/register">Utwórz konto</a>
+            </div>
+        </div>
+
+        <!-- column 3 -->
+        <div layout="column" flex="">
+
+      </div>
+
+
+        </div>

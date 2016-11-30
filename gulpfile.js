@@ -20,14 +20,14 @@ var reload      = browserSync.reload;
 
 var bases = {
  app: 'public/',
- dist: 'build/',
+ dist: 'build/'
 };
 
 var paths = {
- scripts: ['app.module.js','*.js', '*/**/*.js'],
+ scripts: ['app.module.js','auth/app.auth.module.js', 'layout.home/layout.module.js', '*.js', '*/**/*.js'],
  //libs: ['scripts/libs/jquery/dist/jquery.js', 'scripts/libs/underscore/underscore.js', 'scripts/backbone/backbone.js'],
  styles: ['stylesheets/**/*.css'],
- html: ['index.html'],
+ html: ['*.html', '*/**/*.html'],
  //images: ['images/**/*.png'],
  //extras: ['crossdomain.xml', 'humans.txt', 'manifest.appcache', 'robots.txt', 'favicon.ico'],
 };
@@ -41,7 +41,9 @@ gulp.task('clean', function() {
 // Process scripts and concatenate them into one output file
 gulp.task('scripts', ['clean'], function() {
  gulp.src(paths.scripts, {cwd: bases.app})
- .pipe(jshint())
+ .pipe(jshint({
+   esversion: 6
+ }))
  .pipe(jshint.reporter('default'))
  .pipe(concat('app.min.js', {newLine: ';'}))
         // Annotate before uglify so the code get's min'd properly.
@@ -51,6 +53,7 @@ gulp.task('scripts', ['clean'], function() {
             add: true
         }))
  .pipe(bytediff.start())
+ .pipe(uglify().on('error', function(e){console.log('uglify Error:');console.log(e);})) // notice the error event here
  .pipe(uglify( {mangle: true} ))
  .pipe(bytediff.stop())
  .pipe(gulp.dest(bases.dist + 'scripts/'));
@@ -128,5 +131,6 @@ gulp.task('browser-sync', function() {
         }
     });
      gulp.watch("public/*.html").on("change", reload);
+     gulp.watch("public/**/*.html").on("change", reload);
      gulp.watch("public/**/*.js").on("change", reload);
 });

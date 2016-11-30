@@ -1,0 +1,32 @@
+<div ng-controller="ReportController as vm">
+  <h1>Ukończone</h1>
+  <!-- Tasks table -->
+  <table  width="100%" layout-padding>
+    <thead>
+      <tr>
+
+        <th>Opis</th>
+        <th>Projekt</th>
+        <th>Kategoria</th>
+        <th>Data utworzenia</th>
+        <th>Data modyfikacji</th>
+        <th>Czas trwania</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in vm.tasks" ng-if="item.isCompleted">
+
+        <td class="table-desc">{{ item.desc }}</td>
+        <td class="table-project">{{ item.project }}</td>
+        <td class="table-category">{{ item.category }}</td>
+        <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td class="table-duration">{{ item.duration | formatDuration }}</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>

@@ -1,0 +1,19 @@
+<nav class="md-whiteframe-2dp" style="background-color:#1A237E; color: white" layout="row" layout-align="end start" >
+    <!-- column 1 -->
+      <div flex="20" layout="row" >
+        <h4 style="margin: 0px; padding: 20px">TimeTracker</h4>
+      </div>
+      <div flex="">
+
+      </div>
+    <!-- column 3 -->
+
+        <div ng-controller="LogoutController as vm" >
+          <h5 ng-if="!vm.isLoggedIn()" style="margin-right: 10px;">ver 0.1.0</h5>
+          <div ng-if="vm.isLoggedIn()" layout-align="end none" >
+            <md-button ng-click='vm.logout()' class="md-raised md-primary">Wyloguj</md-button>
+          </div>
+        </div>
+
+
+</nav>

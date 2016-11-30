@@ -1,0 +1,50 @@
+<div class="md-whiteframe-4dp" layout-padding ng-controller="DashboardController as vm">
+  <br />
+
+  <div ng-include="'./layout.home/addtask.html'" ng-controller="AddTaskController as at" ></div>
+
+
+<!-- Tasks table -->
+<table  cellspacing="0" width="100%" layout-padding>
+
+  <caption>
+    <md-button class="md-primary" ng-click="vm.setAsCompleted()">Oznacz jako ukończone</md-button>
+    <md-button class="md-primary" ng-click="vm.removeTasks($event)">Usuń</md-button>
+  </caption>
+
+  <thead>
+    <tr>
+      <th >
+
+      </th>
+      <th>Opis</th>
+      <th>Projekt</th>
+      <th>Kategoria</th>
+      <!-- <th>Data utworzenia</th> -->
+      <th>Data modyfikacji</th>
+      <th>Czas trwania</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in vm.tasks" ng-if="!item.isCompleted">
+      <td class="table-checkbox">
+        <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
+      </td>
+      <td class="table-desc">{{ item.desc }}</td>
+      <td class="table-project">{{ item.project }}</td>
+      <td class="table-category">{{ item.category }}</td>
+      <!-- <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td> -->
+      <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+      <td class="table-duration">{{ item.duration | formatDuration }}</td>
+      <td class="table-toggle">
+        <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary"
+         style="background-color:#4CAF50" ng-click="vm.toggleTask(item)">START</md-button>
+        <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary"
+         style="background-color:#F44336" ng-click="vm.toggleTask(item)">STOP</md-button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>

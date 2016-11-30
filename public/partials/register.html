@@ -1,0 +1,48 @@
+<!-- column 1 -->
+<div layout-margin layout="row" >
+  <div layout="column" flex="">
+
+  </div>
+
+  <!-- column 2 - loginForm -->
+  <div layout="column" flex="" >
+    <h1>Rejestracja</h1>
+    <div ng-show="vm.error">
+      {{ vm.errorMessage }}
+    </div>
+      <form name="registerForm">
+        <md-input-container class="md-block" >
+          <label>Login</label>
+          <input type="text" name="username" ng-model="vm.registerForm.username" autofocus />
+        </md-input-container>
+
+        <md-input-container class="md-block" >
+          <label>Hasło</label>
+          <input type="password" name="password" ng-model="vm.registerForm.password" >
+        </md-input-container>
+
+        <md-input-container class="md-block" >
+          <label>email</label>
+          <input type="email" name="email" ng-model="vm.registerForm.email" required>
+        </md-input-container>
+
+        <md-input-container class="md-block" >
+          <md-button class="md-raised md-primary" name="button"
+            ng-click="vm.register()" ng-disabled="enabled">Utwórz</md-button>
+        </md-input-container>
+      </form>
+
+      <div>
+          <a ng-href="#/">Logowanie</a>
+      </div>
+      <br />
+
+  </div>
+
+  <!-- column 3 -->
+  <div layout="column" flex="">
+
+</div>
+
+
+  </div>

@@ -1,0 +1,80 @@
+
+<html>
+    <head>
+        <title>TimeTracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/stylesheets/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+        <!-- Angular Material style sheet -->
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+
+    </head>
+    <body ng-app="loginApp" ng-cloak >
+
+      <nav class="md-whiteframe-2dp" style="background-color:#1A237E; color: white"  >
+        <div flex="20">
+          <h4 style="margin: 0px; padding: 20px">TimeTracker</h4>
+        </div>
+
+      </nav>
+
+      <div layout-margin layout="row" >
+        <div layout="column" flex="">
+
+        </div>
+        <div layout="column" flex="" >
+            <form action="/login" method="post" name="loginForm">
+              <md-input-container class="md-block" >
+                <label>Login</label>
+                <input type="text" name="username" autofocus />
+              </md-input-container>
+
+              <md-input-container class="md-block" >
+                <label>Hasło</label>
+                <input type="password" name="password">
+              </md-input-container>
+
+              <md-input-container class="md-block" >
+                <md-button type="submit" class="md-raised md-primary" name="button">Zaloguj</md-button>
+              </md-input-container>
+            </form>
+
+            <div>
+                <a href="/resetpassword">Nie pamiętam hasła</a>
+            </div>
+            <br />
+            <div>
+                <a href="/register">Utwórz konto</a>
+            </div>
+
+        </div>
+        <div layout="column" flex="">
+
+        </div>
+
+
+        </div>
+
+
+
+      <!-- AngularJS Library -->
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+
+      <!-- Angular Material Library -->
+      <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.min.js"></script>
+
+      <script>
+        angular.module('loginApp', ['ngMaterial', 'ngAnimate'])
+        .controller('loginCtrl', function() {});
+      </script>
+
+    </body>
+</html>

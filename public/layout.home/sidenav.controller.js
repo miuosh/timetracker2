@@ -8,10 +8,19 @@
   .controller('SideNavController', SideNavController);
 
   /* @ngInject */
-  function SideNavController() {
+  SideNavController.$inject = ['AuthService'];
+  function SideNavController(AuthService) {
     var vm = this;
     vm.name = "SideNavController";
-  }
+    vm.username = getUsername;
+
+    function getUsername() {
+      return AuthService.getUsername()
+              .then(function(data) {
+                vm.username = data;
+              });
+    }
 
 
+  }// #SideNavController
 })();
