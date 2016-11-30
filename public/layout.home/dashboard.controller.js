@@ -8,13 +8,13 @@
   DashboardController.$inject = ['$scope', '$interval','$mdDialog', 'dataservice'];
   /*
   1. dodać funkcję odliczania czasu - done
-  2. sformatować tabele
+  2. sformatować tabele- done
   3. zrobić stronicowanie
   4. filtrowanie po kolumnie
   5. filtrowanie po kategorii
   6. wyszukiwanie
   7. możliwość wczytania predefiniowanych kategorii
-  8. dodać menu - usuń, status: zakończone
+  8. dodać menu - usuń, status: ukończone - done
   */
 
   function DashboardController($scope, $interval, $mdDialog, dataservice) {

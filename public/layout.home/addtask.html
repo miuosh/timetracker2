@@ -18,14 +18,20 @@
         </div>
       </md-input-container>
 
-      <!-- category -->
-      <md-input-container>
-        <label>Kategoria...</label>
-        <input type="text" name="category" ng-model="at.newTask.category" required md-no-asterisk autocomplete="off">
-        <div ng-messages="newTaskForm.category.$error" role="alert">
-          <div ng-message="required">Pole nie może być puste.</div>
-        </div>
-      </md-input-container>
+      <!-- category autocomplete -->
+      <div ng-controller="AutocompleteController as ac">
+        <md-input-container >
+          <md-autocomplete
+            md-selected-item="ac.selectedItem"
+            md-search-text="ac.typedItem"
+            md-items="item in getMatches(ac.typedItem)"
+            md-item-text="item.display"
+
+
+            md-floating-label="Kategoria...">
+           </md-autocomplete>
+        </md-input-container>
+      </div>
 
     <md-input-container>
       <md-button type="submit" class="md-fab" aria-label="add-task" >
