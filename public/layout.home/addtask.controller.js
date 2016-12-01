@@ -14,23 +14,37 @@
     vm.addTask = addTask;
     $scope.newTaskForm = {};
 
-    // autocomplete model
-    vm.profile = {
-        "name": "profil1",
-        "projects": ["TelWin", "TelNOM"],
-        "categories": ["Instalacja", "Konfiguracja", "Poprawka", "Testy"]
-      };
+
+    self.simulateQuery = false;
+    self.isDisabled    = false;
+
+////////////////////////////////////////////////////////////////////////////////
+   // my test data
+   self.profile = {
+       "name": "profil1",
+       "projects": ["TelWin", "TelNOM"],
+       "categories": ["Instalacja", "Konfiguracja", "Poprawka", "Testy"]
+     };
+
+   self.categories =  ["Instalacja", "Konfiguracja", "Poprawka", "Testy"];
 
 
+
+    init();
+////////////////////////////////////////////////////////////////////////////////
     function init() {
-      console.log('Init AddTaskCtrl');
+      console.log('Init AddTaskController');
+
+      $scope.$on('categoryChanged', function(event, data) {
+        vm.newTask.category = data;
+      })
     }
 
 
     function addTask(task) {
       return dataservice.addTask(task)
               .then(function(data) {
-                  // pass data to DashboardController through event
+                  // pass data to DashboardController by emit event
                   $scope.$emit('addNewTask', data);
                   return data;
                 })
