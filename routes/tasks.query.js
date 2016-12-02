@@ -9,7 +9,8 @@ module.exports = {
   stopUserTask: stopUserTask,
   stopAllPerfomingUserTasks: stopAllPerfomingUserTasks,
   toggleUserTask: toggleUserTask,
-  setAsCompleted: setAsCompleted
+  setAsCompleted: setAsCompleted,
+  editTask: editTask
 
 }
 
@@ -181,3 +182,17 @@ module.exports = {
             return err;
           });
     };
+
+function editTask(task) {
+  var promise = Task.find({'_id': task.id }).exec();
+
+  promise.then(function(data) {
+    var prevTask = data[0];
+    prevTask = task;
+
+    return task.save();
+  })
+  .catch(function(err) {
+    return err;
+  });
+}

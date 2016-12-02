@@ -5,12 +5,15 @@
   .constant('dataUrl', {
     'url' : '/tasks/'
   })
+  .constant('profileUrl', {
+    'url' : '/profiles/'
+  })
   .factory('dataservice', dataservice);
 
   /* @ngInject */
 //  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http, dataUrl) {
+  function dataservice($http, dataUrl, profileUrl) {
     return {
       getTasks: getTasks,
       getTask: getTask,
@@ -19,7 +22,14 @@
       toggleTask: toggleTask,
       getCategories: getCategories,
       getProjects: getProjects,
-      setAsCompleted: setAsCompleted
+      setAsCompleted: setAsCompleted,
+      /* Task profiles */
+      getProfiles: getProfiles,
+      getProfile: getProfile,
+      addProfile: addProfile,
+      editProfile: editProfile,
+      removeProfile: removeProfile
+
     };
 
 
@@ -85,5 +95,34 @@
                         .catch(errorCallback);
     }
 
+    function getProfiles() {
+      return $http.get(profileUrl.url)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getProfile(id) {
+      return $http.get(profileUrl.url + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function addProfile(profile) {
+      return $http.post(profileUrl.url, profile, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function editProfile(id, profile) {
+      return $http.post(profileUrl.url + id, profile, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function removeProfile(id) {
+      return $http.delete(profileUrl.url + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
   } //#dataservice
 })();

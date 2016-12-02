@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////////
     // my test data
     self.profile = {
-        "name": "profil1",
+        "name": "default",
         "projects": ["TelWin", "TelNOM"],
         "categories": ["Instalacja", "Konfiguracja", "Poprawka", "Testy"]
       };

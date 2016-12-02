@@ -79,6 +79,11 @@ md-checkbox .md-container {
   text-align: center;
 }
 
+.table-col {
+  width: 10%;
+  text-align: center;
+}
+
 md-input-container:not(.md-input-has-value) {
   color:red;
 }

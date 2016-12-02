@@ -16,6 +16,7 @@ var users = require('./routes/users');
 var tasks = require('./routes/tasks')
 var addtask = require('./routes/addtask')
 var edittask = require('./routes/edittask')
+var taskprofile = require('./routes/taskprofile')
 
 var Account = require('./models/account');
 var Task = require('./models/task');
@@ -54,7 +55,7 @@ app.use('/users/', users);
 app.use('/tasks/', tasks);
 app.use('/addtask/', addtask);
 app.use('/edittask/', edittask);
-
+app.use('/profiles/', taskprofile);
 
 // MongoDB
     var dbConfig = {
