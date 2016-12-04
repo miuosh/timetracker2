@@ -6,18 +6,19 @@
   .controller('ProfilesController', ProfilesController);
 
   /* @ngInject */
-  ProfilesController.$inject = ['$scope', 'dataservice'];
-  function ProfilesController($scope, dataservice) {
+  ProfilesController.$inject = ['$scope', '$mdDialog', 'dataservice'];
+  function ProfilesController($scope, $mdDialog, dataservice) {
     var vm = this;
     vm.name = "ProfilesController";
     vm.profiles = {};
-    vm.newProfile = {};
-    vm.addProject = addProject;
-    vm.addCategory = addCategory;
-    vm.saveProfile = saveProfile;
     vm.loadProfiles = loadProfiles;
     vm.removeProfile = removeProfile;
 
+    // Dialog
+    $scope.status = '';
+    $scope.showCustomDialog = showCustomDialog;
+
+    // initialize events and load data
     init();
 
     //////////////////////////////////
@@ -37,30 +38,7 @@
         });
     }
 
-    function addProject() {
-      if (angular.isUndefined(vm.newProfile.projects)) {
-        vm.newProfile.projects = [];
-      }
-      vm.newProfile.projects.unshift("");
-    }
 
-    function addCategory() {
-      if(angular.isUndefined(vm.newProfile.categories)) {
-        vm.newProfile.categories = [];
-      }
-      vm.newProfile.categories.unshift("");
-    }
-
-    function saveProfile(profile) {
-      return dataservice.addProfile(profile)
-              .then(function(data) {
-                vm.loadProfiles();
-                return data;
-              })
-              .catch(function(err) {
-                console.error(err);
-              })
-    }
 
     function removeProfile(id) {
       return dataservice.removeProfile(id)
@@ -84,6 +62,75 @@
                 })
     }
 
+    function showCustomDialog(ev) {
+      $mdDialog.show({
+        controller: DialogController,
+        controllerAs: 'dc',
+        templateUrl: '/layout.home/new-profile.dialog.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        fullscreen: false
+      })
+    }
+
+    //-------------------------------------------------
+    //  DialogController
+    //-------------------------------------------------
+
+    function DialogController($scope, $mdDialog, dataservice) {
+
+      var self = this;
+      self.hide = hide;
+      self.cancel = cancel;
+      self.answer = answer;
+      // form
+      self.newProfile = {};
+      self.addProject = addProject;
+      self.addCategory = addCategory;
+      self.saveProfile = saveProfile;
+
+
+      ////////////////////////////////////////////////////////////////////////////////
+      function hide() {
+        $mdDialog.hide();
+      }
+
+      function cancel() {
+        $mdDialog.cancel();
+      }
+
+      function answer(answer) {
+        $mdDialog.hide(answer);
+      }
+
+      function addProject() {
+        if (angular.isUndefined(self.newProfile.projects)) {
+          self.newProfile.projects = [];
+        }
+        self.newProfile.projects.unshift("");
+      }
+
+      function addCategory() {
+        if(angular.isUndefined(self.newProfile.categories)) {
+          self.newProfile.categories = [];
+        }
+        self.newProfile.categories.unshift("");
+      }
+
+      function saveProfile(profile) {
+        return dataservice.addProfile(profile)
+                .then(function(data) {
+                  vm.loadProfiles();
+                  self.hide();
+                  return data;
+                })
+                .catch(function(err) {
+                  console.error(err);
+                })
+      }
+
+    }// $DialogController
 
   }// #ProfilesController
 

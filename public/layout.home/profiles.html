@@ -1,39 +1,9 @@
 <h2>Profile</h2>
 
 <div ng-controller="ProfilesController as pc">
-  <div layout="row"  layout-align="space-around center">
 
-      <div flex>
-        <md-input-container>
-          <label>Nazwa profilu</label>
-          <input type="text" name="name" ng-model="pc.newProfile.name" required md-no-asterisk autocomplete="off">
-        <md-input-container>
-      </div>
 
-      <div flex>
-        <h3>Projekty</h3>
-        <md-button type="button" name="projectbutton" ng-click="pc.addProject()">Dodaj projekt</md-button>
-
-        <md-input-container ng-repeat="item in pc.newProfile.projects track by $index" layout="row">
-          <label>Wpisz nazwę {{ $index + 1}} projektu</label>
-          <input type="text" name="project-[$index]" ng-model="pc.newProfile.projects[$index]" required md-no-asterisk autocomplete="off">
-        <md-input-container>
-
-      </div>
-
-      <div flex>
-        <h3>Kategorie</h3>
-        <md-button type="button" name="projectbutton" ng-click="pc.addCategory()">Dodaj kategorię</md-button>
-
-        <md-input-container ng-repeat="item in pc.newProfile.categories track by $index" layout="row">
-          <label>Wpisz nazwę {{ $index + 1}} kategorii</label>
-          <input type="text" name="categories-[$index]" ng-model="pc.newProfile.categories[$index]" required md-no-asterisk autocomplete="off">
-        <md-input-container>
-      </div>
-
-        <md-button ng-click="pc.saveProfile(pc.newProfile)" name="saveProfilebutton">Zapisz</md-button>
-
-  </div>
+  <md-button ng-click="showCustomDialog($event)">Dodaj nowy profil</md-button>
 
 
   <table>
