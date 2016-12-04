@@ -1,0 +1,43 @@
+<md-dialog aria-label="Dodawanie nowego profilu">
+
+<md-dialog-content style="padding: 1em;">
+
+  <div flex>
+    <h2>Dodawanie nowego profilu</h2>
+    <md-input-container>
+      <label>Nazwa profilu</label>
+      <input type="text" name="name" ng-model="dc.newProfile.name" required md-no-asterisk autocomplete="off">
+    <md-input-container>
+  </div>
+
+  <div layout="row"  layout-align="space-around center">
+      <div flex>
+        <h3>Projekty</h3>
+        <md-button type="button" name="projectbutton" ng-click="dc.addProject()">Dodaj projekt</md-button>
+
+        <md-input-container ng-repeat="item in dc.newProfile.projects track by $index" layout="row">
+          <label>Wpisz nazwę {{ $index + 1}} projektu</label>
+          <input type="text" name="project-[$index]" ng-model="dc.newProfile.projects[$index]" required md-no-asterisk autocomplete="off">
+        <md-input-container>
+
+      </div>
+
+      <div flex>
+        <h3>Kategorie</h3>
+        <md-button type="button" name="projectbutton" ng-click="dc.addCategory()">Dodaj kategorię</md-button>
+
+        <md-input-container ng-repeat="item in dc.newProfile.categories track by $index" layout="row">
+          <label>Wpisz nazwę {{ $index + 1}} kategorii</label>
+          <input type="text" name="categories-[$index]" ng-model="dc.newProfile.categories[$index]" required md-no-asterisk autocomplete="off">
+        <md-input-container>
+      </div>
+
+  </div>
+</md-dialog-content>
+
+<md-dialog-actions>
+  <md-button ng-click="dc.cancel()" name="saveProfilebutton">Anuluj</md-button>
+  <md-button ng-click="dc.saveProfile(dc.newProfile)" name="saveProfilebutton">Zapisz</md-button>
+</md-dialog-actions>
+
+</md-dialog>
