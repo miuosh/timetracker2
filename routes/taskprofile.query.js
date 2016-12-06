@@ -5,7 +5,8 @@ module.exports = {
   getProfile: getProfile,
   addProfile: addProfile,
   editProfile: editProfile,
-  removeProfile: removeProfile
+  removeProfile: removeProfile,
+  getProfileByName: getProfileByName
 }
 
 
@@ -14,10 +15,14 @@ function getProfiles() {
 }
 
 function getProfile(id) {
-  return Task.Profile.find( {'_id': id} );
+  return TaskProfile.find( {'_id': id} );
 }
 
-function addProfile(profile){
+function getProfileByName(name) {
+  return TaskProfile.find( {'name': name} ).exec();
+}
+
+function addProfile(profile) {
   var profile = new TaskProfile( {
     name: profile.name,
     projects: profile.projects,

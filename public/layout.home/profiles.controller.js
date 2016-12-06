@@ -72,6 +72,11 @@
         clickOutsideToClose: true,
         fullscreen: false
       })
+      .then(function(answer) {
+        console.log('Dialog - OK.')
+      }, function() {
+        console.log('Cancel dialog.')
+      })
     }
 
     //-------------------------------------------------
@@ -122,12 +127,15 @@
         return dataservice.addProfile(profile)
                 .then(function(data) {
                   vm.loadProfiles();
-                  self.hide();
+                  if(data.status === 400) {
+                    self.errmsg = "Profil o podanej nazwie już istnieje!";
+                  } else {
+                    self.hide();
+                  }
+
                   return data;
                 })
-                .catch(function(err) {
-                  console.error(err);
-                })
+
       }
 
     }// $DialogController

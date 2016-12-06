@@ -1,14 +1,21 @@
 <md-dialog aria-label="Dodawanie nowego profilu">
+<md-toolbar>
+<h2 style="padding: 5px;">Dodawanie nowego profilu</h2>
+</md-toolbar>
 
 <md-dialog-content style="padding: 1em;">
 
-  <div flex>
-    <h2>Dodawanie nowego profilu</h2>
+  <div layout="column">
+    <div ng-show="dc.errmsg" style="color:red">
+      {{dc.errmsg}}
+    </div>
     <md-input-container>
       <label>Nazwa profilu</label>
       <input type="text" name="name" ng-model="dc.newProfile.name" required md-no-asterisk autocomplete="off">
     <md-input-container>
+
   </div>
+
 
   <div layout="row"  layout-align="space-around center">
       <div flex>

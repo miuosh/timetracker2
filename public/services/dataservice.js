@@ -8,12 +8,15 @@
   .constant('profileUrl', {
     'url' : '/profiles/'
   })
+  .constant('userUrl', {
+    'url': '/users/'
+  })
   .factory('dataservice', dataservice);
 
   /* @ngInject */
 //  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http, dataUrl, profileUrl) {
+  function dataservice($http, dataUrl, profileUrl, userUrl) {
     return {
       getTasks: getTasks,
       getTask: getTask,
@@ -25,10 +28,13 @@
       setAsCompleted: setAsCompleted,
       /* Task profiles */
       getProfiles: getProfiles,
-      getProfile: getProfile,
+      getProfile: getProfile, // by name
       addProfile: addProfile,
       editProfile: editProfile,
-      removeProfile: removeProfile
+      removeProfile: removeProfile,
+      /* User settings */
+      saveUserSettings: saveUserSettings,
+      getUserSettings: getUserSettings,
 
     };
 
@@ -101,8 +107,8 @@
                     .catch(errorCallback);
     }
 
-    function getProfile(id) {
-      return $http.get(profileUrl.url + id)
+    function getProfile(name) {
+      return $http.get(profileUrl.url + name)
                     .then(successCallback)
                     .catch(errorCallback);
     }
@@ -124,5 +130,19 @@
                     .then(successCallback)
                     .catch(errorCallback);
     }
+
+    function getUserSettings() {
+      return $http.get(userUrl.url + '/settings/')
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function saveUserSettings(config) {
+      console.log(config);
+      return $http.post(userUrl.url + '/settings/', JSON.stringify(config), { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
   } //#dataservice
 })();

@@ -32,10 +32,11 @@ router.get('/', function(req, res) {
 
 });
 /*
- GET profile of given ID
+ GET profile of given name
 */
-router.get('/:id', function(req, res) {
-  var getProfilePromise = query.getProfile(req.params.id);
+router.get('/:name', function(req, res) {
+	
+  var getProfilePromise = query.getProfileByName(req.params.name);
 
   getProfilePromise.then(function(data) {
     res.status(200);
@@ -47,13 +48,15 @@ router.get('/:id', function(req, res) {
   });
 });
 
+
+
 /*
   POST - add new TaskProfile
 */
 
 router.post('/', isAuthenticated, function(req, res) {
     var profile = req.body;
-    console.log(profile);
+		// profile has unique name
     var addProfilePromise = query.addProfile(profile);
 
     addProfilePromise.then(function(data) {
