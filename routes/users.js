@@ -115,7 +115,7 @@ router.post('/settings/', isAuthenticated, function(req, res) {
     var accountPromise = Account.find({ "_id": req.user._id }).exec();
 
     var config = req.body;
-    if(typeof config.profile.name === 'string') {
+    if(config.profile.name != undefined ||  typeof config.profile.name === 'string') {
 
       accountPromise.then(function(data) {
         var account = data[0];

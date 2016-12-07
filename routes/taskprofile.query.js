@@ -32,10 +32,10 @@ function addProfile(profile) {
   return profile.save();
 }
 
-function editProfile(id, profile) {
-  var promise = TaskProfile.find({ '_id': id }).exec();
+function editProfile(profile) {
+  var promise = TaskProfile.find({ '_id': profile._id }).exec();
 
-  promise.then(function(data) {
+  return promise.then(function(data) {
     var taskprofile = data[0];
     taskprofile.name = profile.name;
     taskprofile.projects = profile.projects;

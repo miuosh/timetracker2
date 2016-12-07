@@ -43,7 +43,7 @@
 
     function successCallback(response) {
       //console.log(response.data);
-      return response.data;
+        return response.data;
     }
 
     function errorCallback(err) {
@@ -119,8 +119,8 @@
                     .catch(errorCallback);
     }
 
-    function editProfile(id, profile) {
-      return $http.post(profileUrl.url + id, profile, { headers: {'Content-Type': 'application/json' }})
+    function editProfile(profile) {
+      return $http.put(profileUrl.url, profile, { headers: {'Content-Type': 'application/json' }})
                     .then(successCallback)
                     .catch(errorCallback);
     }

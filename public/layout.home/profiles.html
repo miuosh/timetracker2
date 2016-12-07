@@ -3,13 +3,12 @@
 <div ng-controller="ProfilesController as pc">
 
 
-  <md-button ng-click="showCustomDialog($event)">Dodaj nowy profil</md-button>
+  <md-button ng-click="addNewProfile($event)">Dodaj nowy profil</md-button>
 
 
   <table>
     <thead>
       <tr>
-        <th>ID</th>
         <th>Nazwa</th>
         <th>Projekty</th>
         <th>Kategorie</th>
@@ -18,12 +17,12 @@
     </thead>
     <tbody >
       <tr class="table-col" ng-repeat="item in pc.profiles">
-        <th>{{item._id}}</th>
         <td>{{item.name}}</td>
         <td>{{item.projects}}</td>
         <td>{{item.categories}}</td>
         <td>
           <md-button ng-click="pc.removeProfile(item._id)" name="removeButton-$index">Usuń</md-button>
+          <md-button ng-click="editProfile($event, item)" name="editButton-$index">Edytuj</md-button>
         </td>
       </tr>
 

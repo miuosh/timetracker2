@@ -10,34 +10,49 @@
         </div>
       </md-input-container>
 
-        <!-- project -->
-        <md-input-container>
-          <label>Projekt...</label>
-          <input type="text" name="project" ng-model="at.newTask.project" required md-no-asterisk autocomplete="off">
-          <div ng-messages="newTaskForm.project.$error" role="alert">
-            <div ng-message="required">Pole nie może być puste.</div>
-          </div>
-        </md-input-container>
-        {{at.newTask.category}}
+        <!-- project autocomplete -->
+
+          <md-autocomplete required md-no-asterisk
+                          md-input-name="project"
+                          md-selected-item="at.selectedProject"
+                          md-search-text-change="at.searchProjectChange(at.searchProject)"
+                          md-search-text="at.searchProject"
+                          md-selected-item-change="at.selectedProjectChange(item)"
+                          md-items="item in at.profile.projects | filter:at.searchProject"
+                          md-item-text="item"
+                          md-min-length="0"
+                          md-input-minlength="0"
+                          md-floating-label="Projekt...">
+                      <md-item-template>
+                          <span md-highlight-text="at.searchProject" md-highlight-flags="^i">{{item}}</span>
+                      </md-item-template>
+                      <div ng-messages="newTaskForm.project.$error" role="alert">
+                          <div ng-message="required">Pole nie może być puste.</div>
+                      </div>
+          </md-autocomplete>
+
+
         <!-- category autocomplete -->
-        <div ng-controller="AutocompleteController as ctrl">
-            <md-autocomplete required md-no-asterisk
-                ng-disabled="ctrl.isDisabled"
-                md-no-cache="ctrl.noCache"
-                md-selected-item="ctrl.selectedItem"
-                md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-                md-search-text="ctrl.searchText"
-                md-selected-item-change="ctrl.selectedItemChange(item)"
-                md-items="item in ctrl.querySearch(ctrl.searchText)"
-                md-item-text="item"
-                md-min-length="0"
-                md-input-minlength="0"
-                md-floating-label="Kategoria...">
-              <md-item-template>
-               <span md-highlight-text="ctrl.searchText">{{item}}</span>
-              </md-item-template>
-             </md-autocomplete>
-        </div>
+
+          <md-autocomplete required md-no-asterisk
+                          md-input-name="category"
+                          md-selected-item="at.selectedCategory"
+                          md-search-text-change="at.searchCategoryChange(at.searchProject)"
+                          md-search-text="at.searchCategory"
+                          md-selected-item-change="at.selectedCategoryChange(item)"
+                          md-items="item in at.profile.categories | filter:at.searchCategory"
+                          md-item-text="item"
+                          md-min-length="0"
+                          md-input-minlength="0"
+                          md-floating-label="Kategoria...">
+                      <md-item-template>
+                          <span md-highlight-text="at.searchCategory" md-highlight-flags="^i">{{item}}</span>
+                      </md-item-template>
+                      <div ng-messages="newTaskForm.category.$error" role="alert">
+                          <div ng-message="required">Pole nie może być puste.</div>
+                      </div>
+          </md-autocomplete>
+
 
       <md-input-container>
         <md-button type="submit" class="md-fab" aria-label="add-task" >

@@ -7,55 +7,95 @@
   AddTaskController.$inject = ['$scope', '$log', 'dataservice'];
 
   function AddTaskController($scope, $log, dataservice) {
-    var vm = this;
-    //vm.projects = loadProjects();
-  //  vm.categories = loadCategories();
-    vm.newTask = {};
-    vm.addTask = addTask;
+
     $scope.newTaskForm = {};
 
+    var vm = this;
+    vm.newTask = {};
+    vm.addTask = addTask;
 
-    self.simulateQuery = false;
-    self.isDisabled    = false;
+   // Autocomplete profile
+   vm.profile = [];
 
-////////////////////////////////////////////////////////////////////////////////
-   // my test data
-   self.profile = {
-       "name": "profil1",
-       "projects": ["TelWin", "TelNOM"],
-       "categories": ["Instalacja", "Konfiguracja", "Poprawka", "Testy"]
-     };
+   // autocomplete projects
+   vm.projects =  vm.profile.projects;
+   vm.searchProject = '';
+   vm.selectedProjectChange = selectedProjectChange;
+   vm.searchProjectChange   = searchProjectChange;
 
-   self.categories =  ["Instalacja", "Konfiguracja", "Poprawka", "Testy"];
+   // autocomplete categories
+   vm.categories =  vm.profile.categories;
+   vm.searchCategory = '';
+   vm.selectedCategoryChange = selectedCategoryChange;
+   vm.searchCategoryChange   = searchCategoryChange;
 
+   /*
+   init events and load data
+   */
+   init();
 
-
-    init();
 ////////////////////////////////////////////////////////////////////////////////
     function init() {
       console.log('Init AddTaskController');
-
-      $scope.$on('categoryChanged', function(event, data) {
-        vm.newTask.category = data;
-      })
+      loadProfileData();
     }
 
 
     function addTask(task) {
+      console.log(task);
       return dataservice.addTask(task)
               .then(function(data) {
                   // pass data to DashboardController by emit event
-                  $scope.$emit('addNewTask', data);
+                  console.log(data);
+                  if(!data.status) {
+                    $scope.$emit('addNewTask', data);
+                  }
                   return data;
                 })
               .then(function(data) {
                 //clear new task fields
                 vm.newTask = angular.copy({});
-                //$scope.newTaskForm.$setPristine();
-                //$scope.newTaskForm.$setUntouched();
+                vm.searchCategory = undefined;
+                vm.searchProject = undefined;
               });
     }
 
+    function loadProfileData() {
+      return dataservice.getUserSettings()
+              .then(function(data) {
+                return dataservice.getProfile(data.profile);
+              })
+              .then(function(data) {
+                if(data[0] != undefined) {
+                  vm.profile = data[0];
+                  return data[0];
+                } else {
+                  vm.profile.categories = [];
+                  vm.profile.projects = [];
+                  return data;
+                }
+              });
+    }// #loadProfileData
+
+    function searchProjectChange(text) {
+      //$log.info('Text changed to ' + text);
+      vm.newTask.project = text
+    }
+
+    function selectedProjectChange(item) {
+      //$log.info('Item changed to ' + JSON.stringify(item));
+      vm.newTask.project = item;
+    }
+
+    function searchCategoryChange(text) {
+      //$log.info('Text changed to ' + text);
+      vm.newTask.category = text
+    }
+
+    function selectedCategoryChange(item) {
+      //$log.info('Item changed to ' + JSON.stringify(item));
+      vm.newTask.category = item;
+    }
 
   }// #AddTaskController
 })();

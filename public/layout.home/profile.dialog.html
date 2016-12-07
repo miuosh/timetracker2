@@ -1,0 +1,57 @@
+<md-dialog aria-label="Profil" style="margin: 10 10 10 10">
+<md-toolbar>
+<h2 style="padding: 5px;" ng-if="!editMode">Dodawanie nowego profilu</h2>
+<h2 style="padding: 5px;" ng-if="editMode">Edycja profilu</h2>
+</md-toolbar>
+
+<md-dialog-content style="padding: 1em;">
+
+  <div layout="column">
+    <div ng-show="dc.errmsg" style="color:red">
+      {{dc.errmsg}}
+    </div>
+    <md-input-container>
+      <label>Nazwa profilu</label>
+      <input type="text" name="name" ng-model="dc.profile.name" required md-no-asterisk autocomplete="off">
+    <md-input-container>
+
+  </div>
+
+
+  <div layout="row"  layout-align="space-around center">
+      <div flex>
+        <h3>Projekty</h3>
+        <md-button type="button" name="projectbutton" ng-click="dc.addProject()">Dodaj projekt</md-button>
+
+        <md-input-container ng-repeat="item in dc.profile.projects track by $index" layout="row">
+          <label>Wpisz nazwę {{ $index + 1}} projektu</label>
+          <input type="text" name="project-[$index]" ng-model="dc.profile.projects[$index]" required md-no-asterisk autocomplete="off">
+            <md-icon><i class="material-icons pointer" ng-click="dc.removeProject($index)">remove</i></md-icon>
+        <md-input-container>
+
+      </div>
+
+      <div flex>
+        <h3>Kategorie</h3>
+        <md-button type="button" name="projectbutton" ng-click="dc.addCategory()">Dodaj kategorię</md-button>
+
+        <md-input-container ng-repeat="item in dc.profile.categories track by $index" layout="row">
+          <label>Wpisz nazwę {{ $index + 1}} kategorii</label>
+          <input type="text" name="categories-[$index]" ng-model="dc.profile.categories[$index]" required md-no-asterisk autocomplete="off">
+            <md-icon><i class="material-icons pointer" ng-click="dc.removeCategory($index)">remove</i></md-icon>
+        <md-input-container>
+
+
+
+      </div>
+
+  </div>
+</md-dialog-content>
+
+<md-dialog-actions>
+  <md-button ng-click="dc.cancel()" name="cancelProfilebutton">Anuluj</md-button>
+  <md-button ng-click="dc.addProfile(dc.profile)" ng-if="!editMode" name="addProfilebutton">Zapisz</md-button>
+  <md-button ng-click="dc.saveProfile(dc.profile)" ng-if="editMode" name="saveProfilebutton">Zapisz</md-button>
+</md-dialog-actions>
+
+</md-dialog>

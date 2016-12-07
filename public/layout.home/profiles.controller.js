@@ -16,7 +16,8 @@
 
     // Dialog
     $scope.status = '';
-    $scope.showCustomDialog = showCustomDialog;
+    $scope.addNewProfile = addNewProfile;
+    $scope.editProfile = editProfile;
 
     // initialize events and load data
     init();
@@ -62,11 +63,15 @@
                 })
     }
 
-    function showCustomDialog(ev) {
+    function addNewProfile(ev) {
       $mdDialog.show({
+        locals: {
+          profile : {},
+          editMode: false
+        },
         controller: DialogController,
         controllerAs: 'dc',
-        templateUrl: '/layout.home/new-profile.dialog.html',
+        templateUrl: '/layout.home/profile.dialog.html',
         parent: angular.element(document.body),
         targetEvent: ev,
         clickOutsideToClose: true,
@@ -79,22 +84,49 @@
       })
     }
 
+    function editProfile(ev, item) {
+      $mdDialog.show({
+        locals: {
+          profile: item,
+          editMode: true
+        },
+        controller: DialogController,
+        controllerAs: 'dc',
+        templateUrl: '/layout.home/profile.dialog.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        fullscreen: false
+
+      })
+      .then(function(answer) {
+        console.log('Dialog - OK.')
+      }, function() {
+        console.log('Cancel dialog.')
+      })
+
+    }
     //-------------------------------------------------
     //  DialogController
     //-------------------------------------------------
 
-    function DialogController($scope, $mdDialog, dataservice) {
+    function DialogController($scope, $mdDialog, dataservice, profile, editMode) {
 
       var self = this;
       self.hide = hide;
       self.cancel = cancel;
       self.answer = answer;
       // form
-      self.newProfile = {};
+      self.profile = profile || {};
       self.addProject = addProject;
       self.addCategory = addCategory;
       self.saveProfile = saveProfile;
+      self.addProfile = addProfile;
+      $scope.editMode = editMode;
 
+      // remove profile properties
+      self.removeCategory = removeCategory;
+      self.removeProject = removeProject;
 
       ////////////////////////////////////////////////////////////////////////////////
       function hide() {
@@ -110,20 +142,21 @@
       }
 
       function addProject() {
-        if (angular.isUndefined(self.newProfile.projects)) {
-          self.newProfile.projects = [];
+        if (angular.isUndefined(self.profile.projects)) {
+          self.profile.projects = [];
         }
-        self.newProfile.projects.unshift("");
+        self.profile.projects.unshift("");
       }
 
       function addCategory() {
-        if(angular.isUndefined(self.newProfile.categories)) {
-          self.newProfile.categories = [];
+        if(angular.isUndefined(self.profile.categories)) {
+          self.profile.categories = [];
         }
-        self.newProfile.categories.unshift("");
+        self.profile.categories.unshift("");
       }
 
-      function saveProfile(profile) {
+      function addProfile(profile) {
+        console.log(profile)
         return dataservice.addProfile(profile)
                 .then(function(data) {
                   vm.loadProfiles();
@@ -136,6 +169,28 @@
                   return data;
                 })
 
+      }// #addProfile
+
+      function saveProfile(profile) {
+        return dataservice.editProfile(profile)
+                .then(function(data) {
+                  vm.loadProfiles();
+                  if(data.status >= 400) {
+                    self.errmsg = "Wystąpił błąd. Sprawdź wprowadzone dane";
+                  } else {
+                    self.hide();
+                  }
+                  return data;
+                })
+      }// #saveProfile
+
+
+      function removeProject(index) {
+        self.profile.projects.splice(index, 1);
+      }
+
+      function removeCategory(index) {
+        self.profile.categories.splice(index, 1);
       }
 
     }// $DialogController

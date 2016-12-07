@@ -35,7 +35,7 @@ router.get('/', function(req, res) {
  GET profile of given name
 */
 router.get('/:name', function(req, res) {
-	
+
   var getProfilePromise = query.getProfileByName(req.params.name);
 
   getProfilePromise.then(function(data) {
@@ -69,13 +69,14 @@ router.post('/', isAuthenticated, function(req, res) {
     });
 });
 /*
-  POST - edit existing profile
+  PUT - edit existing profile
 */
-router.post('/:id', isAuthenticated, function(req, res) {
+router.put('/', isAuthenticated, function(req, res) {
     var profile = req.body;
-    var id = req.params.id;
-    var editProfilePromise = query.editProfile(id,profile);
-
+		console.log(profile);
+    var editProfilePromise = query.editProfile(profile);
+		console.log('editProfilePromise');
+		console.log(editProfilePromise);
     editProfilePromise.then(function(data) {
       res.status(200);
       res.send(data);
@@ -85,6 +86,7 @@ router.post('/:id', isAuthenticated, function(req, res) {
       res.send(JSON.stringify(err));
     });
 });
+
 /*
   DELETE - remove existing TaskProfile
 */
