@@ -13,25 +13,33 @@
 
       /////////////////////////////
       function register() {
-        vm.error = false;
-        vm.disabled = true;
-          console.log('registering...');
+        if (vm.registerForm.password === vm.registerForm.confirmPassword) {
+          vm.error = false;
+          vm.disabled = true;
+            console.log('registering...');
 
-        AuthService.register(
-           vm.registerForm.username,
-           vm.registerForm.password,
-           vm.registerForm.email)
-          .then(function() {
-            $location.path('/login');
-            vm.disabled = false;
-            vm.registerForm = {};
-          })
-          .catch(function(error) {
-            vm.error = true;
-            vm.errorMessage = error.err.message;
-            vm.disabled = false;
-            vm.registerForm = {};
-          });
+          AuthService.register(
+             vm.registerForm.username,
+             vm.registerForm.password,
+             vm.registerForm.email)
+            .then(function() {
+              $location.path('/login');
+              vm.disabled = false;
+              vm.registerForm = {};
+            })
+            .catch(function(error) {
+              vm.error = true;
+              vm.errorMessage = error.err.message;
+              vm.disabled = false;
+              vm.registerForm = {};
+            });
+
+        } else {
+          vm.error = true;
+          vm.disabled = true;
+          vm.errorMessage = "Wprowadzone hasła nie są identyczne";
+        }
+
       }
     }
 })();

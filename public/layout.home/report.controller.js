@@ -14,6 +14,11 @@
     vm.name = "ReportController";
     vm.tasks = {};
 
+    // filter table
+    $scope.sortType = 'updated';
+    $scope.sortReverse = true;
+    $scope.searchType = '';
+
     init();
 
     //////////////////////////////////

@@ -1,21 +1,40 @@
 <div ng-controller="ReportController as vm">
-  <h1>Ukończone</h1>
+  <h1>Ukończone zadania</h1>
+  <md-divider><md-divider>
+    <br/>
   <!-- Tasks table -->
   <table  width="100%" layout-padding>
     <thead>
       <tr>
 
-        <th>Opis</th>
-        <th>Projekt</th>
-        <th>Kategoria</th>
-        <th>Data utworzenia</th>
-        <th>Data modyfikacji</th>
-        <th>Czas trwania</th>
-
+        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
+          Opis
+          <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'project'; sortReverse = !sortReverse ">
+          Projekt
+          <span class="sortorder" ng-show="sortType === 'project'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'category'; sortReverse = !sortReverse ">
+          Kategoria
+          <span class="sortorder" ng-show="sortType === 'category'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'creationDate'; sortReverse = !sortReverse ">
+          Data utworzenia
+          <span class="sortorder" ng-show="sortType === 'creationDate'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">
+          Data modyfikacji
+          <span class="sortorder" ng-show="sortType === 'updated'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'duration'; sortReverse = !sortReverse ">
+          Czas trwania
+          <span class="sortorder" ng-show="sortType === 'duration'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in vm.tasks" ng-if="item.isCompleted">
+      <tr ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse" ng-if="item.isCompleted">
 
         <td class="table-desc">{{ item.desc }}</td>
         <td class="table-project">{{ item.project }}</td>

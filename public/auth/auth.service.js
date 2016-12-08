@@ -9,7 +9,7 @@
     function AuthService($q, $timeout, $http) {
 
       var user = null;
-
+      var username = null;
         return ({
           isLoggedIn: isLoggedIn,
           getUserStatus: getUserStatus,
@@ -24,9 +24,11 @@
           return $http.get('/users/username')
                   .success(function(data) {
                     username = data.username;
+                    return username;
                   })
                   .error(function(err) {
                     console.log(err);
+                    return err;
                   });
         }
 

@@ -66,7 +66,7 @@
                 return dataservice.getProfile(data.profile);
               })
               .then(function(data) {
-                if(data[0] != undefined) {
+                if(data[0] !== undefined) {
                   vm.profile = data[0];
                   return data[0];
                 } else {
@@ -79,7 +79,7 @@
 
     function searchProjectChange(text) {
       //$log.info('Text changed to ' + text);
-      vm.newTask.project = text
+      vm.newTask.project = text;
     }
 
     function selectedProjectChange(item) {
@@ -89,7 +89,7 @@
 
     function searchCategoryChange(text) {
       //$log.info('Text changed to ' + text);
-      vm.newTask.category = text
+      vm.newTask.category = text;
     }
 
     function selectedCategoryChange(item) {

@@ -25,7 +25,7 @@
     vm.loadUserSettings = loadUserSettings;
     vm.saveUserSettings = saveUserSettings;
 
-    loadUserSettings()
+    loadUserSettings();
 
     function loadUserSettings() {
       return dataservice.getUserSettings()
@@ -35,22 +35,22 @@
               })
               .then(function(data) {
                  getProfile(vm.user.config.profile);
-              })
-    }; // #loadUserSettings
+              });
+    } // #loadUserSettings
 
     function getProfile(name) {
       return dataservice.getProfile(name)
               .then(function(data) {
                 vm.selectedProfile = data[0];
-                console.log(vm.selectedProfile);
-              })
+                //console.log(vm.selectedProfile);
+              });
     }
 
     function loadProfiles() {
       return dataservice.getProfiles()
               .then(function(data) {
                 vm.profiles = data;
-                console.log(data);
+                //console.log(data);
               })
               .then(function(data){
 
@@ -60,13 +60,13 @@
    function saveUserSettings() {
      var config = {
        profile : vm.selectedProfile
-     }
+     };
      return dataservice.saveUserSettings(config)
             .then(function(data) {
               console.log('saveUserSettings..');
               console.log(data);
               loadUserSettings();
-            })
+            });
   }// #saveUserSettings
 
   }// #UserSettingsController

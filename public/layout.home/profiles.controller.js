@@ -49,18 +49,7 @@
               })
               .catch(function(err){
                 console.error(err);
-              })
-    }
-
-    function editProfile(id, profile) {
-      return dataservice.editProfile(id, profile)
-                .then(function(data) {
-                  vm.loadProfiles();
-                  return data;
-                })
-                .catch(function(err) {
-                  console.error(err);
-                })
+              });
     }
 
     function addNewProfile(ev) {
@@ -78,10 +67,10 @@
         fullscreen: false
       })
       .then(function(answer) {
-        console.log('Dialog - OK.')
+        console.log('Dialog - OK.');
       }, function() {
-        console.log('Cancel dialog.')
-      })
+        console.log('Cancel dialog.');
+      });
     }
 
     function editProfile(ev, item) {
@@ -100,10 +89,10 @@
 
       })
       .then(function(answer) {
-        console.log('Dialog - OK.')
+        console.log('Dialog - OK.');
       }, function() {
-        console.log('Cancel dialog.')
-      })
+        console.log('Cancel dialog.');
+      });
 
     }
     //-------------------------------------------------
@@ -156,7 +145,7 @@
       }
 
       function addProfile(profile) {
-        console.log(profile)
+        //console.log(profile);
         return dataservice.addProfile(profile)
                 .then(function(data) {
                   vm.loadProfiles();
@@ -167,7 +156,7 @@
                   }
 
                   return data;
-                })
+                });
 
       }// #addProfile
 
@@ -181,7 +170,7 @@
                     self.hide();
                   }
                   return data;
-                })
+                });
       }// #saveProfile
 
 

@@ -9,6 +9,8 @@
     function LoginController ($location, AuthService) {
       var vm = this;
       vm.login = login;
+      vm.getUsername = getUsername;
+      vm.username = null;
 
       ///////////////////////////////
 
@@ -23,6 +25,7 @@
             $location.path('/');
             vm.disabled = false;
             vm.loginForm = {};
+            getUsername();
           })
           // handle error
           .catch(function (err) {
@@ -31,6 +34,15 @@
             vm.disabled = false;
             vm.loginForm = {};
           });
+      }
+
+      function getUsername(){
+         AuthService.getUsername()
+                .then(function(data) {
+                  vm.username = data;
+                  console.log(data);
+                  return data;
+                })
       }
 
     }
