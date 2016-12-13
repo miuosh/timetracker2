@@ -42,7 +42,7 @@
                   vm.username = data;
                   console.log(data);
                   return data;
-                })
+                });
       }
 
     }

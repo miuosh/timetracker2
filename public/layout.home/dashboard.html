@@ -76,7 +76,7 @@
          style="background-color:#F44336" ng-click="vm.toggleTask(item)">STOP</md-button>
       </td>
       <td>
-        <div ng-show="edit">
+        <div ng-show="edit && !item.isPerforming" >
           <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.editTask($event, item)">
             <md-icon>mode_edit</md-icon>
             <md-tooltip>Edycja</md-tooltip>

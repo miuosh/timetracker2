@@ -57,8 +57,8 @@
       .then(function(answer) {
         console.log('Dialog OK: ' + answer);
       }, function(){
-        console.log('Cancel dialog.')
-      })
+        console.log('Cancel dialog.');
+      });
     }// #editTask
 
 
@@ -99,7 +99,7 @@
                 })
                 .then(function(data) {
                   vm.getTasks(); //from parent controller
-                })
+                });
       }
 
     }// #EditDialogController
