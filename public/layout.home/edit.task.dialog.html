@@ -1,0 +1,101 @@
+
+
+
+<md-dialog aria-label="EditTaskDialog">
+  <md-toolbar>
+    <h2 style="padding: 5px; text-align: center;">Edycja zadania</h2>
+  </md-toolbar>
+  <form name="editTaskForm" ng-submit="$event.preventDefault()">
+<div class="md-dialog-content" layout="row" layout-align="space-between start">
+
+
+
+  <div flex="40">
+    <md-input-container>
+      <label>Opis</label>
+      <textarea style="min-width:200px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off"></textarea>
+      <div ng-messages="editTaskForm.desc.$error" role="alert">
+          <div ng-message="required">Pole nie może być puste.</div>
+      </div>
+    <md-input-container>
+  </div>
+
+  <!-- autocomplete fields -->
+  <div layout="row" ng-controller="AddTaskController as at">
+    <!-- project autocomplete -->
+    <div >
+      <md-autocomplete required md-no-asterisk
+                      md-input-name="project"
+                      md-selected-item="edc.task.project"
+                      md-search-text-change="at.searchProjectChange(edc.task.project)"
+                      md-search-text="edc.task.project"
+                      md-selected-item-change="at.selectedProjectChange(item)"
+                      md-items="item in at.profile.projects | filter:edc.task.project"
+                      md-item-text="item"
+                      md-min-length="0"
+                      md-input-minlength="0"
+                      input-clear="black"
+                      md-floating-label="Projekt...">
+                  <md-item-template>
+                      <span md-highlight-text="edc.task.project" md-highlight-flags="^i">{{item}}</span>
+                  </md-item-template>
+                  <div ng-messages="editTaskForm.project.$error" role="alert">
+                      <div ng-message="required">Pole nie może być puste.</div>
+                  </div>
+      </md-autocomplete>
+
+    </div>
+
+
+
+    <div >
+      <!-- category autocomplete -->
+        <md-autocomplete required md-no-asterisk
+                        md-input-name="category"
+                        md-selected-item="edc.task.category"
+                        md-search-text-change="at.searchCategoryChange(edc.task.category)"
+                        md-search-text="edc.task.category"
+                        md-selected-item-change="at.selectedCategoryChange(item)"
+                        md-items="item in at.profile.categories | filter:edc.task.category"
+                        md-item-text="item"
+                        md-min-length="0"
+                        md-input-minlength="0"
+                        md-floating-label="Kategoria...">
+                    <md-item-template>
+                        <span md-highlight-text="edc.task.category" md-highlight-flags="^i">{{item}}</span>
+                    </md-item-template>
+                    <div ng-messages="editTaskForm.category.$error" role="alert">
+                        <div ng-message="required">Pole nie może być puste.</div>
+                    </div>
+        </md-autocomplete>
+
+    </div>
+
+</div>
+
+        <div layout="row" >
+
+          <md-input-container flex>
+            <label flex>Czas: {{edc.task.duration | formatDuration}}</label>
+            <input flex type="number" ng-model="edc.task.duration" ng-min="0" min="0" aria-label="hh" required md-no-asterisk>
+            <div ng-messages="editTaskForm.duration.$error" role="alert">
+                <div ng-message="required">Pole nie może być puste.</div>
+            </div>
+          </md-input-container>
+
+
+        </div>
+
+
+
+
+</div>
+</form>
+
+<!-- answers footer -->
+<md-dialog-actions>
+  <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
+  <md-button ng-click="edc.save(edc.task)" name="saveTaskButton">Zapisz</md-button>
+</md-dialog-actions>
+
+</md-dialog>

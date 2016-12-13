@@ -182,7 +182,7 @@
         self.profile.categories.splice(index, 1);
       }
 
-    }// $DialogController
+    }// #DialogController
 
   }// #ProfilesController
 

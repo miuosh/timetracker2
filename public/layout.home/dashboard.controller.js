@@ -10,11 +10,12 @@
   1. dodać funkcję odliczania czasu - done
   2. sformatować tabele- done
   3. zrobić stronicowanie
-  4. filtrowanie po kolumnie
-  5. filtrowanie po kategorii
-  6. wyszukiwanie
-  7. możliwość wczytania predefiniowanych kategorii
+  4. filtrowanie po kolumnie - done
+  5. filtrowanie po kategorii - done
+  6. wyszukiwanie - done
+  7. możliwość wczytania predefiniowanych kategorii - done
   8. dodać menu - usuń, status: ukończone - done
+  9. edycja zadania
   */
 
   function DashboardController($scope, $interval, $mdDialog, dataservice) {
@@ -23,6 +24,8 @@
     vm.tasks = {};
     vm.intervalsID = [];
 
+    vm.getTasks = getTasks;
+    vm.editTask = editTask;
     vm.removeTasks = removeTasks;
     vm.toggleTask = toggleTask;
     vm.setAsCompleted = setAsCompleted;
@@ -32,7 +35,6 @@
     vm.countDuration = countDuration;
 
     // filter table
-    vm.sort = sort;
     $scope.sortType = 'updated';
     $scope.sortReverse = true;
     $scope.searchType = '';
@@ -178,20 +180,69 @@
 
     }
 
+    function editTask(ev, item) {
+      $mdDialog.show({
+        locals: {
+          task: item
+        },
+        controller: EditTaskDialogController,
+        controllerAs: 'edc',
+        templateUrl: '/layout.home/edit.task.dialog.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        fullscreen: true
+      })
+      .then(function(answer) {
+        console.log('Dialog OK: ' + answer);
+      }, function(){
+        console.log('Cancel dialog.')
+      })
+    }// #editTask
 
-    function sort(property) {
 
-    }
+    //-------------------------------------------------
+    //  EditTaskDialogController - edit Task
+    //-------------------------------------------------
 
-    function compare(a, b) {
-      if (a < b) {
-        return -1;
+    function EditTaskDialogController ($scope, $mdDialog, dataservice, task) {
+      var self = this;
+      self.hide = hide;
+      self.cancel = cancel;
+      self.answer = answer;
+
+      //form
+      self.task = task || {};
+      self.save = save;
+
+      //////////////////////////////////////////////////////////////////////
+      function hide() {
+        $mdDialog.hide();
       }
-      if (a > b) {
-        return 1;
+
+      function cancel() {
+        $mdDialog.cancel();
+        vm.getTasks();//from parent controller
       }
-      return 0;
-    }
+
+      function answer(answer) {
+        $mdDialog.hide(answer);
+      }
+
+      function save(item) {
+        console.log('EditDialogController:  save task clicked');
+        return dataservice.editTask(item)
+                .then(function(data) {
+                  self.hide();
+                  return data;
+                })
+                .then(function(data) {
+                  vm.getTasks(); //from parent controller
+                })
+      }
+
+    }// #EditDialogController
+
 
   }// #DashboardController
 })();

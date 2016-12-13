@@ -7,7 +7,7 @@
 
 
 <!-- Tasks table -->
-<table  cellspacing="0" width="100%" layout-padding>
+<table cellspacing="0" width="100%" layout-padding >
 
   <caption style="padding: 0 0;"  >
     <div layout="row" layout-align="space-between stretch">
@@ -25,11 +25,12 @@
 
   </caption>
 
-  <thead>
+  <thead >
     <tr>
       <th >
 
       </th>
+
       <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
         Opis
         <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
@@ -54,10 +55,11 @@
       <th class="pointer" ng-click="sortType = 'isPerforming'; sortReverse = !sortReverse ">
         <span class="sortorder" ng-show="sortType === 'isPerforming'" ng-class="{sortReverse: sortReverse}"></span>
       </th>
+      <th></th>
     </tr>
   </thead>
-  <tbody>
-    <tr ng-animate="'animate'" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="!item.isCompleted">
+  <tbody >
+    <tr ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="!item.isCompleted">
       <td class="table-checkbox">
         <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
       </td>
@@ -73,7 +75,16 @@
         <md-button type="button" ng-if="item.isPerforming" class="md-raised md-primary"
          style="background-color:#F44336" ng-click="vm.toggleTask(item)">STOP</md-button>
       </td>
+      <td>
+        <div ng-show="edit">
+          <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.editTask($event, item)">
+            <md-icon>mode_edit</md-icon>
+            <md-tooltip>Edycja</md-tooltip>
+          </md-button>
+        </div>
+      </td>
     </tr>
+
   </tbody>
 </table>
 

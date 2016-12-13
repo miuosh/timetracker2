@@ -1,7 +1,7 @@
 <div ng-controller="ReportController as vm">
   <h1>Ukończone zadania</h1>
   <md-divider><md-divider>
-    <br/>
+    <br>
   <!-- Tasks table -->
   <table  width="100%" layout-padding>
     <thead>
@@ -31,10 +31,11 @@
           Czas trwania
           <span class="sortorder" ng-show="sortType === 'duration'" ng-class="{sortReverse: sortReverse}"></span>
         </th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse" ng-if="item.isCompleted">
+      <tr style="height: 3em" ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse" ng-if="item.isCompleted">
 
         <td class="table-desc">{{ item.desc }}</td>
         <td class="table-project">{{ item.project }}</td>
@@ -42,6 +43,14 @@
         <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
         <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
         <td class="table-duration">{{ item.duration | formatDuration }}</td>
+        <td>
+          <div ng-show="edit">
+            <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.editTask($event, item)">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Edycja</md-tooltip>
+            </md-button>
+          </div>
+        </td>
 
       </tr>
     </tbody>

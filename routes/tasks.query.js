@@ -184,15 +184,20 @@ module.exports = {
     };
 
 function editTask(task) {
-  var promise = Task.find({'_id': task.id }).exec();
+  var promise = Task.find({'_id': task._id }).exec();
 
-  promise.then(function(data) {
-    var prevTask = data[0];
-    prevTask = task;
+  return promise.then(function(data) {
+        console.log(data);
+          var prevTask = data[0];
+          prevTask.desc = task.desc;
+          prevTask.project = task.project;
+          prevTask.category = task.category;
+          prevTask.duration = task.duration;
+          prevTask.isCompleted = task.isCompleted;
 
-    return task.save();
-  })
-  .catch(function(err) {
-    return err;
-  });
+          return prevTask.save();
+        })
+        .catch(function(err) {
+          return err;
+        });
 }

@@ -26,6 +26,7 @@
       getCategories: getCategories,
       getProjects: getProjects,
       setAsCompleted: setAsCompleted,
+      editTask: editTask,
       /* Task profiles */
       getProfiles: getProfiles,
       getProfile: getProfile, // by name
@@ -100,6 +101,14 @@
                         .then(successCallback)
                         .catch(errorCallback);
     }
+
+    function editTask(item) {
+      return $http.put('/edittask/edit', item, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    /* Task Profiles */
 
     function getProfiles() {
       return $http.get(profileUrl.url)

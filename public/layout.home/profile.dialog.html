@@ -18,7 +18,7 @@
   </div>
 
 
-  <div layout="row" layout-align="space-between start">
+  <div layout="row"  layout-align="space-between start">
       <div flex>
         <h3>Projekty</h3>
         <md-button type="button" name="projectbutton" ng-click="dc.addProject()">Dodaj projekt</md-button>
@@ -26,7 +26,7 @@
         <md-input-container ng-repeat="item in dc.profile.projects track by $index" layout="row">
           <label>Wpisz nazwę {{ $index + 1}} projektu</label>
           <input type="text" name="project-[$index]" ng-model="dc.profile.projects[$index]" required md-no-asterisk autocomplete="off">
-            <md-icon><i class="material-icons pointer" ng-click="dc.removeProject($index)">remove</i></md-icon>
+            <md-icon><i class="material-icons pointer" ng-click="dc.removeProject(item)">remove</i></md-icon>
         <md-input-container>
 
       </div>
@@ -38,7 +38,7 @@
         <md-input-container ng-repeat="item in dc.profile.categories track by $index" layout="row">
           <label>Wpisz nazwę {{ $index + 1}} kategorii</label>
           <input type="text" name="categories-[$index]" ng-model="dc.profile.categories[$index]" required md-no-asterisk autocomplete="off">
-            <md-icon><i class="material-icons pointer" ng-click="dc.removeCategory($index)">remove</i></md-icon>
+            <md-icon><i class="material-icons pointer" ng-click="dc.removeCategory(item)">remove</i></md-icon>
         <md-input-container>
 
 
