@@ -1,8 +1,7 @@
 var mongoose = require('mongoose')
-require('mongoose-long')(mongoose);
+var Schema = mongoose.Schema;
 
-
-module.exports = mongoose.model('Task',{
+var Task = new Schema( {
     id: String,
     desc: String,
     category: String,
@@ -14,3 +13,5 @@ module.exports = mongoose.model('Task',{
     _creator: String,
     isCompleted: { type: Boolean, default: false}
 });
+
+module.exports = mongoose.model('Task', Task);
