@@ -10,9 +10,24 @@ module.exports = {
   stopAllPerfomingUserTasks: stopAllPerfomingUserTasks,
   toggleUserTask: toggleUserTask,
   setAsCompleted: setAsCompleted,
-  editTask: editTask
+  editTask: editTask,
+  addTask: addTask
 
 }
+
+/*
+  INTERNAL MODULE FUNCTIONS
+*/
+
+  var getDuration = getDuration;
+
+
+
+//------------------------------------------------------------------------------
+/*
+          EXPORT MODULE FUNCTIONS
+*/
+//------------------------------------------------------------------------------
 
   function getAllTasks() {
     var promise = Task.find({}).exec();
@@ -109,29 +124,54 @@ module.exports = {
     @return {promise} - startedTask promise
   */
   function toggleUserTask(userId, taskId) {
+
+    getDuration();
+
     /*
     1. stop all performing tasks except one (taskId)
-    2. get task of given Id
-    2. toggle task of given taskId
+      - find all started Tasks (isPerforming), except task of taskId
+      - for each task
+              - set isPerforming to false (stop task)
+              - getcurrentDuration and save to Task.sample - { startTime: lastUpdated, stopTime: currentTime, dt: currentDuration }
+              - Task.duration -> duration += currentDuration
+
+    2. toggleTask of given Id
+        - getUserTask
+        - isPerforming ? false: true
+        - getcurrentDuration and save data to Task.sample
+        - Task.duration -> duration += currentDuration
     */
     var stopUserTasksPromise = Task.find( {'_creator': userId, 'isPerforming': true, '_id': { '$ne': taskId } } ).exec();
 
     return stopUserTasksPromise.then(function(data) {
       var len = data.length;
       var saveTaskPromises = [];
+
       // loop tasks
       for(var i = len; i--; ) {
         var task = data[i];
         task.isPerforming = false;
         var currentTime = new Date();
 
-        if (!task.isPerforming) {
-            var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
-            var lastDuration = task.duration;
-            task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-        }
+        var lastUpdated = task.updated;
+        var lastDuration = task.duration;
 
-        task.updated = currentTime;
+        var currentDuration = (currentTime - lastUpdated) / 1000; // ms -> sec
+
+        /*
+          if task was running then task.updated property keep timestamp of start action
+        */
+        var sample = {
+          startTime: lastUpdated,
+          stopTime: currentTime,
+          dt: currentDuration
+        };
+
+        task.history.push(sample);
+        // if user dont't edit task - simply duration = last + current
+        task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+        task.updated = currentTime; // keep STOP timestamp
+
         saveTaskPromises.push(task.save());
       }
 
@@ -145,15 +185,16 @@ module.exports = {
       console.log('data: ');
       console.log(data);
       var task = data[0];
-
         task.isPerforming = task.isPerforming ? false : true;
         var currentTime = new Date();
+        // if toggle task cause STOP then calculate duration and save sample
         if (!task.isPerforming) {
             var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
             var lastDuration = task.duration;
             task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
-        }
+        } else {
 
+        }
         task.updated = currentTime;
       return task.save();
     });
@@ -200,4 +241,33 @@ function editTask(task) {
         .catch(function(err) {
           return err;
         });
+}
+
+function addTask(item, creatorID) {
+    var task = new Task({
+          desc: item.desc,
+          category: item.category,
+          project: item.project,
+          creationDate: new Date(),
+          updated: new Date(),
+          isPerforming: false,
+          _creator: creatorID
+    });
+
+    return task.save();
+}
+
+//------------------------------------------------------------------------------
+/*
+    INTERNAL FUNCTIONS
+*/
+//------------------------------------------------------------------------------
+
+function getDuration(task) {
+
+  if (!task.isPerforming) {
+      var currentDuration = (currentTime - task.updated) / 1000; // ms -> sec
+      var lastDuration = task.duration;
+      task.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+  }
 }
