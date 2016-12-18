@@ -159,9 +159,9 @@ module.exports = {
         var currentDuration = (currentTime - lastUpdated) / 1000; // ms -> sec
 
         /*
-          if task was running then task.updated property keep timestamp of start action
+          if task was running then task.updated property contains timestamp of "start action"
         */
-        var sample = {
+        var timespan = {
           startTime: lastUpdated,
           stopTime: currentTime,
           dt: currentDuration

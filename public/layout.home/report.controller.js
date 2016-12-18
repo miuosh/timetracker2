@@ -1,6 +1,3 @@
-/* IIFE - Immediately Invoked Function Expression
- without IIFE i.e. function SideNavController() is defined as global variable
-*/
 (function(){
   'use strict';
 

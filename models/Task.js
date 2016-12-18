@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
-var sample = new Schema({
+var timespan = new Schema({
   startTime : { type: Date },
   stopTime: { type: Date },
   dt : { type: Number, default: 0}
@@ -18,7 +18,7 @@ var Task = new Schema( {
     isPerforming: { type: Boolean, default: false},
     _creator: String,
     isCompleted: { type: Boolean, default: false},
-    history : [ sample ]
+    history : [ timespan ]
 });
 
 module.exports = mongoose.model('Task', Task);
