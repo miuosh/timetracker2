@@ -72,27 +72,49 @@
 
 </div>
 
-        <div layout="row" >
-
-          <md-input-container flex>
-            <label flex>Czas: {{edc.task.duration | formatDuration}}</label>
-            <input flex type="number" ng-model="edc.task.duration" ng-min="0" min="0" aria-label="hh" required md-no-asterisk>
-            <div ng-messages="editTaskForm.duration.$error" role="alert">
-                <div ng-message="required">Pole nie może być puste.</div>
-            </div>
-          </md-input-container>
-
-
-        </div>
-
-
-
 
 </div>
+
+<!-- task history -->
+<div layout="column" ng-hide="edc.task.history.length === 0">
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Od</th>
+        <th>Do</th>
+        <th>Czas</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="edit = true" ng-mouseleave="edit = false">
+        <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
+        <td class="table-col">{{ item.startTime | date:'HH:mm:ss'}}</td>
+        <td class="table-col">{{ item.stopTime | date:'HH:mm:ss '}}</td>
+        <td class="table-col">{{ item.dt | formatDuration }}</td>
+        <td class="table-col">
+          <div ng-show="edit && !item.isPerforming" >
+            <md-button class="md-icon-button" aria-label="Usuń" ng-click="edc.removeTimeSpan($index)">
+              <md-icon>delete_forever</md-icon>
+              <md-tooltip>Usuń</md-tooltip>
+            </md-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
 </form>
+
+
+
+
 
 <!-- answers footer -->
 <md-dialog-actions>
+  <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
   <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
   <md-button ng-click="edc.save(edc.task)" name="saveTaskButton">Zapisz</md-button>
 </md-dialog-actions>

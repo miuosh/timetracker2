@@ -103,6 +103,12 @@ md-checkbox .md-container {
   text-align: center;
 }
 
+.timespan-row {
+  margin: 0 6px;
+  height: 42px;
+  padding: 8px;
+}
+
 md-input-container:not(.md-input-has-value) {
   color:red;
 }

@@ -194,7 +194,9 @@ function editTask(task) {
           prevTask.category    = task.category;
           prevTask.isCompleted = task.isCompleted;
 
-          prevTask = modifyStoppedTask(prevTask);
+
+          prevTask.history = task.history;
+          prevTask.duration = sumByProperty(task.history, 'dt')
 
           return prevTask.save();
         })
@@ -250,4 +252,8 @@ function modifyStoppedTask(task) {
     task.duration = Math.round(sumByProperty(task.history, 'dt'), 0); // round to full sek
 
   return task;
+}
+
+function modifyTaskHistory(task) {
+
 }

@@ -10,15 +10,18 @@
   function formatDuration() {
     return function formatTime(duration) {
       var seconds_num,
-            seconds,
-            minutes,
-            hours;
-        seconds_num = parseInt(duration);
-        hours = Math.floor(seconds_num / 3600);
-        minutes = Math.floor((seconds_num - (hours * 3600) ) / 60);
-        seconds = seconds_num - (hours * 3600) - (minutes * 60);
+          seconds_float,
+          seconds,
+          minutes,
+          hours;
 
-        if (hours < 10) { hours = '0' + hours; }
+        seconds_num   = parseInt(duration);
+        seconds_float = parseFloat(duration);
+        hours         = Math.floor(seconds_num / 3600);
+        minutes       = Math.floor((seconds_num - (hours * 3600) ) / 60);
+        seconds       = Math.round( seconds_float - (hours * 3600) - (minutes * 60) );
+
+        if (hours < 10) { hours     = '0' + hours; }
         if (minutes < 10) { minutes = '0' + minutes; }
         if (seconds < 10) { seconds = '0' + seconds; }
 

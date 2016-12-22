@@ -210,6 +210,7 @@
       self.hide = hide;
       self.cancel = cancel;
       self.answer = answer;
+      self.removeTimeSpan = removeTimeSpan;
 
       //form
       self.task = task || {};
@@ -229,6 +230,11 @@
         $mdDialog.hide(answer);
       }
 
+      function removeTimeSpan(index) {
+        self.task.history.splice(index, 1);
+        self.task.duration = sumByProperty(self.task.history, 'dt');
+      }
+
       function save(item) {
         console.log('EditDialogController:  save task clicked');
         return dataservice.editTask(item)
@@ -239,6 +245,18 @@
                 .then(function(data) {
                   vm.getTasks(); //from parent controller
                 });
+      }
+
+      /*
+      Internal use functions
+      */
+      function sumByProperty(items, property) {
+
+        if (items == 0) return 0;
+
+        return items.reduce((previous, current) => {
+          return current[property] == null ? previous : previous + parseFloat(current[property]);
+        }, 0)
       }
 
     }// #EditDialogController

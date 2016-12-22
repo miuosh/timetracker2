@@ -30,7 +30,10 @@
       <th >
 
       </th>
-
+      <th class="pointer" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">
+        Data modyfikacji
+        <span class="sortorder" ng-show="sortType === 'updated'" ng-class="{sortReverse: sortReverse}"></span>
+      </th>
       <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
         Opis
         <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
@@ -44,10 +47,7 @@
         <span class="sortorder" ng-show="sortType === 'category'" ng-class="{sortReverse: sortReverse}"></span>
       </th>
       <!-- <th>Data utworzenia</th> -->
-      <th class="pointer" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">
-        Data modyfikacji
-        <span class="sortorder" ng-show="sortType === 'updated'" ng-class="{sortReverse: sortReverse}"></span>
-      </th>
+
       <th class="pointer" ng-click="sortType = 'duration'; sortReverse = !sortReverse ">
         Czas trwania
         <span class="sortorder" ng-show="sortType === 'duration'" ng-class="{sortReverse: sortReverse}"></span>
@@ -63,11 +63,11 @@
       <td class="table-checkbox">
         <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
       </td>
+      <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
       <td class="table-desc">{{ item.desc }}</td>
       <td class="table-project">{{ item.project }}</td>
       <td class="table-category">{{ item.category }}</td>
       <!-- <td>{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td> -->
-      <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
       <td class="table-duration">{{ item.duration | formatDuration }}</td>
       <td class="table-toggle">
         <md-button type="button" ng-if="!item.isPerforming" class="md-raised md-primary"
