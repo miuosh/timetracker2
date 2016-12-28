@@ -207,14 +207,26 @@
 
     function EditTaskDialogController ($scope, $mdDialog, dataservice, task) {
       var self = this;
-      self.hide = hide;
-      self.cancel = cancel;
-      self.answer = answer;
-      self.removeTimeSpan = removeTimeSpan;
+      self.hide            = hide;
+      self.cancel          = cancel;
+      self.answer          = answer;
+      self.removeTimeSpan  = removeTimeSpan;
+      // change time / date
+      self.addHour         = addHour;
+      self.substractHour   = substractHour;
+      self.addMinute       = addMinute;
+      self.substractMinute = substractMinute;
+
 
       //form
       self.task = task || {};
       self.save = save;
+
+      //Internal
+      var sumByProperty = sumByProperty;
+      var calcDuration = calcDuration;
+      var addTime = addTime;
+      var substractTime = substractTime;
 
       //////////////////////////////////////////////////////////////////////
       function hide() {
@@ -247,9 +259,54 @@
                 });
       }
 
+      function addHour(item, property) {
+        addTime(item, property, 'HH');
+      }
+
+      function substractHour(item, property) {
+        substractTime(item, property, 'HH');
+      }
+
+      function addMinute(item, property) {
+        addTime(item, property, 'mm');
+      }
+
+      function substractMinute(item, property) {
+        substractTime(item, property, 'mm');
+      }
       /*
       Internal use functions
       */
+      function addTime(item, property, timeProperty) {
+        var tmp = new Date(item[property]);
+
+        if (timeProperty === 'HH') {
+          tmp.setHours(tmp.getHours() + 1);
+        }
+        if (timeProperty === "mm") {
+          tmp.setMinutes(tmp.getMinutes() + 1);
+        }
+
+        item[property] = tmp.toISOString();
+        item.dt = calcDuration(item);
+        self.task.duration = sumByProperty(self.task.history, 'dt');
+      }
+
+      function substractTime(item, property, timeProperty) {
+          var tmp = new Date(item[property]);
+          if (timeProperty === 'HH') {
+            tmp.setHours(tmp.getHours() - 1);
+          }
+          if (timeProperty === "mm") {
+            tmp.setMinutes(tmp.getMinutes() - 1);
+          }
+
+          item[property] = tmp.toISOString();
+          item.dt = calcDuration(item);
+          self.task.duration = sumByProperty(self.task.history, 'dt');
+
+      }
+
       function sumByProperty(items, property) {
 
         if (items == 0) return 0;
@@ -259,6 +316,18 @@
         }, 0)
       }
 
+      function calcDuration(item){
+        var start = new Date(item.startTime);
+        var stop = new Date(item.stopTime);
+
+        if (stop > start) {
+          return (stop.getTime() - start.getTime()) / 1000;
+        } else {
+          console.error('Bład: Czas startu jest większy od czasu stop');
+          return item.dt;
+        }
+
+      }
     }// #EditDialogController
 
 

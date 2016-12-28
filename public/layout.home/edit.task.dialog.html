@@ -88,17 +88,72 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="edit = true" ng-mouseleave="edit = false">
+      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
         <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
-        <td class="table-col">{{ item.startTime | date:'HH:mm:ss'}}</td>
-        <td class="table-col">{{ item.stopTime | date:'HH:mm:ss '}}</td>
+        <td class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+        <td class="table-col" ng-show="edit">
+          <div layout="row" layout-align="center center">
+            <div>
+              <i class="material-icons pointer" ng-click="edc.addHour(item, 'startTime')">keyboard_arrow_up</i>
+              <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'HH'}}</p>
+              <i class="material-icons pointer" ng-click="edc.substractHour(item, 'startTime')">keyboard_arrow_down</i>
+            </div>
+
+            <div >
+              <p style="margin: 0px 0px 0px 0px">:</p>
+            </div>
+
+            <div >
+              <i class="material-icons pointer" ng-click="edc.addMinute(item, 'startTime')">keyboard_arrow_up</i>
+              <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'mm'}}</p>
+              <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'startTime')">keyboard_arrow_down</i>
+            </div>
+          </div>
+         </td>
+        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss '}}</td>
+        <td class="table-col" ng-show="edit">
+          <div layout="row" layout-align="center center">
+            <div>
+              <i class="material-icons pointer" ng-click="edc.addHour(item, 'stopTime')">keyboard_arrow_up</i>
+              <p style="margin: 0px 0px 0px 0px">{{ item.stopTime | date:'HH'}}</p>
+              <i class="material-icons pointer" ng-click="edc.substractHour(item, 'stopTime')">keyboard_arrow_down</i>
+            </div>
+
+            <div >
+              <p style="margin: 0px 0px 0px 0px">:</p>
+            </div>
+
+            <div >
+              <i class="material-icons pointer" ng-click="edc.addMinute(item, 'stopTime')">keyboard_arrow_up</i>
+              <p style="margin: 0px 0px 0px 0px">{{ item.stopTime | date:'mm'}}</p>
+              <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'stopTime')">keyboard_arrow_down</i>
+            </div>
+          </div>
+         </td>
+
         <td class="table-col">{{ item.dt | formatDuration }}</td>
-        <td class="table-col">
-          <div ng-show="edit && !item.isPerforming" >
+        <td class="table-col" style="width: 15%;">
+          <div ng-show="hover && !item.isPerforming && !edit">
+            <md-button class="md-icon-button" aria-label="Edycja" ng-click="edit = true">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Edycja</md-tooltip>
+            </md-button>
             <md-button class="md-icon-button" aria-label="Usuń" ng-click="edc.removeTimeSpan($index)">
               <md-icon>delete_forever</md-icon>
               <md-tooltip>Usuń</md-tooltip>
             </md-button>
+          </div>
+
+          <div ng-show="hover && !item.isPerforming && edit">
+            <md-button class="md-icon-button" aria-label="Zapis" ng-click="edit = false">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Wyłącz edycje</md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Usuń" ng-click="edc.removeTimeSpan($index)">
+              <md-icon>delete_forever</md-icon>
+              <md-tooltip>Usuń</md-tooltip>
+            </md-button>
+          </div>
         </td>
       </tr>
     </tbody>
