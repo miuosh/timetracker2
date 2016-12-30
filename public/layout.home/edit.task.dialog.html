@@ -88,14 +88,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
+      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false"
+      ng-class="!edc.isValidTimeSpan(item) ? 'has-error': ''">
         <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
+        <!-- table cell when edit mode is disabled -->
         <td class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+
+        <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
           <div layout="row" layout-align="center center">
             <div>
               <i class="material-icons pointer" ng-click="edc.addHour(item, 'startTime')">keyboard_arrow_up</i>
-              <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'HH'}}</p>
+              <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'HH' }}</p>
               <i class="material-icons pointer" ng-click="edc.substractHour(item, 'startTime')">keyboard_arrow_down</i>
             </div>
 
@@ -109,8 +113,14 @@
               <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'startTime')">keyboard_arrow_down</i>
             </div>
           </div>
+          <div>
+            <p>{{item.startTime | date: 'yyyy-MM-dd'}}</p>
+          </div>
          </td>
-        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss '}}</td>
+        <!-- table cell when edit mode is disabled -->
+        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss' }}</td>
+
+        <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
           <div layout="row" layout-align="center center">
             <div>
@@ -129,10 +139,18 @@
               <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'stopTime')">keyboard_arrow_down</i>
             </div>
           </div>
+          <div>
+            <md-icon><i class="material-icons">date_range</i></md-icon>
+            <md-tooltip>{{item.stopTime | date: 'yyyy-MM-dd'}}</md-tooltip>
+            <p style="font-size: .8em;">{{item.stopTime | date: 'yyyy-MM-dd'}}</p>
+          </div>
          </td>
 
         <td class="table-col">{{ item.dt | formatDuration }}</td>
+
+        <!-- table cell - timespan options -->
         <td class="table-col" style="width: 15%;">
+          <!-- when edit mode disabled -->
           <div ng-show="hover && !item.isPerforming && !edit">
             <md-button class="md-icon-button" aria-label="Edycja" ng-click="edit = true">
               <md-icon>mode_edit</md-icon>
@@ -143,7 +161,7 @@
               <md-tooltip>Usuń</md-tooltip>
             </md-button>
           </div>
-
+          <!-- when edit mode enabled -->
           <div ng-show="hover && !item.isPerforming && edit">
             <md-button class="md-icon-button" aria-label="Zapis" ng-click="edit = false">
               <md-icon>mode_edit</md-icon>
@@ -155,6 +173,7 @@
             </md-button>
           </div>
         </td>
+
       </tr>
     </tbody>
   </table>
@@ -169,9 +188,10 @@
 
 <!-- answers footer -->
 <md-dialog-actions>
+  <span ng-show="edc.task.history.isValid.error" style="color:red;">{{edc.task.history.isValid.message}}</span>
   <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
   <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
-  <md-button ng-click="edc.save(edc.task)" name="saveTaskButton">Zapisz</md-button>
+  <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
 </md-dialog-actions>
 
 </md-dialog>

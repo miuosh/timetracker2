@@ -15,7 +15,7 @@
       // var $rootScope = $rootScope.errors || [];
       // $rootScope.errors.push(exception.message);
       console.error('Exception:\n'+ exception.message + ' \nCause: ' + cause);
-    };
+      console.info(exception);
 
 
 ///////////////////////////////////

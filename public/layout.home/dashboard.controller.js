@@ -222,12 +222,18 @@
       self.task = task || {};
       self.save = save;
 
+      //data validation
+      self.task.history.isValid = {}
+
       //Internal
       var sumByProperty = sumByProperty;
       var calcDuration = calcDuration;
       var addTime = addTime;
       var substractTime = substractTime;
 
+      // data validation
+      self.isValidTimeSpan = isValidTimeSpan; // check timespan consistency
+      var setValidationMessage = setValidationMessage;
       //////////////////////////////////////////////////////////////////////
       function hide() {
         $mdDialog.hide();
@@ -319,15 +325,68 @@
       function calcDuration(item){
         var start = new Date(item.startTime);
         var stop = new Date(item.stopTime);
+        var isValid = isValidTimeSpan(item);
 
-        if (stop > start) {
+
+        if (isValid) {
+          setValidationMessage("", false);
           return (stop.getTime() - start.getTime()) / 1000;
         } else {
+          setValidationMessage("Sprawdz poprawnośc danych");
           console.error('Bład: Czas startu jest większy od czasu stop');
           return item.dt;
         }
 
       }
+
+
+    function isValidTimeSpan(item) {
+      var start = new Date(item.startTime);
+      var stop  = new Date(item.stopTime);
+
+      //check current item
+      if (start > stop) { return false; }
+      if (stop > new Date() ) { return false; } // gt than current Time
+      if (stop.getDate() > start.getDate() || start.getDate() > stop.getDate()) { return false; } //different days
+
+      // // compare timespan with previous/next timespan
+      // var history = self.task.history;
+      // var index   = history.map(function (e) { return e._id; }).indexOf(item._id);
+      // var currentItem = item;
+      // console.log('index:' + index);
+      // if (index != undefined || index != null || index != -1) {
+      //    currentItem  = history[index];
+      // }
+      //
+      // if (index > 0 && index < history.length - 1) {
+      //         var previousItem = history[index - 1];
+      //         var nextItem     = history[index + 1];
+      //         if (new Date(previousItem.stopTime) > new Date(currentItem.startTime) ) {
+      //             return false;
+      //         }
+      //
+      //         if (new Date(nextItem.startTime) > new Date(currentItem.stopTime) ) {
+      //             return false;
+      //         }
+      //
+      // }
+      //
+      // if (index > 0 && index === history.length) {
+      //         var previousItem = history[index - 1];
+      //         if (new Date(previousItem.stopTime) > new Date(currentItem.startTime)) {
+      //             return false;
+      //         }
+      // }
+
+      return true;
+    }
+
+
+    function setValidationMessage(message, error = true) {
+        self.task.history.isValid.message = message || {};
+        self.task.history.isValid.error = error || {};
+    }
+
     }// #EditDialogController
 
 

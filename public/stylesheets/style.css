@@ -132,3 +132,8 @@ md-input-container:not(.md-input-has-value) {
 .edit-task-dialog {
   width: 90%;
 }
+
+.has-error {
+  color: red;
+  background-color: yellow;
+}
