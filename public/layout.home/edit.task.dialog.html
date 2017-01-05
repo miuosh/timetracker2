@@ -1,19 +1,19 @@
 
 
 
+
 <md-dialog aria-label="EditTaskDialog">
   <md-toolbar>
-    <h2 style="padding: 5px; text-align: center;">Edycja zadania</h2>
+    <h2 style="text-align: center;">Edycja zadania</h2>
   </md-toolbar>
-  <form name="editTaskForm" ng-submit="$event.preventDefault()">
-<div class="md-dialog-content" layout="row" layout-align="space-between start">
+<form name="editTaskForm" ng-submit="$event.preventDefault()">
 
+<div class="md-dialog-content" layout="row" layout-align="center start">
 
-
-  <div flex="40">
+  <div flex="50">
     <md-input-container>
       <label>Opis</label>
-      <textarea style="min-width:200px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off"></textarea>
+      <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
       <div ng-messages="editTaskForm.desc.$error" role="alert">
           <div ng-message="required">Pole nie może być puste.</div>
       </div>
@@ -75,6 +75,8 @@
 
 </div>
 
+<br />
+
 <!-- task history -->
 <div layout="column" ng-hide="edc.task.history.length === 0">
   <table>
@@ -88,19 +90,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false"
-      ng-class="!edc.isValidTimeSpan(item) ? 'has-error': ''">
+      <tr ng-class="item.isValid ? '':'has-error'" class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
         <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
         <!-- table cell when edit mode is disabled -->
-        <td class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+        <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
+          <div >
+            <p style="font-size: .8em;">{{item.startTime | date: 'yyyy-MM-dd'}}</p>
+          </div>
+
           <div layout="row" layout-align="center center">
-            <div>
-              <i class="material-icons pointer" ng-click="edc.addHour(item, 'startTime')">keyboard_arrow_up</i>
-              <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'HH' }}</p>
-              <i class="material-icons pointer" ng-click="edc.substractHour(item, 'startTime')">keyboard_arrow_down</i>
+            <div >
+              <i class="material-icons pointer" ng-mousedown="edc.addHour(item, 'startTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_up</i>
+              <p style="margin: 0px 0px 0px 0px" >{{ item.startTime | date:'HH' }}</p>
+              <i class="material-icons pointer" ng-mousedown="edc.substractHour(item, 'startTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_down</i>
             </div>
 
             <div >
@@ -108,42 +113,42 @@
             </div>
 
             <div >
-              <i class="material-icons pointer" ng-click="edc.addMinute(item, 'startTime')">keyboard_arrow_up</i>
+              <i class="material-icons pointer" ng-mousedown="edc.addMinute(item, 'startTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_up</i>
               <p style="margin: 0px 0px 0px 0px">{{ item.startTime | date:'mm'}}</p>
-              <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'startTime')">keyboard_arrow_down</i>
+              <i class="material-icons pointer" ng-mousedown="edc.substractMinute(item, 'startTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_down</i>
             </div>
           </div>
-          <div>
-            <p>{{item.startTime | date: 'yyyy-MM-dd'}}</p>
-          </div>
+
          </td>
         <!-- table cell when edit mode is disabled -->
         <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss' }}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
+          <div>
+            <p style="font-size: .8em;">{{item.stopTime | date: 'yyyy-MM-dd'}}</p>
+          </div>
+
           <div layout="row" layout-align="center center">
             <div>
-              <i class="material-icons pointer" ng-click="edc.addHour(item, 'stopTime')">keyboard_arrow_up</i>
+              <i class="material-icons pointer" ng-mousedown="edc.addHour(item, 'stopTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_up</i>
               <p style="margin: 0px 0px 0px 0px">{{ item.stopTime | date:'HH'}}</p>
-              <i class="material-icons pointer" ng-click="edc.substractHour(item, 'stopTime')">keyboard_arrow_down</i>
+              <i class="material-icons pointer" ng-mousedown="edc.substractHour(item, 'stopTime')"  ng-mouseup="edc.cancelInterval()">keyboard_arrow_down</i>
             </div>
 
             <div >
+
               <p style="margin: 0px 0px 0px 0px">:</p>
             </div>
 
             <div >
-              <i class="material-icons pointer" ng-click="edc.addMinute(item, 'stopTime')">keyboard_arrow_up</i>
+
+              <i class="material-icons pointer" ng-mousedown="edc.addMinute(item, 'stopTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_up</i>
               <p style="margin: 0px 0px 0px 0px">{{ item.stopTime | date:'mm'}}</p>
-              <i class="material-icons pointer" ng-click="edc.substractMinute(item, 'stopTime')">keyboard_arrow_down</i>
+              <i class="material-icons pointer" ng-mousedown="edc.substractMinute(item, 'stopTime')" ng-mouseup="edc.cancelInterval()">keyboard_arrow_down</i>
             </div>
           </div>
-          <div>
-            <md-icon><i class="material-icons">date_range</i></md-icon>
-            <md-tooltip>{{item.stopTime | date: 'yyyy-MM-dd'}}</md-tooltip>
-            <p style="font-size: .8em;">{{item.stopTime | date: 'yyyy-MM-dd'}}</p>
-          </div>
+
          </td>
 
         <td class="table-col">{{ item.dt | formatDuration }}</td>
@@ -186,12 +191,19 @@
 
 
 
+
 <!-- answers footer -->
-<md-dialog-actions>
-  <span ng-show="edc.task.history.isValid.error" style="color:red;">{{edc.task.history.isValid.message}}</span>
-  <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
-  <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
-  <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
+<md-dialog-actions layout="row" layout-align="space-between center">
+  <div>
+    <span ng-show="edc.task.history.isValid.error === true" style="color:red;">{{edc.task.history.isValid.message}}</span>
+  </div>
+
+  <div>
+    <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
+    <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
+    <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
+  </div>
+
 </md-dialog-actions>
 
 </md-dialog>
