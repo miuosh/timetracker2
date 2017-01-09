@@ -54,9 +54,13 @@
                 })
               .then(function(data) {
                 //clear new task fields
-                vm.newTask = angular.copy({});
-                vm.searchCategory = undefined;
-                vm.searchProject = undefined;
+                angular.copy({}, vm.newTask);
+                vm.searchCategory = null;
+                vm.searchProject = null;
+                $scope.newTaskForm.$setPristine();
+                $scope.newTaskForm.$setUntouched();
+
+
               });
     }
 
@@ -79,7 +83,8 @@
 
     function searchProjectChange(text) {
       //$log.info('Text changed to ' + text);
-      vm.newTask.project = text;
+      // comment newTask.project = text - user must selected project
+      //vm.newTask.project = text;
     }
 
     function selectedProjectChange(item) {
@@ -89,7 +94,8 @@
 
     function searchCategoryChange(text) {
       //$log.info('Text changed to ' + text);
-      vm.newTask.category = text;
+      // comment newTask.category - user must select category
+      //vm.newTask.category = text;
     }
 
     function selectedCategoryChange(item) {

@@ -6,17 +6,6 @@
 
   /* @ngInject */
   DashboardController.$inject = ['$scope', '$interval', '$timeout', '$mdDialog', 'dataservice'];
-  /*
-  1. dodać funkcję odliczania czasu - done
-  2. sformatować tabele- done
-  3. zrobić stronicowanie
-  4. filtrowanie po kolumnie - done
-  5. filtrowanie po kategorii - done
-  6. wyszukiwanie - done
-  7. możliwość wczytania predefiniowanych kategorii - done
-  8. dodać menu - usuń, status: ukończone - done
-  9. edycja zadania
-  */
 
   function DashboardController($scope, $interval, $timeout, $mdDialog, dataservice) {
     var vm = this;
@@ -425,7 +414,7 @@
               }
               console.groupEnd();
       }
-      if (index === 0 ) {
+      if (index === 0 && history.length > 1) {
               var previousItem = history[index + 1];
               console.group('Pierwszy element tabeli');
               if (new Date(previousItem.stopTime).getTime() > new Date(currentItem.startTime).getTime()) {
@@ -435,7 +424,7 @@
               console.groupEnd();
       }
 
-      if (index === history.length-1 ) {
+      if (index === history.length-1 && history.length > 1 ) {
         console.group('Ostatni element tabeli');
         var nextItem = history[index-1];
         if ( new Date(currentItem.stopTime).getTime() > new Date(nextItem.startTime).getTime() ) {

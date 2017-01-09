@@ -28,15 +28,15 @@
                       md-input-name="project"
                       md-selected-item="edc.task.project"
                       md-search-text-change="at.searchProjectChange(edc.task.project)"
-                      md-search-text="edc.task.project"
+                      md-search-text="searchProject"
                       md-selected-item-change="at.selectedProjectChange(item)"
-                      md-items="item in at.profile.projects | filter:edc.task.project"
+                      md-items="item in at.profile.projects | filter:searchProject"
                       md-item-text="item"
                       md-min-length="0"
                       md-input-minlength="0"
                       md-floating-label="Projekt...">
                   <md-item-template>
-                      <span md-highlight-text="edc.task.project" md-highlight-flags="^i">{{item}}</span>
+                      <span md-highlight-text="searchProject" md-highlight-flags="^i">{{item}}</span>
                   </md-item-template>
                   <div ng-messages="editTaskForm.project.$error" role="alert">
                       <div ng-message="required">Pole nie może być puste.</div>
@@ -55,13 +55,13 @@
                         md-search-text-change="at.searchCategoryChange(edc.task.category)"
                         md-search-text="edc.task.category"
                         md-selected-item-change="at.selectedCategoryChange(item)"
-                        md-items="item in at.profile.categories | filter:edc.task.category"
+                        md-items="item in at.profile.categories "
                         md-item-text="item"
                         md-min-length="0"
                         md-input-minlength="0"
                         md-floating-label="Kategoria...">
                     <md-item-template>
-                        <span md-highlight-text="edc.task.category" md-highlight-flags="^i">{{item}}</span>
+                        <span md-highlight-text="searchCategory" md-highlight-flags="^i">{{item}}</span>
                     </md-item-template>
                     <div ng-messages="editTaskForm.category.$error" role="alert">
                         <div ng-message="required">Pole nie może być puste.</div>
