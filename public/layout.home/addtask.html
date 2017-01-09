@@ -27,7 +27,8 @@
                           <span md-highlight-text="at.searchProject" md-highlight-flags="^i">{{item}}</span>
                       </md-item-template>
                       <div ng-messages="newTaskForm.project.$error" role="alert">
-                          <div ng-message="required">Pole nie może być puste.</div>
+                          <div ng-message="required">Wybierz projekt.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
                       </div>
           </md-autocomplete>
 
@@ -49,13 +50,14 @@
                           <span md-highlight-text="at.searchCategory" md-highlight-flags="^i">{{item}}</span>
                       </md-item-template>
                       <div ng-messages="newTaskForm.category.$error" role="alert">
-                          <div ng-message="required">Pole nie może być puste.</div>
+                          <div ng-message="required">Wybierz kategorię.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
                       </div>
           </md-autocomplete>
 
 
       <md-input-container>
-        <md-button type="submit" class="md-fab" aria-label="add-task" >
+        <md-button type="submit" class="md-fab" aria-label="add-task" ng-disabled="newTaskForm.$invalid">
               <md-icon><i class="material-icons">add</i></md-icon>
           </md-button>
       </md-input-container>

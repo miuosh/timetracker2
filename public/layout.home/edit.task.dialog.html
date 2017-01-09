@@ -39,7 +39,8 @@
                       <span md-highlight-text="searchProject" md-highlight-flags="^i">{{item}}</span>
                   </md-item-template>
                   <div ng-messages="editTaskForm.project.$error" role="alert">
-                      <div ng-message="required">Pole nie może być puste.</div>
+                      <div ng-message="required">Wybierz projekt.</div>
+                      <div ng-message="notSelected">Wybierz projekt z listy.</div>
                   </div>
       </md-autocomplete>
 
@@ -64,7 +65,8 @@
                         <span md-highlight-text="searchCategory" md-highlight-flags="^i">{{item}}</span>
                     </md-item-template>
                     <div ng-messages="editTaskForm.category.$error" role="alert">
-                        <div ng-message="required">Pole nie może być puste.</div>
+                        <div ng-message="required">Wybierz kategorię.</div>
+                        <div ng-message="notSelected">Wybierz kategorię z listy.</div>
                     </div>
         </md-autocomplete>
 

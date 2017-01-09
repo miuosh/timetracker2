@@ -43,26 +43,24 @@
 
     function addTask(task) {
       console.log(task);
-      return dataservice.addTask(task)
-              .then(function(data) {
-                  // pass data to DashboardController by emit event
-                  console.log(data);
-                  if(!data.status) {
-                    $scope.$emit('addNewTask', data);
-                  }
-                  return data;
-                })
-              .then(function(data) {
-                //clear new task fields
-                angular.copy({}, vm.newTask);
-                vm.searchCategory = null;
-                vm.searchProject = null;
-                $scope.newTaskForm.$setPristine();
-                $scope.newTaskForm.$setUntouched();
-
-
-              });
-    }
+        return dataservice.addTask(task)
+                .then(function(data) {
+                    // pass data to DashboardController by emit event
+                    console.log(data);
+                    if(!data.status) {
+                      $scope.$emit('addNewTask', data);
+                    }
+                    return data;
+                  })
+                .then(function(data) {
+                  //clear new task fields
+                  angular.copy({}, vm.newTask);
+                  vm.searchCategory = null;
+                  vm.searchProject  = null;
+                  $scope.newTaskForm.$setPristine();
+                  $scope.newTaskForm.$setUntouched();
+                });
+    }// #addTask
 
     function loadProfileData() {
       return dataservice.getUserSettings()
@@ -90,6 +88,11 @@
     function selectedProjectChange(item) {
       //$log.info('Item changed to ' + JSON.stringify(item));
       vm.newTask.project = item;
+      if (item === undefined) {
+        $scope.newTaskForm.project.$setValidity('notSelected', false); //set error
+      } else {
+        $scope.newTaskForm.project.$setValidity('notSelected', true); //remove error
+      }
     }
 
     function searchCategoryChange(text) {
@@ -101,6 +104,11 @@
     function selectedCategoryChange(item) {
       //$log.info('Item changed to ' + JSON.stringify(item));
       vm.newTask.category = item;
+      if (item === undefined) {
+        $scope.newTaskForm.category.$setValidity('notSelected', false); //set error
+      } else {
+        $scope.newTaskForm.category.$setValidity('notSelected', true); //remove error
+      }
     }
 
   }// #AddTaskController

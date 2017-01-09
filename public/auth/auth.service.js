@@ -24,7 +24,7 @@
           return $http.get('/users/username')
                   .success(function(data) {
                     username = data.username;
-                    return username;
+                    return data;
                   })
                   .error(function(err) {
                     console.log(err);
