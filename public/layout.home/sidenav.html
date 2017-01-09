@@ -32,18 +32,22 @@
   </div>
     <div layout="column" layout-align="center center" flex="80">
       <i class="material-icons account-icon">account_circle</i>
+      <h3 class="account-name">{{vm.username}}</h3>
     </div>
 
   <!-- application section -->
   <md-divider></md-divider>
 
+  <div layout="column" layout-align="space-between stretch">
     <h3 class="nav-header">Zadania</h3>
     <md-divider></md-divider>
 
+    <md-button ng-click="lvm.subPage='/layout.home/dashboard.html'" class="md-primary md-hue-1" >Do wykonania</md-button>
     <md-button ng-click="lvm.subPage='/layout.home/report.html'" class="md-primary md-hue-1">Ukończone</md-button>
   </div>
 
   <md-divider></md-divider>
+  <div layout="column" layout-align="space-between stretch">
     <h3 class="nav-header">Raporty</h3>
     <md-divider></md-divider>
   </div>
