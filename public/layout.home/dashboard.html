@@ -60,7 +60,7 @@
   <tbody >
     <tr ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="!item.isCompleted">
       <td class="table-checkbox">
-        <md-checkbox ng-model="item.selected" aria-label="checkbox_{{item._id}}"> </md-checkbox>
+        <md-checkbox class="md-checkbox-custom" ng-model="item.selected" aria-label="checkbox_{{item._id}}" > </md-checkbox>
       </td>
       <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
       <td class="table-desc">{{ item.desc }}</td>

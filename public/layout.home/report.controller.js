@@ -176,7 +176,7 @@
         },
         controller: EditTaskDialogController,
         controllerAs: 'edc',
-        templateUrl: '/layout.home/edit.task.dialog.html',
+        templateUrl: '/layout.home/edit.completed.task.dialog.html',
         parent: angular.element(document.body),
         targetEvent: ev,
         clickOutsideToClose: true,
