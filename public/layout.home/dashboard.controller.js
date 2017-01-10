@@ -212,7 +212,8 @@
       self.save = save;
 
       //data validation
-      self.task.history.isValid = {}
+      self.task.history.isValid = {};
+
 
       //intervals
       var interval = null;
@@ -220,7 +221,7 @@
       self.cancelInterval = cancelInterval;
       var ms = 125; //interval and cancel interval timeout
 
-      //Internal
+      //Internal functions
       var sumByProperty = sumByProperty;
       var calcDuration = calcDuration;
       var addTime = addTime;
@@ -231,6 +232,8 @@
       // data validation
       var setValidationMessage = setValidationMessage;
       var initValidation = initValidation;
+
+
       initValidation();
 
       //////////////////////////////////////////////////////////////////////
@@ -275,7 +278,7 @@
       function cancelInterval() {
         if(interval) {
           $timeout (function() {
-            $interval.cancel(interval)
+            $interval.cancel(interval);
             interval = null;
           }, ms);
         }
@@ -308,7 +311,6 @@
         self.initInterval( function() {
             substractTime(item, property, 'mm');
         });
-
       }
       /*
       Internal use functions
@@ -345,10 +347,10 @@
 
       function sumByProperty(items, property) {
 
-        if (items == 0) return 0;
+        if (items === 0) return 0;
 
-        return items.reduce((previous, current) => {
-          return current[property] == null ? previous : previous + parseFloat(current[property]);
+        return items.reduce(function(previous, current) {
+          return current[property] === null ? previous : previous + parseFloat(current[property]);
         }, 0)
       }
 
@@ -409,7 +411,7 @@
               }
 
               if ( new Date(currentItem.stopTime).getTime() > new Date(nextItem.startTime).getTime()) {
-                  console.log('stopTime bieżacego elementu większy od starTime następnego elementu')
+                  console.log('stopTime bieżacego elementu większy od starTime następnego elementu');
                   return false;
               }
               console.groupEnd();

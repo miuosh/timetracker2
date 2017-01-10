@@ -1,9 +1,9 @@
 
-  <md-dialog aria-label="EditTaskDialog">
+  <md-dialog aria-label="taskDialog">
     <md-toolbar>
       <h2 style="text-align: center;">Edycja zadania</h2>
     </md-toolbar>
-  <form name="editTaskForm" ng-submit="$event.preventDefault()">
+  <form name="taskForm" ng-submit="$event.preventDefault()" ng-controller="AddTaskController as at">
 
   <div class="md-dialog-content" layout="row" layout-align="center start">
     <!-- set status: completed, in progress -->
@@ -23,14 +23,14 @@
       <md-input-container>
         <label>Opis</label>
         <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
-        <div ng-messages="editTaskForm.desc.$error" role="alert">
+        <div ng-messages="taskForm.desc.$error" role="alert">
             <div ng-message="required">Pole nie może być puste.</div>
         </div>
       <md-input-container>
     </div>
 
     <!-- autocomplete fields -->
-    <div layout="row" ng-controller="AddTaskController as at">
+    <div layout="row" >
       <!-- project autocomplete -->
       <div >
         <md-autocomplete required md-no-asterisk
@@ -47,8 +47,9 @@
                     <md-item-template>
                         <span md-highlight-text="searchProject" md-highlight-flags="^i">{{item}}</span>
                     </md-item-template>
-                    <div ng-messages="editTaskForm.project.$error" role="alert">
+                    <div ng-messages="taskForm.project.$error" role="alert">
                         <div ng-message="required">Pole nie może być puste.</div>
+                        <div ng-message="notSelected">Wybierz projekt z listy.</div>
                     </div>
         </md-autocomplete>
 
@@ -72,8 +73,9 @@
                       <md-item-template>
                           <span md-highlight-text="searchCategory" md-highlight-flags="^i">{{item}}</span>
                       </md-item-template>
-                      <div ng-messages="editTaskForm.category.$error" role="alert">
+                      <div ng-messages="taskForm.category.$error" role="alert">
                           <div ng-message="required">Pole nie może być puste.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
                       </div>
           </md-autocomplete>
 
@@ -210,7 +212,7 @@
     <div>
       <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
       <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
-      <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
+      <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.isValid.error == true">Zapisz</md-button>
     </div>
 
   </md-dialog-actions>

@@ -8,7 +8,7 @@
 
   function AddTaskController($scope, $log, dataservice) {
 
-    $scope.newTaskForm = {};
+    $scope.taskForm = {};
 
     var vm = this;
     vm.newTask = {};
@@ -42,6 +42,7 @@
 
 
     function addTask(task) {
+      console.log('Dodawanie zadania...');
       console.log(task);
         return dataservice.addTask(task)
                 .then(function(data) {
@@ -57,8 +58,8 @@
                   angular.copy({}, vm.newTask);
                   vm.searchCategory = null;
                   vm.searchProject  = null;
-                  $scope.newTaskForm.$setPristine();
-                  $scope.newTaskForm.$setUntouched();
+                  $scope.taskForm.$setPristine();
+                  $scope.taskForm.$setUntouched();
                 });
     }// #addTask
 
@@ -89,9 +90,10 @@
       //$log.info('Item changed to ' + JSON.stringify(item));
       vm.newTask.project = item;
       if (item === undefined) {
-        $scope.newTaskForm.project.$setValidity('notSelected', false); //set error
+        console.log($scope.taskForm);
+        $scope.taskForm.project.$setValidity('notSelected', false); //set error
       } else {
-        $scope.newTaskForm.project.$setValidity('notSelected', true); //remove error
+        $scope.taskForm.project.$setValidity('notSelected', true); //remove error
       }
     }
 
@@ -105,9 +107,9 @@
       //$log.info('Item changed to ' + JSON.stringify(item));
       vm.newTask.category = item;
       if (item === undefined) {
-        $scope.newTaskForm.category.$setValidity('notSelected', false); //set error
+        $scope.taskForm.category.$setValidity('notSelected', false); //set error
       } else {
-        $scope.newTaskForm.category.$setValidity('notSelected', true); //remove error
+        $scope.taskForm.category.$setValidity('notSelected', true); //remove error
       }
     }
 

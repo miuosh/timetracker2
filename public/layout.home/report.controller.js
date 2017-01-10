@@ -5,37 +5,168 @@
   .controller('ReportController', ReportController);
 
   /* @ngInject */
-  ReportController.$inject = ['$scope', '$mdDialog', 'dataservice'];
-  function ReportController($scope, $mdDialog, dataservice) {
+  ReportController.$inject = ['$scope', '$interval', '$timeout', '$mdDialog', 'dataservice'];
+
+  function ReportController($scope, $interval, $timeout, $mdDialog, dataservice) {
     var vm = this;
     vm.name = "ReportController";
     vm.tasks = [];
+    vm.intervalsID = [];
 
     vm.getTasks = getTasks;
     vm.editTask = editTask;
+    vm.removeTasks = removeTasks;
+    vm.toggleTask = toggleTask;
+    vm.setAsCompleted = setAsCompleted;
+    vm.startTimer = startTimer;
+    vm.stopTimer = stopTimer;
+
+    vm.countDuration = countDuration;
 
     // filter table
     $scope.sortType = 'updated';
     $scope.sortReverse = true;
     $scope.searchType = '';
 
-    init();
 
-    //////////////////////////////////
+    console.log('Init ReportController Controller');
+    loadTasks();
+    initEvents();
+    /////////////////////
 
-    function init() {
-      getTasks();
+    function loadTasks() {
+      return getTasks().then(function(data) {
+        console.log('Loading tasks...');
+        return data;
+      });
+
+    }// #loadTasks
+
+////////////////////////////////////////////////////////
+    function getTasks(){
+      return dataservice.getTasks()
+          .then(function(data) {
+            vm.tasks = data;
+            return vm.tasks;
+          })
+          .then(function(data) {
+              vm.stopTimer();
+              //console.log('Init timers');
+              if (angular.isArray(data)) {
+                  var len = data.length;
+                  for (var i = len; i--; ) {
+                    if(data[i].isPerforming) {
+                      vm.countDuration(data[i]);
+                      vm.startTimer(data[i]);
+                    }
+                }
+              }
+
+            return data;
+          })
+          .catch(function(err) {
+            console.log(err);
+            return err;
+          });
+  }// #getTasks
+
+    function removeTasks(ev) {
+
+      /* Confirm remove tasks */
+
+         // Appending dialog to document.body to cover sidenav in docs app
+         var confirm = $mdDialog.confirm()
+               .title('Czy na pewno usunąć zaznaczone zadania?')
+               .textContent('')
+               .ariaLabel('Usuń zadania')
+               .targetEvent(ev)
+               .ok('Tak, usuń')
+               .cancel('Anuluj');
+
+         $mdDialog.show(confirm).then(function() {
+            var ids = getSelectedTasks();
+           return dataservice.removeTasks(ids)
+                     .then(getTasks);
+         }, function() {
+           console.log('Anulowano usuwanie');
+         });
+    }// #removeTasks
+
+    function getSelectedTasks() {
+      var ids = [];
+      var len = vm.tasks.length;
+      for (var i = len; i--; ) {
+        if (vm.tasks[i].selected){
+          ids.push( vm.tasks[i]._id);
+        }
+      }
+      return ids;
     }
 
-    function getTasks() {
-      return dataservice.getTasks()
-        .then(function(data) {
-          vm.tasks = data;
-          return data;
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
+
+    function toggleTask(item) {
+      return dataservice.toggleTask(item._id)
+                .then(function(data) {
+                  return data;
+                }).then(function(data) {
+                  return getTasks();
+                });
+
+    }// #toogleTask
+
+    function startTimer(item) {
+      //console.log(item);
+      var intervalPromise = $interval(function() {
+        item.duration++;
+      }, 1000);
+
+      var taskID = item._id;
+      vm.intervalsID.push({
+        intervalPromise: intervalPromise,
+        taskID: taskID });
+      return intervalPromise;
+    } // #startTimer
+
+    function stopTimer() {
+      console.log('Stop timers');
+      var len = vm.intervalsID.length;
+        for (var i = len; i-- ;  ) {
+                $interval.cancel(vm.intervalsID[i].promiseID);
+                vm.intervalsID.splice(i, 1);
+        }
+    }// #stopTimer
+
+    function initEvents() {
+      $scope.$on('$destroy', function() {
+        vm.stopTimer();
+        console.log('DashboardController scope destroyed.');
+      });
+
+      $scope.$on('addNewTask', function (event, data) {
+        console.log('Event: newTask');
+        console.log(data);
+        vm.tasks.unshift(data);
+      });
+    }
+
+    function countDuration(item) {
+      var currentTime = new Date();
+      //console.log('currentTime: ' + currentTime);
+      //console.log('item.updated: ' + item.updated);
+      var updated = new Date(item.updated);
+      //console.log('new item.updated: ' + item.updated);
+      var currentDuration = (currentTime - updated) / 1000; // ms -> sec
+      //console.log('currentDuration: ' + currentDuration);
+      var lastDuration = item.duration;
+      item.duration = Math.round(currentDuration + lastDuration, 0); // round to full sek
+      return item;
+    }
+
+    function setAsCompleted() {
+      var ids = getSelectedTasks();
+      return dataservice.setAsCompleted(ids)
+                .then(getTasks);
+
     }
 
     function editTask(ev, item) {
@@ -45,7 +176,7 @@
         },
         controller: EditTaskDialogController,
         controllerAs: 'edc',
-        templateUrl: '/layout.home/edit.completed.task.dialog.html',
+        templateUrl: '/layout.home/edit.task.dialog.html',
         parent: angular.element(document.body),
         targetEvent: ev,
         clickOutsideToClose: true,
@@ -81,7 +212,8 @@
       self.save = save;
 
       //data validation
-      self.task.history.isValid = {}
+      self.task.history.isValid = {};
+
 
       //intervals
       var interval = null;
@@ -89,7 +221,7 @@
       self.cancelInterval = cancelInterval;
       var ms = 125; //interval and cancel interval timeout
 
-      //Internal
+      //Internal functions
       var sumByProperty = sumByProperty;
       var calcDuration = calcDuration;
       var addTime = addTime;
@@ -100,6 +232,8 @@
       // data validation
       var setValidationMessage = setValidationMessage;
       var initValidation = initValidation;
+
+
       initValidation();
 
       //////////////////////////////////////////////////////////////////////
@@ -144,7 +278,7 @@
       function cancelInterval() {
         if(interval) {
           $timeout (function() {
-            $interval.cancel(interval)
+            $interval.cancel(interval);
             interval = null;
           }, ms);
         }
@@ -177,7 +311,6 @@
         self.initInterval( function() {
             substractTime(item, property, 'mm');
         });
-
       }
       /*
       Internal use functions
@@ -214,10 +347,10 @@
 
       function sumByProperty(items, property) {
 
-        if (items == 0) return 0;
+        if (items === 0) return 0;
 
-        return items.reduce((previous, current) => {
-          return current[property] == null ? previous : previous + parseFloat(current[property]);
+        return items.reduce(function(previous, current) {
+          return current[property] === null ? previous : previous + parseFloat(current[property]);
         }, 0)
       }
 
@@ -278,12 +411,12 @@
               }
 
               if ( new Date(currentItem.stopTime).getTime() > new Date(nextItem.startTime).getTime()) {
-                  console.log('stopTime bieżacego elementu większy od starTime następnego elementu')
+                  console.log('stopTime bieżacego elementu większy od starTime następnego elementu');
                   return false;
               }
               console.groupEnd();
       }
-      if (index === 0 ) {
+      if (index === 0 && history.length > 1) {
               var previousItem = history[index + 1];
               console.group('Pierwszy element tabeli');
               if (new Date(previousItem.stopTime).getTime() > new Date(currentItem.startTime).getTime()) {
@@ -293,7 +426,7 @@
               console.groupEnd();
       }
 
-      if (index === history.length-1 ) {
+      if (index === history.length-1 && history.length > 1 ) {
         console.group('Ostatni element tabeli');
         var nextItem = history[index-1];
         if ( new Date(currentItem.stopTime).getTime() > new Date(nextItem.startTime).getTime() ) {
@@ -345,7 +478,5 @@
     }// #EditDialogController
 
 
-
-  }// #ReportController
-
+  }// #DashboardController
 })();
