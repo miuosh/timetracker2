@@ -11,12 +11,15 @@
   .constant('userUrl', {
     'url': '/users/'
   })
+  .constant('reportsUrl', {
+    'url' : '/reports/'
+  })
   .factory('dataservice', dataservice);
 
   /* @ngInject */
 //  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http, dataUrl, profileUrl, userUrl) {
+  function dataservice($http, dataUrl, profileUrl, userUrl, reportsUrl) {
     return {
       getTasks: getTasks,
       getTask: getTask,
@@ -36,6 +39,9 @@
       /* User settings */
       saveUserSettings: saveUserSettings,
       getUserSettings: getUserSettings,
+
+      /* Reports data */
+      getCompletedTasksBetweenDate: getCompletedTasksBetweenDate
 
     };
 
@@ -149,6 +155,14 @@
     function saveUserSettings(config) {
       console.log(config);
       return $http.post(userUrl.url + '/settings/', JSON.stringify(config), { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+      /* Reports data */
+
+    function getCompletedTasksBetweenDate(from, to) {
+      return $http.get(reportsUrl.url + from + '-' + to)
                     .then(successCallback)
                     .catch(errorCallback);
     }

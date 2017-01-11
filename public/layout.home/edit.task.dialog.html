@@ -199,7 +199,7 @@
   <div>
     <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
     <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
-    <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
+    <md-button ng-click="edc.save(edc.task)" class="md-accent" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
   </div>
 
 </md-dialog-actions>

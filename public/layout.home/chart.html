@@ -1,0 +1,14 @@
+<div ng-controller="ChartController as chc">
+
+<md-button ng-click="chc.getData()">
+  Pobierz dane
+</md-button>
+
+<div style="max-width: 300px;">
+  <canvas id="pie" class="chart chart-pie" width="300" height="300"
+    chart-data="data" chart-labels="labels" chart-options="options" chart-dataset-override="dataOverride">
+  </canvas>
+</div>
+
+
+</div>
