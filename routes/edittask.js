@@ -18,10 +18,6 @@ var isAuthenticated = function (req, res, next) {
 
 
 router.post('/setAsCompleted', isAuthenticated, function(req, res) {
-
-		console.log('User: ' + req.user.id);
-    console.log('Set as completed ' + req.body);
-		
 			query.setAsCompleted(req.body)
 	      .then(function(data) {
 					console.log('setAsCompletePromise resolved');
@@ -39,9 +35,33 @@ router.post('/setAsCompleted', isAuthenticated, function(req, res) {
 
     }); // #setAsCompleted
 
-	router.post('/edit/:id', isAuthenticated, function(req, res) {
+	/*
+		PUT - edit task
+	*/
 
-	} )
+	router.put('/edit/', isAuthenticated, function(req, res) {
+		var task = req.body;
+		var user = req.user;
+		if (task._creator === user.id || !task.isPerforming) {
+			var editTaskPromise = query.editTask(task);
+			editTaskPromise.then(function(data) {
+				res.status(200);
+				res.send(data);
+			})
+			.catch(function(err) {
+				res.status(400);
+				res.send(JSON.stringify(err));
+			});
+
+		} else {
+				console.log('edit task...Cannot modify task.');
+			res.status(400);
+			res.send(JSON.stringify({
+				message: "Cannot modify task. Possible cause: task is runnig or you not created this task."
+			}))
+		}
+
+	});
 
 
 

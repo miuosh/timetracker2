@@ -5,8 +5,10 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var clean = require('gulp-clean');
 var jshint = require('gulp-jshint');
+var stripDebug = require('gulp-strip-debug');
 var concat = require('gulp-concat');
 var bytediff = require('gulp-bytediff');
+var babel = require('gulp-babel');
 /*
 When using standard source.pipe(dest) source will not be destroyed if dest emits close or an error.
 You are also not able to provide a callback to tell when then pipe has finished.
@@ -39,11 +41,16 @@ gulp.task('clean', function() {
 });
 
 // Process scripts and concatenate them into one output file
-gulp.task('scripts', ['clean'], function() {
+gulp.task('scripts', function() {
  gulp.src(paths.scripts, {cwd: bases.app})
+ .pipe(stripDebug())
+ .pipe(babel({
+            presets: ['es2015']
+        }))
  .pipe(jshint({
    esversion: 6
  }))
+
  .pipe(jshint.reporter('default'))
  .pipe(concat('app.min.js', {newLine: ';'}))
         // Annotate before uglify so the code get's min'd properly.
@@ -60,7 +67,7 @@ gulp.task('scripts', ['clean'], function() {
 });
 
 // Copy all other files to dist directly
-gulp.task('copy', ['clean'], function() {
+gulp.task('copy', function() {
  // Copy html
  gulp.src(paths.html, {cwd: bases.app})
  .pipe(gulp.dest(bases.dist));

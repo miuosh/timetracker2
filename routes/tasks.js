@@ -98,31 +98,30 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
   });
 
+/*
+	POST - add new task
+*/
     router.post('/', isAuthenticated, function(req, res) {
 			var body = req.body;
-			console.log(req.user.id);
+			var userId = req.user.id
+			console.log(userId);
 			console.log(body);
-			if(typeof body.desc !== 'string'||	typeof body.category!=='string' || typeof body.project!=='string') {
+			if(typeof body.desc != 'string'||	typeof body.category!='string' || typeof body.project!='string') {
 				res.status(400);
 				res.send({message: 'Fill all required data in form!'});
 			} else {
-							var task = new Task({
-											desc: req.body.desc,
-											category: req.body.category,
-											project: req.body.project,
-											creationDate: new Date(),
-											updated: new Date(),
-											isPerforming: false,
-											_creator: req.user.id
-							});
-							task.save( function(err) {
-									if (err) { throw err; }
-									else {
-											res.send(JSON.stringify(task));
-											console.log('Task saved.'); }
-							});
+					var addTaskPromise = query.addTask(body, userId);
+					addTaskPromise.then(function(data) {
+						res.status(200);
+						res.send(data);
+					})
+					.catch(function(err) {
+						console.log(err);
+						res.status(400);
+						res.send(JSON.stringify({ message: 'Error: Cannot add new task.'}));
+					})
 			}
-        });
+  });
 
 
 

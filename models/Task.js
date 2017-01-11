@@ -1,8 +1,13 @@
 var mongoose = require('mongoose')
-require('mongoose-long')(mongoose);
+var Schema = mongoose.Schema;
 
+var timespan = new Schema({
+  startTime : { type: Date },
+  stopTime: { type: Date },
+  dt : { type: Number, default: 0}
+})
 
-module.exports = mongoose.model('Task',{
+var Task = new Schema( {
     id: String,
     desc: String,
     category: String,
@@ -12,5 +17,8 @@ module.exports = mongoose.model('Task',{
     duration: { type: Number, default: 0 },
     isPerforming: { type: Boolean, default: false},
     _creator: String,
-    isCompleted: { type: Boolean, default: false}
+    isCompleted: { type: Boolean, default: false},
+    history : [ timespan ]
 });
+
+module.exports = mongoose.model('Task', Task);

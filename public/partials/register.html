@@ -13,12 +13,17 @@
       <form name="registerForm">
         <md-input-container class="md-block" >
           <label>Login</label>
-          <input type="text" name="username" ng-model="vm.registerForm.username" autofocus />
+          <input type="text" name="username" ng-model="vm.registerForm.username" autofocus required/>
         </md-input-container>
 
         <md-input-container class="md-block" >
           <label>Hasło</label>
-          <input type="password" name="password" ng-model="vm.registerForm.password" >
+          <input type="password" name="password" ng-model="vm.registerForm.password" required>
+        </md-input-container>
+
+        <md-input-container class="md-block" >
+          <label>Potwierdź hasło</label>
+          <input type="password" name="confirmPassword" ng-model="vm.registerForm.confirmPassword" required>
         </md-input-container>
 
         <md-input-container class="md-block" >

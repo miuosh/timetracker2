@@ -14,13 +14,46 @@
 </div> -->
 
 
-<div id="left-navmenu" layout="column">
-  <!-- <h3>Zalogowany jako: {{vm.user}}</h3> -->
+<div id="left-navmenu" layout="column" >
 
-  <md-button class="btn-menu" class="md-primary md-hue-1" name="button" ng-click="lvm.subPage='/layout.home/dashboard.html'">Zadania</md-button>
-  <md-button ng-click="lvm.subPage='/layout.home/dashboard.html'" class="md-primary md-hue-1">Do wykonania</md-button>
-  <md-button ng-click="lvm.subPage='/layout.home/report.html'" class="md-primary md-hue-1">Ukończone</md-button>
+  <!-- account section -->
+  <div layout="column" layout-align="start end">
+    <div>
+      <md-button class="md-icon-button" aria-label="Profile podpowiedzi" ng-click="lvm.subPage='/layout.home/profiles.html'">
+        <md-icon style="color:#C5CAE9">assignment</md-icon>
+        <md-tooltip>Profile podpowiedzi</md-tooltip>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Ustawienia" ng-click="lvm.subPage='/layout.home/user.settings.html'">
+        <md-icon style="color:#C5CAE9">settings</md-icon>
+        <md-tooltip>Ustawienia</md-tooltip>
+      </md-button>
+    </div>
 
-  <md-button class="btn-menu" class="md-primary md-hue-1" name="raport" ng-click="lvm.subPage='/layout.home/categories.html'">Kategorie</md-button>
-  <md-button class="btn-menu" class="md-primary md-hue-1" name="raport" ng-click="lvm.subPage='/layout.home/report.html'">Raport</md-button>
+  </div>
+    <div layout="column" layout-align="center center" flex="80">
+      <i class="material-icons account-icon">account_circle</i>
+      <h3 class="account-name">{{vm.username}}</h3>
+    </div>
+
+  <!-- application section -->
+  <md-divider></md-divider>
+
+  <div layout="column" layout-align="space-between stretch">
+    <h3 class="nav-header">Zadania</h3>
+    <md-divider></md-divider>
+
+      <md-button ng-click="lvm.subPage='/layout.home/dashboard.html'" class="md-primary md-hue-1" >Do wykonania</md-button>
+      <md-button ng-click="lvm.subPage='/layout.home/report.html'" class="md-primary md-hue-1">Ukończone</md-button>
+  </div>
+
+  <md-divider></md-divider>
+  <div layout="column" layout-align="space-between stretch">
+    <h3 class="nav-header">Raporty</h3>
+    <md-divider></md-divider>
+  </div>
+
+
+
+  <!-- <md-button class="btn-menu" class="md-primary md-hue-1" name="raport" ng-click="lvm.subPage='/layout.home/categories.html'">Kategorie</md-button> -->
+  <!-- <md-button class="btn-menu" class="md-primary md-hue-1" name="raport" ng-click="lvm.subPage='/layout.home/report.html'">Raport</md-button> -->
 </div>

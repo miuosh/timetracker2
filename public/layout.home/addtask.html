@@ -1,37 +1,69 @@
 <!-- add new task form -->
-<form name="newTaskForm" ng-submit="at.addTask(at.newTask)" autocomplete="off">
-  <md-content id="newTaskBar" layout-gt-sm="row" layout-align="center center">
-    <md-input-container flex="60">
-      <label>Opis zadania</label>
-      <input type="text" name="desc" ng-model="at.newTask.desc" required md-no-asterisk autocomplete="off">
-      <div ng-messages="newTaskForm.desc.$error" role="alert">
-          <div ng-message="required">Pole nie może być puste.</div>
-      </div>
-    </md-input-container>
-
-      <!-- project -->
-      <md-input-container>
-        <label>Projekt...</label>
-        <input type="text" name="project" ng-model="at.newTask.project" required md-no-asterisk autocomplete="off">
-        <div ng-messages="newTaskForm.project.$error" role="alert">
-          <div ng-message="required">Pole nie może być puste.</div>
+<div ng-controller="AddTaskController as at">
+  <form name="taskForm" ng-submit="at.addTask(at.newTask)" autocomplete="off">
+    <md-content id="taskBar" layout-gt-sm="row" layout-align="center center">
+      <md-input-container flex="60">
+        <label>Opis zadania</label>
+        <input type="text" name="desc" ng-model="at.newTask.desc" required md-no-asterisk autocomplete="off">
+        <div ng-messages="taskForm.desc.$error" role="alert">
+            <div ng-message="required">Pole nie może być puste.</div>
         </div>
       </md-input-container>
 
-      <!-- category -->
+        <!-- project autocomplete -->
+
+          <md-autocomplete required md-no-asterisk
+                          md-input-name="project"
+                          md-selected-item="at.selectedProject"
+                          md-search-text-change="at.searchProjectChange(at.searchProject)"
+                          md-search-text="at.searchProject"
+                          md-selected-item-change="at.selectedProjectChange(item)"
+                          md-items="item in at.profile.projects | filter:at.searchProject"
+                          md-item-text="item"
+                          md-min-length="0"
+                          md-input-minlength="0"
+                          md-floating-label="Projekt...">
+                      <md-item-template>
+                          <span md-highlight-text="at.searchProject" md-highlight-flags="^i">{{item}}</span>
+                      </md-item-template>
+                      <div ng-messages="taskForm.project.$error" role="alert">
+                          <div ng-message="required">Wybierz projekt.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
+                      </div>
+          </md-autocomplete>
+
+
+        <!-- category autocomplete -->
+
+          <md-autocomplete required md-no-asterisk
+                          md-input-name="category"
+                          md-selected-item="at.selectedCategory"
+                          md-search-text-change="at.searchCategoryChange(at.searchProject)"
+                          md-search-text="at.searchCategory"
+                          md-selected-item-change="at.selectedCategoryChange(item)"
+                          md-items="item in at.profile.categories | filter:at.searchCategory"
+                          md-item-text="item"
+                          md-min-length="0"
+                          md-input-minlength="0"
+                          md-floating-label="Kategoria...">
+                      <md-item-template>
+                          <span md-highlight-text="at.searchCategory" md-highlight-flags="^i">{{item}}</span>
+                      </md-item-template>
+                      <div ng-messages="taskForm.category.$error" role="alert">
+                          <div ng-message="required">Wybierz kategorię.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
+                      </div>
+          </md-autocomplete>
+
+
       <md-input-container>
-        <label>Kategoria...</label>
-        <input type="text" name="category" ng-model="at.newTask.category" required md-no-asterisk autocomplete="off">
-        <div ng-messages="newTaskForm.category.$error" role="alert">
-          <div ng-message="required">Pole nie może być puste.</div>
-        </div>
+        <md-button type="submit" class="md-fab" aria-label="add-task" ng-disabled="taskForm.$invalid">
+              <md-icon><i class="material-icons">add</i></md-icon>
+          </md-button>
       </md-input-container>
+    </md-content>
 
-    <md-input-container>
-      <md-button type="submit" class="md-fab" aria-label="add-task" >
-            <md-icon><i class="material-icons">add</i></md-icon>
-        </md-button>
-    </md-input-container>
-  </md-content>
+  </form>
 
-</form>
+
+</div>

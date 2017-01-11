@@ -7,7 +7,10 @@ var Account = new Schema({
     email: { type: String, unique: true },
     password: { type: String },
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    config: {
+      profile: { type: String, default: "default" }
+    }
 });
 
 Account.plugin(passportLocalMongoose);

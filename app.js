@@ -10,12 +10,14 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var helmet = require('helmet')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var tasks = require('./routes/tasks')
 var addtask = require('./routes/addtask')
 var edittask = require('./routes/edittask')
+var taskprofile = require('./routes/taskprofile')
 
 var Account = require('./models/account');
 var Task = require('./models/task');
@@ -31,6 +33,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(helmet())
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -54,7 +57,7 @@ app.use('/users/', users);
 app.use('/tasks/', tasks);
 app.use('/addtask/', addtask);
 app.use('/edittask/', edittask);
-
+app.use('/profiles/', taskprofile);
 
 // MongoDB
     var dbConfig = {
@@ -109,7 +112,8 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
    app.use(function(err, req, res, next) {
        res.status(err.status || 500);
-       res.render('error', {
+       console.log(err);
+       res.send( {
            message: err.message,
            error: err
        });
@@ -120,7 +124,8 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
    res.status(err.status || 500);
-   res.render('error', {
+   console.log(err);
+   res.send( {
        message: err.message,
        error: {}
    });

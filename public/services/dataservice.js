@@ -5,12 +5,18 @@
   .constant('dataUrl', {
     'url' : '/tasks/'
   })
+  .constant('profileUrl', {
+    'url' : '/profiles/'
+  })
+  .constant('userUrl', {
+    'url': '/users/'
+  })
   .factory('dataservice', dataservice);
 
   /* @ngInject */
 //  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http, dataUrl) {
+  function dataservice($http, dataUrl, profileUrl, userUrl) {
     return {
       getTasks: getTasks,
       getTask: getTask,
@@ -19,7 +25,18 @@
       toggleTask: toggleTask,
       getCategories: getCategories,
       getProjects: getProjects,
-      setAsCompleted: setAsCompleted
+      setAsCompleted: setAsCompleted,
+      editTask: editTask,
+      /* Task profiles */
+      getProfiles: getProfiles,
+      getProfile: getProfile, // by name
+      addProfile: addProfile,
+      editProfile: editProfile,
+      removeProfile: removeProfile,
+      /* User settings */
+      saveUserSettings: saveUserSettings,
+      getUserSettings: getUserSettings,
+
     };
 
 
@@ -27,7 +44,7 @@
 
     function successCallback(response) {
       //console.log(response.data);
-      return response.data;
+        return response.data;
     }
 
     function errorCallback(err) {
@@ -83,6 +100,57 @@
           return $http.post('/edittask/setAsCompleted/', item)
                         .then(successCallback)
                         .catch(errorCallback);
+    }
+
+    function editTask(item) {
+      return $http.put('/edittask/edit', item, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    /* Task Profiles */
+
+    function getProfiles() {
+      return $http.get(profileUrl.url)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getProfile(name) {
+      return $http.get(profileUrl.url + name)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function addProfile(profile) {
+      return $http.post(profileUrl.url, profile, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function editProfile(profile) {
+      return $http.put(profileUrl.url, profile, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function removeProfile(id) {
+      return $http.delete(profileUrl.url + id)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getUserSettings() {
+      return $http.get(userUrl.url + '/settings/')
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function saveUserSettings(config) {
+      console.log(config);
+      return $http.post(userUrl.url + '/settings/', JSON.stringify(config), { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
     }
 
   } //#dataservice

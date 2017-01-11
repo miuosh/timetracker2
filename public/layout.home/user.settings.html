@@ -1,0 +1,40 @@
+<div ng-controller="UserSettingsController as vm">
+  <h1>Ustawienia użytkownika</h1>
+  <md-divider><md-divider>
+
+
+  <div flex="40" >
+    <h3>Wybrany profil podpowiedzi: <b md-colors="{color:'accent'}">{{vm.user.config.profile}}</b> </h3>
+    <md-divider><md-divider>
+
+    <br>
+
+    <div layout="row" layout-align="start center">
+      <md-select placeholder="Zmień profil" md-on-open="vm.loadProfiles()" ng-model="vm.selectedProfile">
+        <md-option ng-value="profile" ng-repeat="profile in vm.profiles">{{ profile.name }}</md-option>
+      </md-select>
+        <md-button class="md-accent" ng-click="vm.saveUserSettings()">Zapisz ustawienia</md-button>
+
+    </div>
+
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nazwa</th>
+        <th>Projekty</th>
+        <th>Kategorie</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr class="table-col">
+        <td>{{vm.selectedProfile.name}}</td>
+        <td><ul ng-repeat="project in vm.selectedProfile.projects">{{project}}</ul></td>
+        <td><ul ng-repeat="category in vm.selectedProfile.categories">{{category}}</ul></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

@@ -7,119 +7,111 @@
   AddTaskController.$inject = ['$scope', '$log', 'dataservice'];
 
   function AddTaskController($scope, $log, dataservice) {
+
+    $scope.taskForm = {};
+
     var vm = this;
-    //vm.projects = loadProjects();
-  //  vm.categories = loadCategories();
     vm.newTask = {};
     vm.addTask = addTask;
-    $scope.newTaskForm = {};
 
-    //
-    vm.selectedItemChange = selectedItemChange;
-    vm.searchTextChange   = searchTextChange;
-    vm.newState = newState;
+   // Autocomplete profile
+   vm.profile = [];
 
+   // autocomplete projects
+   vm.projects =  vm.profile.projects;
+   vm.searchProject = '';
+   vm.selectedProjectChange = selectedProjectChange;
+   vm.searchProjectChange   = searchProjectChange;
+
+   // autocomplete categories
+   vm.categories =  vm.profile.categories;
+   vm.searchCategory = '';
+   vm.selectedCategoryChange = selectedCategoryChange;
+   vm.searchCategoryChange   = searchCategoryChange;
+
+   /*
+   init events and load data
+   */
+   init();
+
+////////////////////////////////////////////////////////////////////////////////
     function init() {
-      console.log('Init addTaskCtrl');
-    }
-
-    function loadCategories(){
-      return dataservice.getCategories()
-              .then(function(data) {
-                //console.log('kategorie: ' + typeof data)
-                  var cat = 'Instalacja, Konfiguracja, Poprawka, Konsultacja';
-                  return cat.split(/, +/g).map( function (state) {
-                    return {
-                      value: state.toLowerCase(),
-                      display: state
-                    };
-                  });
-
-              });
-    }
-
-    function loadProjects(){
-      return dataservice.getProjects()
-              .then(function(data) {
-                if (data.status === 200) {
-
-                  return data.split(/, +/g).map( function (state) {
-                    return {
-                      value: state.toLowerCase(),
-                      display: state
-                    };
-                  });
-                } else {
-                  console.log('Błąd przy pobieraniu listy projektow');
-                  //.log(data.message);
-                }
-              });
+      console.log('Init AddTaskController');
+      loadProfileData();
     }
 
 
     function addTask(task) {
-      return dataservice.addTask(task)
+      console.log('Dodawanie zadania...');
+      console.log(task);
+        return dataservice.addTask(task)
+                .then(function(data) {
+                    // pass data to DashboardController by emit event
+                    console.log(data);
+                    if(!data.status) {
+                      $scope.$emit('addNewTask', data);
+                    }
+                    return data;
+                  })
+                .then(function(data) {
+                  //clear new task fields
+                  angular.copy({}, vm.newTask);
+                  vm.searchCategory = null;
+                  vm.searchProject  = null;
+                  $scope.taskForm.$setPristine();
+                  $scope.taskForm.$setUntouched();
+                });
+    }// #addTask
+
+    function loadProfileData() {
+      return dataservice.getUserSettings()
               .then(function(data) {
-                  // pass data to DashboardController through event
-                  $scope.$emit('addNewTask', data);
+                return dataservice.getProfile(data.profile);
+              })
+              .then(function(data) {
+                if(data[0] !== undefined) {
+                  vm.profile = data[0];
+                  return data[0];
+                } else {
+                  vm.profile.categories = [];
+                  vm.profile.projects = [];
                   return data;
-                })
-              .then(function(data) {
-                //clear new task fields
-                vm.newTask = angular.copy({});
-                //$scope.newTaskForm.$setPristine();
-                //$scope.newTaskForm.$setUntouched();
+                }
               });
+    }// #loadProfileData
+
+    function searchProjectChange(text) {
+      //$log.info('Text changed to ' + text);
+      // comment newTask.project = text - user must selected project
+      //vm.newTask.project = text;
     }
 
-    function searchTextChange(text) {
-
-      $log.info('Text changed to ' + text);
-    }
-
-    function selectedItemChange(item) {
-      $log.info('Item changed to ' + JSON.stringify(item));
-    }
-
-    function newState(state) {
-      alert("Dodaj nową kategorie");
-      console.log('newState: ' + state);
-      console.log(self.states);
-      self.states.push({
-        value: state.toLowerCase(),
-        display: state
-      });
-    }
-
-    /**
-     * Search for... use $timeout to simulate
-     * remote dataservice call.
-     */
-    function querySearch (query, data) {
-      var results = query ? data.filter( createFilterFor(query, data) ) : self.states,
-          deferred;
-      if (data.simulateQuery) {
-        deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
-        return deferred.promise;
+    function selectedProjectChange(item) {
+      //$log.info('Item changed to ' + JSON.stringify(item));
+      vm.newTask.project = item;
+      if (item === undefined) {
+        console.log($scope.taskForm);
+        $scope.taskForm.project.$setValidity('notSelected', false); //set error
       } else {
-        return results;
+        $scope.taskForm.project.$setValidity('notSelected', true); //remove error
       }
     }
 
-    /**
-     * Create filter function for a query string
-     */
-     function createFilterFor(query, data) {
-       var lowercaseQuery = angular.lowercase(query);
-      console.log('state1:' + data);
-      console.log('query:' + data);
-        return function filterFn(data) {
-          console.log('state2:' + data);
-          return (data.value.indexOf(lowercaseQuery) === 0);
-        };
+    function searchCategoryChange(text) {
+      //$log.info('Text changed to ' + text);
+      // comment newTask.category - user must select category
+      //vm.newTask.category = text;
+    }
 
+    function selectedCategoryChange(item) {
+      //$log.info('Item changed to ' + JSON.stringify(item));
+      vm.newTask.category = item;
+      if (item === undefined) {
+        $scope.taskForm.category.$setValidity('notSelected', false); //set error
+      } else {
+        $scope.taskForm.category.$setValidity('notSelected', true); //remove error
       }
+    }
 
   }// #AddTaskController
 })();

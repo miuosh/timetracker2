@@ -4,6 +4,18 @@ var passport = require('passport');
 
 var Account = require('../models/account.js');
 
+var TaskProfile = require('../models/taskprofile');
+
+var isAuthenticated = function (req, res, next) {
+	// if user is authenticated in the session, call the next() to call the next request handler
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+	if (req.isAuthenticated())
+		return next();
+	// if the user is not authenticated then redirect him to the login page
+	res.redirect('/');
+};
+
 router.post('/register', function(req, res) {
 
   Account.register(new Account({
@@ -81,5 +93,53 @@ router.get('/username', function(req, res) {
 router.get('/ping', function(req, res) {
   res.status(200).send("pong!");
 })
+
+
+router.get('/settings/', isAuthenticated, function(req, res) {
+    var accountPromise = Account.find({ "_id" : req.user._id }).exec();
+
+    accountPromise.then(function(data) {
+      var account = data[0];
+      res.status(200);
+      res.send(account.config);
+    })
+    .catch(function(err) {
+      res.status(400).json({
+        msg: "Cannot get user settings"
+      });
+    });
+});
+
+
+router.post('/settings/', isAuthenticated, function(req, res) {
+    var accountPromise = Account.find({ "_id": req.user._id }).exec();
+
+    var config = req.body;
+    if(config.profile.name != undefined ||  typeof config.profile.name === 'string') {
+
+      accountPromise.then(function(data) {
+        var account = data[0];
+        account.config.profile = config.profile.name;
+        return account.save();
+      })
+      .then(function(data) {
+        res.status(200).json({
+          msg: "Settings saved successfully!"
+        });
+      })
+      .catch(function(err) {
+        res.status(400).json({
+          msg: "Cannot save user settings"
+        });
+      });
+
+    } else {
+      res.status(400).json({
+        msg : 'Invalid data'
+      })
+    }
+
+
+});
 
 module.exports = router;

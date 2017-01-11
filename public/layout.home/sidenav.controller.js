@@ -12,12 +12,15 @@
   function SideNavController(AuthService) {
     var vm = this;
     vm.name = "SideNavController";
-    vm.username = getUsername;
+    vm.username = '';
+
+    getUsername();
 
     function getUsername() {
       return AuthService.getUsername()
-              .then(function(data) {
-                vm.username = data;
+              .then(function(res) {
+                vm.username = res.data.username;
+                return res.data.username;
               });
     }
 
