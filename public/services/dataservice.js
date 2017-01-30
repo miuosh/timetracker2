@@ -30,6 +30,7 @@
       getProjects: getProjects,
       setAsCompleted: setAsCompleted,
       editTask: editTask,
+      getTasksByDate : getTasksByDate,
       /* Task profiles */
       getProfiles: getProfiles,
       getProfile: getProfile, // by name
@@ -110,6 +111,12 @@
 
     function editTask(item) {
       return $http.put('/edittask/edit', item, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getTasksByDate(date) {
+      return $http.get(dataUrl.url + '/dayView/' + date)
                     .then(successCallback)
                     .catch(errorCallback);
     }

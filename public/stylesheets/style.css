@@ -62,7 +62,10 @@ td > ul {
   list-style-position: inside;
 }
 tbody > tr:hover {
-  background-color: #F5F5F5;
+  background-color: #ECEFF1;
+}
+tbody > tr:nth-child(even) {
+  /*background-color: #ECEFF1;*/
 }
 
 .table-checkbox {

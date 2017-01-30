@@ -104,7 +104,7 @@
         <tr ng-class="item.isValid ? '':'has-error'" class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
           <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
           <!-- table cell when edit mode is disabled -->
-          <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+          <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm'}}</td>
 
           <!-- table cell when edit mode is enabled -->
           <td class="table-col" ng-show="edit">
@@ -132,7 +132,7 @@
 
            </td>
           <!-- table cell when edit mode is disabled -->
-          <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss' }}</td>
+          <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm' }}</td>
 
           <!-- table cell when edit mode is enabled -->
           <td class="table-col" ng-show="edit">

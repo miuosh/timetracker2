@@ -54,9 +54,9 @@
                         md-input-name="category"
                         md-selected-item="edc.task.category"
                         md-search-text-change="at.searchCategoryChange(edc.task.category)"
-                        md-search-text="edc.task.category"
+                        md-search-text="searchCategory"
                         md-selected-item-change="at.selectedCategoryChange(item)"
-                        md-items="item in at.profile.categories "
+                        md-items="item in at.profile.categories | filter:searchCategory"
                         md-item-text="item"
                         md-min-length="0"
                         md-input-minlength="0"
@@ -95,7 +95,7 @@
       <tr ng-class="item.isValid ? '':'has-error'" class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
         <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
         <!-- table cell when edit mode is disabled -->
-        <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+        <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm'}}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
@@ -123,7 +123,7 @@
 
          </td>
         <!-- table cell when edit mode is disabled -->
-        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss' }}</td>
+        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm' }}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">

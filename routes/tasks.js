@@ -71,30 +71,19 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
   *  GET Report
   */
 
-  router.get('/report/:year-:month', function(req, res) {
+  router.get('/dayView/:date', function(req, res) {
 
-      var userID = req.session.passport.user;
-      // moth - from 0 - 11
-      // date - day on the month - 1-31
-      var year = parseInt(req.params.year);
-      var month = parseInt(req.params.month);
-      var fromDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-      var lastDayOfMonth = new Date(year, month, 0, 23, 59, 59, 0);
-      //fromDate = fromDate.toISOString();
-     // lastDayOfMonth = lastDayOfMonth.toISOString();
-      console.log('fd: ' +  fromDate);
-     // console.log('ld: ' +  lastDayOfMonth.toISOString());
-      console.log(userID);
+		var promise = query.getUserTasksByDate(req.user.id, Number(req.params.date));
 
-      Task.find( { "_creator": userID ,"updated":  { "$gte": fromDate, "$lte": lastDayOfMonth } }, function(err, data) {
-          if (err) {
-              console.log(err);
-              res.send('error - cannot get report');
-          } else {
-              console.log(data);
-            res.send(data);
-          }
-      })
+		promise.then(function(data) {
+			res.status(200);
+			res.send(JSON.stringify(data))
+		})
+		.catch(function(err) {
+			console.log(err);
+			res.status(500);
+			res.send(err);
+		});
 
   });
 

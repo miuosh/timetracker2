@@ -1,0 +1,54 @@
+<div ng-controller="DayViewController as vm">
+
+  <div layout="row" layout-align="left center">
+      <md-datepicker ng-model="vm.viewDate" md-placeholder="Enter date"
+        ng-change="vm.getTasksByDate(vm.viewDate)"
+        md-open-on-focus>
+      </md-datepicker>
+  </div>
+
+<div >
+  <table>
+    <caption>
+      <h4>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h4>
+    </caption>
+    <thead>
+      <tr>
+        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
+          Opis
+          <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.startTime'; sortReverse = !sortReverse ">
+          Od
+          <span class="sortorder" ng-show="sortType === 'timespan.startTime'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.stopTime'; sortReverse = !sortReverse ">
+          Do
+          <span class="sortorder" ng-show="sortType === 'timespan.stopTime'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.dt'; sortReverse = !sortReverse ">
+          Czas
+          <span class="sortorder" ng-show="sortType === 'timespan.dt'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th>
+
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse" >
+        <td class="table-desc">{{ item.desc }}</td>
+        <td class="table-updated">{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <td class="table-updated">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
+        <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
+        <td>
+          <span ng-show="item.isCompleted">Ukończone</span>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+
+</div>

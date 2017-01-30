@@ -11,7 +11,8 @@ module.exports = {
   toggleUserTask           : toggleUserTask,
   setAsCompleted           : setAsCompleted,
   editTask                 : editTask,
-  addTask                  : addTask
+  addTask                  : addTask,
+  getUserTasksByDate       : getUserTasksByDate
 }
 
 /*
@@ -217,6 +218,35 @@ function addTask(item, creatorID) {
     });
 
     return task.save();
+}
+
+function getUserTasksByDate(userID, date) {
+  var _date = new Date(date);
+  _date.setHours(0);
+  _date.setMinutes(0);
+  _date.setSeconds(0);
+  _date.setMilliseconds(0);
+
+  var endDay = new Date(date);
+  endDay.setHours(23);
+  endDay.setMinutes(59);
+  endDay.setSeconds(59);
+  endDay.setMilliseconds(999);
+
+  var fromDate = _date.toISOString();
+  var toDate = endDay.toISOString();
+  console.log('fromDate: ' + fromDate);
+  console.log('toDate: ' + toDate);
+
+  var promise = Task.find({
+    '_creator' : userID,
+    'history.startTime' : {
+      '$gte': fromDate,
+      '$lt': toDate
+    }
+  }).exec();
+
+  return promise;
 }
 
 //------------------------------------------------------------------------------
