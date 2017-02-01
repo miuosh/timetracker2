@@ -21,25 +21,26 @@
 
   function dataservice($http, dataUrl, profileUrl, userUrl, reportsUrl) {
     return {
-      getTasks: getTasks,
-      getTask: getTask,
-      addTask: addTask,
-      removeTasks: removeTasks,
-      toggleTask: toggleTask,
-      getCategories: getCategories,
-      getProjects: getProjects,
-      setAsCompleted: setAsCompleted,
-      editTask: editTask,
-      getTasksByDate : getTasksByDate,
+      getTasks                    : getTasks,
+      getTask                     : getTask,
+      addTask                     : addTask,
+      removeTasks                 : removeTasks,
+      toggleTask                  : toggleTask,
+      getCategories               : getCategories,
+      getProjects                 : getProjects,
+      setAsCompleted              : setAsCompleted,
+      editTask                    : editTask,
+      editTaskHistoryItem         : editTaskHistoryItem, // POST timespan object
+      getTasksByDate              : getTasksByDate,
       /* Task profiles */
-      getProfiles: getProfiles,
-      getProfile: getProfile, // by name
-      addProfile: addProfile,
-      editProfile: editProfile,
-      removeProfile: removeProfile,
+      getProfiles                 : getProfiles,
+      getProfile                  : getProfile, // by name
+      addProfile                  : addProfile,
+      editProfile                 : editProfile,
+      removeProfile               : removeProfile,
       /* User settings */
-      saveUserSettings: saveUserSettings,
-      getUserSettings: getUserSettings,
+      saveUserSettings            : saveUserSettings,
+      getUserSettings             : getUserSettings,
 
       /* Reports data */
       getCompletedTasksBetweenDate: getCompletedTasksBetweenDate
@@ -67,7 +68,7 @@
     }
 
     function getTask(id) {
-      return $http.get(dataUrl.url + ':' + id)
+      return $http.get(dataUrl.url + id)
                     .then(successCallback)
                     .catch(errorCallback);
     }
@@ -111,6 +112,12 @@
 
     function editTask(item) {
       return $http.put('/edittask/edit', item, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function editTaskHistoryItem(item) {
+      return $http.post('/edit/history/' + item._id, item, { headers: {'Content-Type': 'application/json' }})
                     .then(successCallback)
                     .catch(errorCallback);
     }

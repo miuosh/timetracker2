@@ -33,18 +33,31 @@
         <th>
 
         </th>
+        <th>
+        </th>
       </tr>
     </thead>
 
     <tbody>
-      <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse" >
+      <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
+          ng-mouseover="hover = true" ng-mouseleave="hover = false">
         <td class="table-desc">{{ item.desc }}</td>
         <td class="table-updated">{{ item.timespan.startTime | date:'HH:mm'}}</td>
         <td class="table-updated">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
         <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
         <td>
-          <span ng-show="item.isCompleted">Ukończone</span>
+          <!-- mousehover edit off -->
+          <div ng-show="hover">
+            <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.openEditDialog($event, item)">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Edycja</md-tooltip>
+            </md-button>
+          </div>
         </td>
+        <td>
+
+        </td>
+
       </tr>
     </tbody>
 

@@ -5,9 +5,9 @@
 
   /* @ngInject */
 
-  DayViewController.$inject = ['$scope', 'dataservice'];
+  DayViewController.$inject = ['$scope', '$mdDialog', 'dataservice'];
 
-  function DayViewController($scope, dataservice) {
+  function DayViewController($scope, $mdDialog, dataservice) {
     var vm = this;
     vm.tasksInDay = [];
     vm.tasks = []; // input data
@@ -27,6 +27,12 @@
     $scope.sortReverse = true;
     $scope.searchType = '';
 
+    //edit task dialog
+    vm.openEditDialog = openEditDialog;
+
+    // edit model
+    vm.editTaskHistoryItem = editTaskHistoryItem;
+
     /* internal functions */
     var sumByProperty = sumByProperty;
     var filterHistory = filterHistory;
@@ -42,6 +48,39 @@
       getTasksByDate(vm.viewDate);
 
   }
+
+  function openEditDialog(ev, item) {
+    console.log('OpenEditDialog: item: \n');
+    console.log(item);
+    return dataservice.getTask(item._id)
+      .then(function(data) {
+        console.log('Received data: ');
+        console.log(data);
+
+        $mdDialog.show({
+          locals: {
+            task: data[0]
+          },
+          controller: 'DialogTaskEditController',
+          controllerAs: 'edc',
+          templateUrl: '/layout.home/dialog.task.edit.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true
+        })
+        .then(function(answer) {
+          console.log('Dialog OK: ' + answer);
+          getTasksByDate(vm.viewDate);
+        }, function(){
+          console.log('Cancel dialog.');
+        });
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    }
+
     function getTasksByDate(date) {
       return dataservice.getTasksByDate(date.getTime())
         .then(function(data) {
@@ -54,7 +93,12 @@
         .then(calculateSummaryTime);
     }
 
-
+    function editTaskHistoryItem(item) {
+      return dataservice.editTaskHistoryItem(item)
+              .then(function(data) {
+                init();
+              })
+    }
     function filterHistory() {
       var length = vm.tasks.length;
       vm.filteredTasks = vm.tasks;
@@ -79,6 +123,7 @@
       for (var i = 0; i < length; i++) {
           for(var j = 0; j < vm.filteredTasks[i].history.length; j++) {
             tmp.push({
+              _id : vm.filteredTasks[i]._id,
               desc: vm.filteredTasks[i].desc,
               isCompleted: vm.filteredTasks[i].isCompleted,
               timespan: vm.filteredTasks[i].history[j],

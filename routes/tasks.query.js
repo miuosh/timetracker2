@@ -5,14 +5,21 @@ module.exports = {
   getUserTasks             : getUserTasks,
   getTask                  : getTask,
   getUserTask              : getUserTask,
+  getUserTasksByDate       : getUserTasksByDate,
+
   startUserTask            : startUserTask,
   stopUserTask             : stopUserTask,
   stopAllPerfomingUserTasks: stopAllPerfomingUserTasks,
+
   toggleUserTask           : toggleUserTask,
   setAsCompleted           : setAsCompleted,
+
   editTask                 : editTask,
-  addTask                  : addTask,
-  getUserTasksByDate       : getUserTasksByDate
+  editTaskHistoryItem      : editTaskHistoryItem,
+
+  addTask                  : addTask
+
+
 }
 
 /*
@@ -21,6 +28,7 @@ module.exports = {
 
   var sumByProperty     = sumByProperty;
   var modifyStoppedTask = modifyStoppedTask; // calculate duration and add timespan to history
+  var calcDuration = calcDuration;
 
 
 //------------------------------------------------------------------------------
@@ -249,6 +257,27 @@ function getUserTasksByDate(userID, date) {
   return promise;
 }
 
+
+function editTaskHistoryItem(historyItemId, userId, newItem) {
+  var promise = Task.find({
+    '_creator' : userId,
+    'history._id': historyItemId
+  }).exec();
+
+  promise.then(function(data) {
+    var prevItem = data[0];
+    var index = prevItem.history.findIndex(item => item._id === historyItemId);
+    prevItem.history[index] = newItem; //assume that client calculate dt
+
+    prevItem.duration = Math.round(sumByProperty(prevItem.history, 'dt'), 0); // round to full sek
+
+    return prevItem.save();
+  })
+  .catch(function(err) {
+    return err;
+  })
+}
+
 //------------------------------------------------------------------------------
 /*
     INTERNAL FUNCTIONS
@@ -284,6 +313,18 @@ function modifyStoppedTask(task) {
   return task;
 }
 
-function modifyTaskHistory(task) {
+function calcDuration(starTime, stopTime) {
+  if (typeof starTime === 'string' && typeof stopTime === 'string') {
+    var start = new Date(starTime);
+    var stop = new Date(stopTime);
+    return Math.round((stop.getTime() - start.getTime()) / 1000, 1);
 
+  } else if (typeof starTime === 'string' && !isNaN(starTime) && !isNaN(stopTime) ) {
+    var start = new Date(Number(starTime));
+    var stop = new Date(Number(stopTime));
+
+      return Math.round((stop.getTime() - start.getTime()) / 1000, 1);
+  } else {
+    return -1;
+  }
 }

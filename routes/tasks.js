@@ -68,7 +68,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 });
 
  /**
-  *  GET Report
+  *  GET - dayView
   */
 
   router.get('/dayView/:date', function(req, res) {
@@ -86,6 +86,25 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 		});
 
   });
+
+	router.post('/edit/history/:id', function (req, res) {
+
+		var userId = req.user.id;
+		var historyItemId = req.params.id;
+		var newItem = req.body;
+		console.log(body);
+
+		var editHistoryItemPromise = query.editTaskHistoryItem(historyItemId, userId, newItem);
+		editHistoryItemPromise.then(function(data) {
+			res.status(200);
+			res.send(data);
+		})
+		.catch(function(err) {
+			res.status(500);
+			res.send(err);
+		})
+
+	});
 
 /*
 	POST - add new task
