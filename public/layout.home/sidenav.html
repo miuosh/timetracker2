@@ -41,17 +41,39 @@
   <div layout="column" layout-align="space-between stretch">
     <h3 class="nav-header">Zadania</h3>
     <md-divider></md-divider>
+        <md-button ng-click="lvm.subPage='/layout.home/dashboard.html'" class="md-primary md-hue-1" >
+          <span>
+            <i class="material-icons menu-icon">subject</i>
+            Do wykonania
+          </span>
 
-      <md-button ng-click="lvm.subPage='/layout.home/dashboard.html'" class="md-primary md-hue-1" >Do wykonania</md-button>
-      <md-button ng-click="lvm.subPage='/layout.home/report.html'" class="md-primary md-hue-1">Ukończone</md-button>
-      <md-button ng-click="lvm.subPage='/layout.home/dayview.html'" class="md-primary md-hue-1" >Widok dnia</md-button>
+        </md-button>
+
+      <md-button ng-click="lvm.subPage='/layout.home/report.html'" class="md-primary md-hue-1">
+        <span>
+          <i class="material-icons menu-icon">playlist_add_check</i>
+          Ukończone
+        </span>
+      </md-button>
+
+      <md-button ng-click="lvm.subPage='/layout.home/dayview.html'" class="md-primary md-hue-1" >
+        <span>
+            <i class="material-icons menu-icon">event_note</i>
+            Widok dnia
+        </span>
+      </md-button>
   </div>
 
   <md-divider></md-divider>
   <div layout="column" layout-align="space-between stretch">
     <h3 class="nav-header">Raporty</h3>
     <md-divider></md-divider>
-      <md-button ng-click="lvm.subPage='/layout.home/chart.html'" class="md-primary md-hue-1" >Statystyki</md-button>
+      <md-button ng-click="lvm.subPage='/layout.home/chart.html'" class="md-primary md-hue-1" >
+        <span>
+            <i class="material-icons menu-icon">trending_up</i>
+            Statystyki
+        </span>
+      </md-button>
   </div>
 
 

@@ -21,6 +21,8 @@
     vm.viewDate.setMilliseconds(0);
     console.log('Init DayViewController...');
     vm.getTasksByDate = getTasksByDate;
+    vm.prevDay = prevDay;
+    vm.nextDay = nextDay;
 
     // filter table
     $scope.sortType = 'timespan.startTime';
@@ -91,6 +93,16 @@
         .then(filterHistory)
         .then(makeDaySchedule)
         .then(calculateSummaryTime);
+    }
+
+    function prevDay() {
+      vm.viewDate.setDate(vm.viewDate.getDate() - 1);
+      init();
+    }
+
+    function nextDay() {
+      vm.viewDate.setDate(vm.viewDate.getDate() + 1);
+      init();
     }
 
     function editTaskHistoryItem(item) {

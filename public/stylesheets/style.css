@@ -142,6 +142,12 @@ md-input-container:not(.md-input-has-value) {
   content: '\25bc';   /* BLACK DOWN-POINTING TRIANGLE */
 }
 
+.menu-icon {
+  position: relative;
+  top: 0.3em;
+  left: -0.4em;
+}
+
 /*
   Animations
 */
