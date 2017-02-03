@@ -87,7 +87,6 @@
                 return data;
               })
               .then(function(data) {
-                vm.getTasks(); //from parent controller
               });
     }
 
