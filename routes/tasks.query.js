@@ -248,9 +248,13 @@ function getUserTasksByDate(userID, date) {
 
   var promise = Task.find({
     '_creator' : userID,
-    'history.startTime' : {
-      '$gte': fromDate,
-      '$lt': toDate
+    'history' : {
+      '$elemMatch' : {
+        'startTime' : {
+          '$gte' : fromDate,
+          '$lt' : toDate
+        }
+      }
     }
   }).exec();
 
