@@ -1,4 +1,4 @@
-<div ng-controller="ReportController as vm">
+<div ng-controller="DashboardCompletedController as vm">
   <h1>Ukończone zadania</h1>
   <md-divider><md-divider>
     <br>
@@ -43,7 +43,7 @@
         <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
         <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
         <td class="table-duration">{{ item.duration | formatDuration }}</td>
-        <td>
+        <td class="table-edit-btn">
           <div ng-show="edit">
             <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.editTask($event, item)">
               <md-icon>mode_edit</md-icon>

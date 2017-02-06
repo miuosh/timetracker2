@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app.layout')
-  .controller('ReportController', ReportController);
+  .controller('DashboardCompletedController', DashboardCompletedController);
 
   /* @ngInject */
-  ReportController.$inject = ['$scope', '$interval', '$timeout', '$mdDialog', 'dataservice'];
+  DashboardCompletedController.$inject = ['$scope', '$interval', '$timeout', '$mdDialog', 'dataservice'];
 
-  function ReportController($scope, $interval, $timeout, $mdDialog, dataservice) {
+  function DashboardCompletedController($scope, $interval, $timeout, $mdDialog, dataservice) {
     var vm = this;
-    vm.name = "ReportController";
+    vm.name = "DashboardCompletedController";
     vm.tasks = [];
     vm.intervalsID = [];
 
@@ -29,7 +29,7 @@
     $scope.searchType = '';
 
 
-    console.log('Init ReportController Controller');
+    console.log('Init DashboardCompletedController Controller');
     loadTasks();
     initEvents();
     /////////////////////

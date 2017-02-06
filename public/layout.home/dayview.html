@@ -3,6 +3,8 @@
 
   <div layout="column" layout-align="start start">
     <div layout="row">
+      <h1>Widok dnia</h1>
+
       <md-datepicker style="visibility: hidden" ng-model="vm.viewDate" md-placeholder="Enter date"
         ng-change="vm.getTasksByDate(vm.viewDate)"
         md-hide-icons="all"
@@ -10,34 +12,33 @@
       </md-datepicker>
 
       <!-- prev day -->
-      <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.prevDay()">
+      <md-button class="md-icon-button" style="margin-top: 1em;" aria-label="Edycja" ng-click="vm.prevDay()">
         <md-icon>chevron_left</md-icon>
         <md-tooltip>Poprzedni dzień</md-tooltip>
       </md-button>
       <!-- custom date picker -->
           <md-button class="md-flat" ng-click="vm.isOpen = true">{{ vm.viewDate | date: 'yyyy-MM-dd'}}</md-button>
         <!-- next day -->
-        <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.nextDay()">
+        <md-button class="md-icon-button" style="margin-top: 1em;" aria-label="Edycja" ng-click="vm.nextDay()">
           <md-icon>chevron_right</md-icon>
           <md-tooltip>Następny dzień</md-tooltip>
         </md-button>
     </div>
 
   </div>
-<br />
+
 
 <div>
   <h4 ng-hide="vm.tasksInDay.length">Brak wyników</h4>
   <table ng-show="vm.tasksInDay.length">
     <caption>
-      <h4>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h4>
+      <md-divider></md-divider>
+      <h3>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h3>
+      <md-divider></md-divider>
+      <br />
     </caption>
     <thead>
       <tr>
-        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
-          Ukończone
-          <span class="sortorder" ng-show="sortType === 'isCompleted'" ng-class="{sortReverse: sortReverse}"></span>
-        </th>
         <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
           Opis
           <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
@@ -63,12 +64,9 @@
     <tbody>
       <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
           ng-mouseover="hover = true" ng-mouseleave="hover = false">
-        <td class="table-col">
-          <md-icon ng-show="item.isCompleted">check</md-icon>
-        </td>
         <td class="table-desc">{{ item.desc }}</td>
-        <td class="table-updated">{{ item.timespan.startTime | date:'HH:mm'}}</td>
-        <td class="table-updated">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;">{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
         <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
         <td class="table-col">
           <!-- mousehover edit off -->

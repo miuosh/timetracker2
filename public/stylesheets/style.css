@@ -11,10 +11,16 @@ a {
 #left-navbar {
   background-color:#1A237E;
 }
-
 #left-navmenu, #left-sidebar {
   background-color:#303F9F;
 }
+
+@media screen and (max-width: 600px){
+  #left-navmenu, #left-sidebar {
+    visibility: hidden;
+  }
+}
+
 
 .nav-header {
   color: #C5CAE9;
@@ -69,7 +75,7 @@ tbody > tr:nth-child(even) {
 }
 
 .table-checkbox {
-  width: 4%;
+  width: 2%;
 
 }
 md-checkbox .md-container {
@@ -82,6 +88,7 @@ md-checkbox .md-container {
 
 .table-desc {
   width: 30%;
+
 }
 
 .table-project {
@@ -102,7 +109,7 @@ md-checkbox .md-container {
 
 .table-updated {
   width: 10%;
-  text-align: center;
+  text-align: left;
   white-space:nowrap;
 }
 .table-duration {

@@ -15,7 +15,7 @@ module.exports = {
   setAsCompleted           : setAsCompleted,
 
   editTask                 : editTask,
-  editTaskHistoryItem      : editTaskHistoryItem,
+  editTaskHistoryItem      : editTaskHistoryItem, //deprecated
 
   addTask                  : addTask
 
@@ -243,8 +243,8 @@ function getUserTasksByDate(userID, date) {
 
   var fromDate = _date.toISOString();
   var toDate = endDay.toISOString();
-  console.log('fromDate: ' + fromDate);
-  console.log('toDate: ' + toDate);
+  //console.log('fromDate: ' + fromDate);
+ //console.log('toDate: ' + toDate);
 
   var promise = Task.find({
     '_creator' : userID,
@@ -257,7 +257,7 @@ function getUserTasksByDate(userID, date) {
   return promise;
 }
 
-
+//deprecated
 function editTaskHistoryItem(historyItemId, userId, newItem) {
   var promise = Task.find({
     '_creator' : userId,
