@@ -22,7 +22,7 @@
     self.addMinute       = addMinute;
     self.substractMinute = substractMinute;
 
-    self.init = init; // init dialog
+    self.init            = init; // init dialog
 
 
     //form
@@ -34,22 +34,22 @@
 
 
     //intervals
-    var interval = null;
-    self.initInterval = initInterval;
+    var interval        = null;
+    self.initInterval   = initInterval;
     self.cancelInterval = cancelInterval;
-    var ms = 125; //interval and cancel interval timeout
+    var ms              = 125; //interval and cancel interval timeout
 
     //Internal functions
-    var sumByProperty = sumByProperty;
-    var calcDuration = calcDuration;
-    var addTime = addTime;
-    var substractTime = substractTime;
+    var sumByProperty      = sumByProperty;
+    var calcDuration       = calcDuration;
+    var addTime            = addTime;
+    var substractTime      = substractTime;
 
     var getIndexOfTimespan = getIndexOfTimespan;
 
     // data validation
     var setValidationMessage = setValidationMessage;
-    var initValidation = initValidation;
+    var initValidation       = initValidation;
 
 
     initValidation();
