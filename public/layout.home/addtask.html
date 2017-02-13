@@ -2,30 +2,39 @@
 <div ng-controller="AddTaskController as at">
   <form name="taskForm" ng-submit="at.addTask(at.newTask)" autocomplete="off">
     <md-content id="taskBar" layout-gt-sm="row" layout-align="center center">
+      <md-input-container flex="60">
+        <label>Opis zadania</label>
+        <input type="text" name="desc" ng-model="at.newTask.desc" required md-no-asterisk autocomplete="off">
+        <div ng-messages="taskForm.desc.$error" role="alert">
+            <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      </md-input-container>
 
-      <!-- project autocomplete -->
+        <!-- project autocomplete -->
 
-        <md-autocomplete required md-no-asterisk
-                        md-input-name="project"
-                        md-selected-item="at.selectedProject"
-                        md-search-text-change="at.searchProjectChange(at.searchProject)"
-                        md-search-text="at.searchProject"
-                        md-selected-item-change="at.selectedProjectChange(item)"
-                        md-items="item in at.profile.projects | filter:at.searchProject"
-                        md-item-text="item"
-                        md-min-length="0"
-                        md-input-minlength="0"
-                        md-floating-label="Projekt...">
-                    <md-item-template>
-                        <span md-highlight-text="at.searchProject" md-highlight-flags="^i">{{item}}</span>
-                    </md-item-template>
-                    <div ng-messages="taskForm.project.$error" role="alert">
-                        <div ng-message="required">Wybierz projekt.</div>
-                        <div ng-message="notSelected">Wybierz projekt z listy.</div>
-                    </div>
-        </md-autocomplete>
+          <md-autocomplete required md-no-asterisk
+                          md-input-name="project"
+                          md-selected-item="at.selectedProject"
+                          md-search-text-change="at.searchProjectChange(at.searchProject)"
+                          md-search-text="at.searchProject"
+                          md-selected-item-change="at.selectedProjectChange(item)"
+                          md-items="item in at.profile.projects | filter:at.searchProject"
+                          md-item-text="item"
+                          md-min-length="0"
+                          md-input-minlength="0"
+                          md-floating-label="Projekt...">
+                      <md-item-template>
+                          <span md-highlight-text="at.searchProject" md-highlight-flags="^i">{{item}}</span>
+                      </md-item-template>
+                      <div ng-messages="taskForm.project.$error" role="alert">
+                          <div ng-message="required">Wybierz projekt.</div>
+                          <div ng-message="notSelected">Wybierz projekt z listy.</div>
+                      </div>
+          </md-autocomplete>
+
 
         <!-- category autocomplete -->
+
           <md-autocomplete required md-no-asterisk
                           md-input-name="category"
                           md-selected-item="at.selectedCategory"
@@ -46,16 +55,6 @@
                       </div>
           </md-autocomplete>
 
-
-
-
-      <md-input-container flex="60">
-        <label>Opis zadania</label>
-        <input type="text" name="desc" ng-model="at.newTask.desc" required md-no-asterisk autocomplete="off">
-        <div ng-messages="taskForm.desc.$error" role="alert">
-            <div ng-message="required">Pole nie może być puste.</div>
-        </div>
-      </md-input-container>
 
       <md-input-container>
         <md-button type="submit" class="md-fab" aria-label="add-task" ng-disabled="taskForm.$invalid">

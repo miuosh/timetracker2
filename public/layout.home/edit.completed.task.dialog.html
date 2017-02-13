@@ -19,6 +19,16 @@
       </md-tooltip>
     </div>
 
+    <div flex="50">
+      <md-input-container>
+        <label>Opis</label>
+        <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
+        <div ng-messages="taskForm.desc.$error" role="alert">
+            <div ng-message="required">Pole nie może być puste.</div>
+        </div>
+      <md-input-container>
+    </div>
+
     <!-- autocomplete fields -->
     <div layout="row" >
       <!-- project autocomplete -->
@@ -73,15 +83,6 @@
 
   </div>
 
-    <div flex="50">
-      <md-input-container>
-        <label>Opis</label>
-        <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
-        <div ng-messages="taskForm.desc.$error" role="alert">
-            <div ng-message="required">Pole nie może być puste.</div>
-        </div>
-      <md-input-container>
-    </div>
 
   </div>
 
