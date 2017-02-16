@@ -138,6 +138,10 @@ md-checkbox .md-container {
   padding: 8px;
 }
 
+.table-col-edit {
+    width: 20%;
+}
+
 md-input-container:not(.md-input-has-value) {
   color:red;
 }
