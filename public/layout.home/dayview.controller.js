@@ -25,18 +25,15 @@
     vm.nextDay = nextDay;
 
     // filter table
-    $scope.sortType = '';
+    $scope.sortType = 'timespan.startTime';
     $scope.sortReverse = true;
     $scope.searchType = '';
 
+    //edit task dialog
+    vm.openEditDialog = openEditDialog;
+
     // edit model
     vm.editTaskHistoryItem = editTaskHistoryItem;
-    $scope.edit = false;
-
-    /* timespan edition  */
-    vm.cancelEdit = cancelEdit;
-    vm.saveChanges = saveChanges;
-    vm.editMode = editMode;
 
     /* internal functions */
     var sumByProperty = sumByProperty;
@@ -54,7 +51,37 @@
 
   }
 
+  function openEditDialog(ev, item) {
+    console.log('OpenEditDialog: item: \n');
+    console.log(item);
+    return dataservice.getTask(item._id)
+      .then(function(data) {
+        console.log('Received data: ');
+        console.log(data);
 
+        $mdDialog.show({
+          locals: {
+            task: data[0]
+          },
+          controller: 'DialogTaskEditController',
+          controllerAs: 'edc',
+          templateUrl: '/layout.home/dialog.task.edit.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true
+        })
+        .then(function(answer) {
+          console.log('Dialog OK: ' + answer);
+          getTasksByDate(vm.viewDate);
+        }, function(){
+          console.log('Cancel dialog.');
+        });
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    }
 
     function getTasksByDate(date) {
       return dataservice.getTasksByDate(date.getTime())
@@ -126,25 +153,12 @@
     }
 
     function sumByProperty(items, property) {
+      console.log()
       if (items === 0) return 0;
+
       return items.reduce(function(previous, current) {
         return current[property] === null ? previous : previous + parseFloat(current[property]);
       }, 0)
-    }
-
-
-    /* taks edition */
-
-    function cancelEdit() {
-      init();
-    }
-
-    function editMode() {
-
-    }
-
-    function saveChanges() {
-      init();
     }
 
   }// #DayViewController

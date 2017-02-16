@@ -62,43 +62,20 @@
     </thead>
 
     <tbody>
-
       <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
           ng-mouseover="hover = true" ng-mouseleave="hover = false">
-
         <td class="table-desc">{{ item.desc }}</td>
-
-        <td class="table-updated" style="text-align: center;" ng-if="edit === false">{{ item.timespan.startTime | date:'HH:mm'}}</td>
-        <!-- table cell when edit mode is enabled -->
-        <td class="table-col" ng-if="edit === true">
-          <my-time-picker time="item.timespan.startTime"/>
-         </td>
-        <td class="table-updated" style="text-align: center;" ng-if="edit === false">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
-        <td class="table-col" ng-if="edit === true">
-          <my-time-picker time="item.timespan.stopTime"/>
-         </td>
-
+        <td class="table-updated" style="text-align: center;">{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
         <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
-        <td class="table-col-edit">
+        <td class="table-col">
           <!-- mousehover edit off -->
-          <div ng-show="hover && !edit">
-            <md-button class="md-icon-button" aria-label="dayViewEdycja" ng-click="edit = true; vm.editMode()">
+          <div ng-show="hover">
+            <md-button class="md-icon-button" aria-label="Edycja" ng-click="vm.openEditDialog($event, item)">
               <md-icon>mode_edit</md-icon>
               <md-tooltip>Edycja</md-tooltip>
             </md-button>
           </div>
-          <!-- edit ON -->
-          <div ng-show="edit">
-            <md-button class="md-icon-button" aria-label="dayViewAnuluj" ng-click="edit = false; vm.cancelEdit()">
-              <md-icon>cancel</md-icon>
-              <md-tooltip>Anuluj</md-tooltip>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="edit = false; vm.saveChanges()">
-              <md-icon>archive</md-icon>
-              <md-tooltip>Zapisz</md-tooltip>
-            </md-button>
-          </div>
-
         </td>
       </tr>
     </tbody>

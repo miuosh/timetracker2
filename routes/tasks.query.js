@@ -264,12 +264,8 @@ function getUserTasksByDate(userID, date) {
 //deprecated
 function editTaskHistoryItem(historyItemId, userId, newItem) {
   var promise = Task.find({
-    '_creator' : userID,
-    'history' : {
-      '$elemMatch' : {
-        '_id' : historyItemId
-      }
-    }
+    '_creator' : userId,
+    'history._id': historyItemId
   }).exec();
 
   promise.then(function(data) {
