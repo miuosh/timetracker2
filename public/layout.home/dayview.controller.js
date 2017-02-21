@@ -5,9 +5,9 @@
 
   /* @ngInject */
 
-  DayViewController.$inject = ['$scope', '$mdDialog', 'dataservice'];
+  DayViewController.$inject = ['$scope', '$mdDialog', '$mdToast', 'dataservice'];
 
-  function DayViewController($scope, $mdDialog, dataservice) {
+  function DayViewController($scope, $mdDialog, $mdToast, dataservice) {
     var vm = this;
     vm.tasksInDay = [];
     vm.tasks = []; // input data
@@ -30,13 +30,17 @@
     $scope.searchType = '';
 
     // edit model
-    vm.editTaskHistoryItem = editTaskHistoryItem;
     $scope.edit = false;
 
     /* timespan edition  */
     vm.cancelEdit = cancelEdit;
     vm.saveChanges = saveChanges;
     vm.editMode = editMode;
+    vm.removeItem = removeItem;
+    vm.dayViewChanged = dayViewChanged;
+
+    /* validation */
+    vm.isValid = true;
 
     /* internal functions */
     var sumByProperty = sumByProperty;
@@ -44,7 +48,8 @@
     var makeDaySchedule = makeDaySchedule;
     var isCurrentDayTimespan = isCurrentDayTimespan;
     var calculateSummaryTime = calculateSummaryTime;
-
+    var updateDuration = updateDuration;
+    var checkValidity = checkValidity;
 
     init();
   /////////////////////////////////////////////////////////////////////////////
@@ -54,7 +59,13 @@
 
   }
 
-
+  function dayViewChanged(timespanId) {
+    console.log('DayViewController - dayViewChanged....');
+    console.log(timespanId);
+    checkValidity(timespanId);
+    updateDuration();
+    calculateSummaryTime();
+  }
 
     function getTasksByDate(date) {
       return dataservice.getTasksByDate(date.getTime())
@@ -78,12 +89,7 @@
       init();
     }
 
-    function editTaskHistoryItem(item) {
-      return dataservice.editTaskHistoryItem(item)
-              .then(function(data) {
-                init();
-              })
-    }
+
     function filterHistory() {
       var length = vm.tasks.length;
       vm.filteredTasks = vm.tasks;
@@ -91,12 +97,11 @@
       for (var i = 0; i < length; i++) {
         vm.filteredTasks[i].history = vm.filteredTasks[i].history.filter(isCurrentDayTimespan);
       }
-      console.log(vm.filteredTasks)
     }
 
     function isCurrentDayTimespan(timespan) {
       var startTime = new Date(timespan.startTime);
-      if (startTime.getTime() > vm.viewDate.getTime()) return timespan;
+      if (startTime.getDate() === vm.viewDate.getDate()) return timespan;
     }
 
 
@@ -112,13 +117,13 @@
               desc: vm.filteredTasks[i].desc,
               isCompleted: vm.filteredTasks[i].isCompleted,
               timespan: vm.filteredTasks[i].history[j],
-              duration: vm.filteredTasks[i].history[j].dt,
+              duration: vm.filteredTasks[i].history[j].dt
             });
           }
       }
-      console.log(tmp)
       vm.tasksInDay = tmp;
     }
+
 
     function calculateSummaryTime() {
       vm.tasksInDay.duration = sumByProperty(vm.tasksInDay, 'duration');
@@ -132,6 +137,32 @@
       }, 0)
     }
 
+    function updateDuration() {
+      // update item duration to calculateSummaryTime by duration property
+      vm.tasksInDay.forEach(elem => {
+          elem.duration = elem.timespan.dt;
+      });
+    }
+
+    function checkValidity(timespanId) {
+      var timespans = vm.tasksInDay;
+      var index = timespans.findIndex(element => element.timespan._id === timespanId);
+
+      vm.tasksInDay[index].timespan.isValid = isSameDay(timespans[index].timespan.startTime, timespans[index].timespan.stopTime) ||
+        isStartTimestampGreater(timespans[index].timespan.startTime, timespans[index].timespan.stopTime);
+    }
+
+    function isSameDay(startTimestamp, stopTimestamp) {
+      var time0 = new Date(startTimestamp);
+      var time1 = new Date(stopTimestamp);
+      return time0.getDate() === time1.getDate();
+    }
+
+    function isStartTimestampGreater(startTimestamp, stopTimestamp) {
+      return time0.getTime() > time1.getTime();
+    }
+
+
 
     /* taks edition */
 
@@ -143,10 +174,51 @@
 
     }
 
-    function saveChanges() {
-      init();
+    function saveChanges(timespan) {
+      console.log('Saving timespan... ');
+      console.log();
+      return dataservice.editTaskHistoryItem(timespan)
+                          .then(function(data) {
+                            console.log(data);
+                            $mdToast.show(
+                              $mdToast.simple()
+                              .textContent(data)
+                              .position('top right')
+                            );
+                          })
+                          .catch(function(err) {
+                            console.log(err);;
+                          })
     }
 
+    function removeItem(ev, id) {
+      /* Confirm remove tasks */
+
+         // Appending dialog to document.body to cover sidenav in docs app
+         var confirm = $mdDialog.confirm()
+               .title('Czy na pewno usunąć?')
+               .textContent('')
+               .ariaLabel('Usuń zadania')
+               .targetEvent(ev)
+               .ok('Tak, usuń')
+               .cancel('Anuluj');
+
+         $mdDialog.show(confirm).then(function() {
+           console.log('usuwanie');
+           return dataservice.removeTaskHistoryItem(id)
+                    .then(function(data) {
+                      console.log(data);
+                      $mdToast.show(
+                        $mdToast.simple()
+                        .textContent(data)
+                        .position('top right')
+                      );
+                      init();
+                    })
+         }, function() {
+           console.log('Anulowano usuwanie');
+         });
+    }
   }// #DayViewController
 
 }());

@@ -5,7 +5,7 @@ module.exports = {
   getUserTasks             : getUserTasks,
   getTask                  : getTask,
   getUserTask              : getUserTask,
-  getUserTasksByDate       : getUserTasksByDate,
+  getUserTasksByDate       : getUserTasksByDate, // used in dayView
 
   startUserTask            : startUserTask,
   stopUserTask             : stopUserTask,
@@ -15,11 +15,13 @@ module.exports = {
   setAsCompleted           : setAsCompleted,
 
   editTask                 : editTask,
-  editTaskHistoryItem      : editTaskHistoryItem, //deprecated
+  editTaskHistoryItem      : editTaskHistoryItem,
+  removeTaskHistoryItem    : removeTaskHistoryItem,
 
-  addTask                  : addTask
+  addTask                  : addTask,
 
-
+  /* dayView */
+  editDayView              : editDayView
 }
 
 /*
@@ -141,9 +143,9 @@ module.exports = {
 
       // loop tasks
       for(var i = len; i--; ) {
-        var task = data[i];
+        var task          = data[i];
         task.isPerforming = false;
-        task = modifyStoppedTask(task);
+        task              = modifyStoppedTask(task);
         saveTaskPromises.unshift(task.save());
       }
 
@@ -261,8 +263,13 @@ function getUserTasksByDate(userID, date) {
   return promise;
 }
 
-//deprecated
-function editTaskHistoryItem(historyItemId, userId, newItem) {
+/* dayView */
+
+function editDayView(items) {
+  console.log(items);
+}
+
+function removeTaskHistoryItem(userID, historyItemId) {
   var promise = Task.find({
     '_creator' : userID,
     'history' : {
@@ -272,18 +279,40 @@ function editTaskHistoryItem(historyItemId, userId, newItem) {
     }
   }).exec();
 
-  promise.then(function(data) {
-    var prevItem = data[0];
-    var index = prevItem.history.findIndex(item => item._id === historyItemId);
-    prevItem.history[index] = newItem; //assume that client calculate dt
+  return promise.then(function(data) {
+        var prevItem      = data[0];
+        var index         = prevItem.history.findIndex(item => item.id === historyItemId);
+        prevItem.history.splice(index, 1);
+        prevItem.duration = Math.round(sumByProperty(prevItem.history, 'dt'), 0);
+        prevItem.updated  = new Date();
+        return prevItem.save();
+      })
+      .catch(function(err) {
+        return err;
+      })
+}//#
 
-    prevItem.duration = Math.round(sumByProperty(prevItem.history, 'dt'), 0); // round to full sek
+function editTaskHistoryItem(userId, newItem) {
+  var promise = Task.find({
+    '_creator' : userId,
+    'history' : {
+      '$elemMatch' : {
+        '_id' : newItem._id
+      }
+    }
+  }).exec();
 
-    return prevItem.save();
-  })
-  .catch(function(err) {
-    return err;
-  })
+  return promise.then(function(data) {
+      var prevItem            = data[0];
+      var index               = prevItem.history.findIndex(item => item.id === newItem._id);
+      prevItem.history[index] = newItem; //assume that client calculate dt
+      prevItem.duration       = Math.round(sumByProperty(prevItem.history, 'dt'), 0); // round to full sek
+
+      return prevItem.save();
+    })
+    .catch(function(err) {
+      return err;
+    })
 }
 
 //------------------------------------------------------------------------------

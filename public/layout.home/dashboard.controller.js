@@ -85,12 +85,18 @@
 
          $mdDialog.show(confirm).then(function() {
             var ids = getSelectedTasks();
-           return dataservice.removeTasks(ids)
-                     .then(getTasks);
-         }, function() {
-           console.log('Anulowano usuwanie');
-         });
+            return dataservice.removeTasks(ids)
+                     .then(function(data) {
+                       console.log('Usunięto zaznaczone zadania.');
+                       console.log(data);
+                       getTasks(); // do zmiany
+                     });
+
+             }, function() {
+               console.log('Anulowano usuwanie');
+             });
     }// #removeTasks
+
 
     function getSelectedTasks() {
       var ids = [];
@@ -107,10 +113,22 @@
     function toggleTask(item) {
       return dataservice.toggleTask(item._id)
                 .then(function(data) {
+                  console.log(data);
                   return data;
-                }).then(function(data) {
-                  return getTasks();
-                });
+                })
+                .then(function(data) {
+                  // var index = vm.tasks.findIndex(element => element._id === item._id);
+                  // console.log(index);
+                  // if (data._id === item._id) {
+                  //   vm.tasks[index] = data;
+                  //   vm.countDuration(vm.tasks[index]);
+                  //   vm.startTimer(vm.tasks[index]);
+                  // }
+                  getTasks();
+                })
+                .catch(function(err) {
+                  console.log(err);
+                })
 
     }// #toogleTask
 

@@ -33,7 +33,17 @@
   <table ng-show="vm.tasksInDay.length">
     <caption>
       <md-divider></md-divider>
-      <h3>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h3>
+      <div layout="row" layout-align="space-between center">
+        <h3>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h3>
+        <div layout="row">
+          <md-button class="md-icon-button" aria-label="dayViewRefresh" ng-click="vm.cancelEdit()">
+            <md-icon>refresh</md-icon>
+            <md-tooltip>Odśwież widok</md-tooltip>
+          </md-button>
+        </div>
+
+      </div>
+
       <md-divider></md-divider>
       <br />
     </caption>
@@ -64,18 +74,18 @@
     <tbody>
 
       <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
-          ng-mouseover="hover = true" ng-mouseleave="hover = false">
+          ng-mouseover="hover = true" ng-mouseleave="hover = false" >
 
         <td class="table-desc">{{ item.desc }}</td>
 
-        <td class="table-updated" style="text-align: center;" ng-if="edit === false">{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;" ng-show="!edit" >{{ item.timespan.startTime | date:'HH:mm'}}</td>
         <!-- table cell when edit mode is enabled -->
-        <td class="table-col" ng-if="edit === true">
-          <my-time-picker time="item.timespan.startTime"/>
+        <td class="table-col" ng-show="edit">
+          <my-time-picker timespan="item.timespan" is-start-time="true" is-stop-time="false" on-change="vm.dayViewChanged" />
          </td>
-        <td class="table-updated" style="text-align: center;" ng-if="edit === false">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
-        <td class="table-col" ng-if="edit === true">
-          <my-time-picker time="item.timespan.stopTime"/>
+        <td class="table-updated" style="text-align: center;" ng-show="!edit">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
+        <td class="table-col" ng-show="edit" >
+          <my-time-picker timespan="item.timespan" is-start-time="false" is-stop-time="true" on-change="vm.dayViewChanged" />
          </td>
 
         <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
@@ -89,11 +99,15 @@
           </div>
           <!-- edit ON -->
           <div ng-show="edit">
-            <md-button class="md-icon-button" aria-label="dayViewAnuluj" ng-click="edit = false; vm.cancelEdit()">
-              <md-icon>cancel</md-icon>
-              <md-tooltip>Anuluj</md-tooltip>
+            <md-button class="md-icon-button" aria-label="dayViewAnuluj" ng-click="edit = false">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Wyłącz edycję</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="edit = false; vm.saveChanges()">
+            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.removeItem($event, item.timespan._id)">
+              <md-icon>delete_forever</md-icon>
+              <md-tooltip>Usuń</md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.saveChanges(item.timespan); edit = false;">
               <md-icon>archive</md-icon>
               <md-tooltip>Zapisz</md-tooltip>
             </md-button>

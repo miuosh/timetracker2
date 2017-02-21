@@ -42,15 +42,6 @@ router.get('/:id', function(req, res) {
 
 router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
-		// var toggleTaskPromise = query.toggleUserTask(req.user.id, req.params.id);
-		// console.log(toggleTaskPromise);
-		// toggleTaskPromise.then(function(data) {
-		// 	res.send(JSON.stringify(data));
-		// })
-		// .catch(function(err) {
-		// 	res.send(JSON.stringify({err: {message: 'Cannot toggle task of given id.'}}))
-		// })
-		// stopAllUserTasks działa
 		var stop = query.toggleUserTask(req.user.id, req.params.id);
 		stop.then(function(data) {
 				console.log('tooggle resolved: ');
@@ -87,25 +78,6 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
   });
 
-	router.post('/edit/history/:id', function (req, res) {
-
-		var userId = req.user.id;
-		var historyItemId = req.params.id;
-		var newItem = req.body;
-		console.log(body);
-
-		var editHistoryItemPromise = query.editTaskHistoryItem(historyItemId, userId, newItem);
-		editHistoryItemPromise.then(function(data) {
-			res.status(200);
-			res.send(data);
-		})
-		.catch(function(err) {
-			res.status(500);
-			res.send(err);
-		})
-
-	});
-
 /*
 	POST - add new task
 */
@@ -130,6 +102,14 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 					})
 			}
   });
+
+	// dayView POST
+	router.post('/dayViewEdit/', isAuthenticated, function(req, res) {
+		console.log(req.body);
+
+		res.status(200);
+		res.send('OK');
+	})
 
 
 
@@ -164,22 +144,36 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
     });
 
+		router.post('/edit/history/', function (req, res) {
 
-    /**
-     *  GET categories
-     */
-
-    router.get('/categories/', function(req, res) {
-        var cat = [ "Instalacja",
-            "Konfiguracja",
-            "Testy"];
-
-
+			var userId = req.user.id;
+			var newItem = req.body;
+			var editHistoryItemPromise = query.editTaskHistoryItem(userId, newItem);
+			editHistoryItemPromise.then(function(data) {
 				res.status(200);
-        res.send(JSON.stringify(cat));
-    });
+				res.send('Zapisano wprowadzone zmiany!');
+			})
+			.catch(function(err) {
+				res.status(500);
+				res.send(err);
+			})
 
-		router.get('/projects/', function(req, res) {
+		});
+
+		router.delete('/edit/history/:id',isAuthenticated, function(req, res) {
+			var userId = req.user.id;
+			var historyItemId = req.params.id;
+
+			var removePromise = query.removeTaskHistoryItem(userId, historyItemId);
+
+			removePromise.then(function(data) {
+				res.status(200);
+				res.send('Usunięto próbkę: ' + historyItemId);
+			})
+			.catch(function(err){
+				res.status(500);
+				res.send(err.message);
+			})
 
 		})
 

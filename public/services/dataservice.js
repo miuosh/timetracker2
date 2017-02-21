@@ -14,6 +14,7 @@
   .constant('reportsUrl', {
     'url' : '/reports/'
   })
+
   .factory('dataservice', dataservice);
 
   /* @ngInject */
@@ -31,6 +32,7 @@
       setAsCompleted              : setAsCompleted,
       editTask                    : editTask,
       editTaskHistoryItem         : editTaskHistoryItem, // POST timespan object
+      removeTaskHistoryItem       : removeTaskHistoryItem, //remove timespan of given ID
       getTasksByDate              : getTasksByDate,
       /* Task profiles */
       getProfiles                 : getProfiles,
@@ -41,6 +43,8 @@
       /* User settings */
       saveUserSettings            : saveUserSettings,
       getUserSettings             : getUserSettings,
+
+      /* dayView */
 
       /* Reports data */
       getCompletedTasksBetweenDate: getCompletedTasksBetweenDate
@@ -171,6 +175,18 @@
       return $http.post(userUrl.url + '/settings/', JSON.stringify(config), { headers: {'Content-Type': 'application/json' }})
                     .then(successCallback)
                     .catch(errorCallback);
+    }
+
+    function editTaskHistoryItem(item) {
+      return $http.post(dataUrl.url + 'edit/history/', JSON.stringify(item), { headers: {'Content-Type': 'application/json' }})
+                .then(successCallback)
+                .catch(errorCallback);
+    }
+
+    function removeTaskHistoryItem(id) {
+      return $http.delete(dataUrl.url + 'edit/history/' + id)
+              .then(successCallback)
+              .catch(errorCallback);
     }
 
       /* Reports data */
