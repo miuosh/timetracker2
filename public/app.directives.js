@@ -41,8 +41,9 @@ function myTimePicker($interval, $timeout) {
       init();
 
 
-      /* time calculation */
+      /* internal functions */
       var calculateDiff = calculateDiff;
+      var isValidTimespan = isValidTimespan;
 
       function initCalculateDiff() {
           scope.timespan.dt = calculateDiff(scope.timespan.startTime, scope.timespan.stopTime);
@@ -50,7 +51,7 @@ function myTimePicker($interval, $timeout) {
 
       /* data validation */
       scope.isValid = true;
-      var isValidTimespan = isValidTimespan;
+
 
       function isValidTimespan() {
         var startTime = new Date(scope.timespan.startTime);
@@ -102,9 +103,8 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setMinutes(tmpTime.getMinutes() + 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = isValidTimespan();
           scope.timespan.isValid = isValidTimespan();
-          if (scope.isValid) {
+          if (scope.timespan.isValid) {
             initCalculateDiff();
           }
           scope.onChange(scope.timespan._id);
@@ -118,9 +118,8 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setMinutes(tmpTime.getMinutes() - 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = isValidTimespan();
           scope.timespan.isValid = isValidTimespan();
-          if (scope.isValid) {
+          if (scope.timespan.isValid) {
               initCalculateDiff();
           }
           scope.onChange(scope.timespan._id);
@@ -133,9 +132,8 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setHours(tmpTime.getHours() + 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = isValidTimespan();
           scope.timespan.isValid = isValidTimespan();
-          if (scope.isValid) {
+          if (scope.timespan.isValid) {
             initCalculateDiff();
           }
           scope.onChange(scope.timespan._id);
@@ -148,9 +146,8 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setHours(tmpTime.getHours() - 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = isValidTimespan();
           scope.timespan.isValid = isValidTimespan();
-          if (scope.isValid) {
+          if (scope.timespan.isValid) {
             initCalculateDiff();
           }
           scope.onChange(scope.timespan._id);
