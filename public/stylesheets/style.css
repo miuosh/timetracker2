@@ -174,12 +174,14 @@ md-input-container:not(.md-input-has-value) {
 
 .has-error {
   color: red;
-  background-color: yellow;
+  background-color: #FFEB3B;
+  border-radius: 5px;
 }
 
 .has-error:hover {
   color: red;
-  background-color: yellow;
+  background-color: #FFEB3B;
+  border-radius: 5px;
 }
 
 [contenteditable] {

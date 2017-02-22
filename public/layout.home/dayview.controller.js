@@ -49,20 +49,19 @@
     var isCurrentDayTimespan = isCurrentDayTimespan;
     var calculateSummaryTime = calculateSummaryTime;
     var updateDuration = updateDuration;
-    var checkValidity = checkValidity;
+    var checkValidityOfTimespan = checkValidityOfTimespan;
+    var checkValidityOfTaskInDay = checkValidityOfTaskInDay;
+    var compareFn = compareFn; // order criteria for tasksInDay table - sort by timespan.startTime
 
     init();
   /////////////////////////////////////////////////////////////////////////////
 
   function init() {
       getTasksByDate(vm.viewDate);
-
   }
 
   function dayViewChanged(timespanId) {
     console.log('DayViewController - dayViewChanged....');
-    console.log(timespanId);
-    checkValidity(timespanId);
     updateDuration();
     calculateSummaryTime();
   }
@@ -71,12 +70,21 @@
       return dataservice.getTasksByDate(date.getTime())
         .then(function(data) {
           vm.tasks = data;
+          console.log('Pobrano zadania dla wybranego dnia.');
           console.log(data);
 
         })
-        .then(filterHistory)
-        .then(makeDaySchedule)
-        .then(calculateSummaryTime);
+        .then(function(data) {
+          filterHistory(); //filtrowanie zadań dla bieżcego dnia
+          makeDaySchedule(); // budowanie tabeli dla widoku, sortowanie po starTime
+          calculateSummaryTime();
+          checkValidityOfTaskInDay();
+
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+
     }
 
     function prevDay() {
@@ -117,11 +125,12 @@
               desc: vm.filteredTasks[i].desc,
               isCompleted: vm.filteredTasks[i].isCompleted,
               timespan: vm.filteredTasks[i].history[j],
-              duration: vm.filteredTasks[i].history[j].dt
+              duration: vm.filteredTasks[i].history[j].dt,
             });
           }
       }
-      vm.tasksInDay = tmp;
+
+      vm.tasksInDay =  tmp.sort(compareFn);;
     }
 
 
@@ -144,25 +153,42 @@
       });
     }
 
-    function checkValidity(timespanId) {
-      var timespans = vm.tasksInDay;
-      var index = timespans.findIndex(element => element.timespan._id === timespanId);
-
-      vm.tasksInDay[index].timespan.isValid = isSameDay(timespans[index].timespan.startTime, timespans[index].timespan.stopTime) ||
-        isStartTimestampGreater(timespans[index].timespan.startTime, timespans[index].timespan.stopTime);
+    function checkValidityOfTimespan(timespan) {
+      var startTime = new Date(timespan.startTime);
+      var stopTime = new Date(timespan.stopTime);
+      return isSameDay(startTime, stopTime) && isStopTimestampGreater(startTime, stopTime);
     }
 
     function isSameDay(startTimestamp, stopTimestamp) {
-      var time0 = new Date(startTimestamp);
-      var time1 = new Date(stopTimestamp);
-      return time0.getDate() === time1.getDate();
+      return startTimestamp.getDate() === stopTimestamp.getDate();
     }
 
-    function isStartTimestampGreater(startTimestamp, stopTimestamp) {
-      return time0.getTime() > time1.getTime();
+    function isStopTimestampGreater(startTimestamp, stopTimestamp) {
+      return stopTimestamp.getTime() > startTimestamp.getTime();
     }
 
+    function isNextStartTimeGreater() {
 
+    }
+
+    function compareFn(a, b) {
+      var aStartTime = new Date(a.timespan.startTime).getTime();
+      var bStartTime = new Date(b.timespan.startTime).getTime();
+      if (aStartTime < bStartTime) {
+        return -1
+      }
+       if (aStartTime > bStartTime) {
+        return 1
+      }
+      return 0
+   }//#compareFn
+
+   function checkValidityOfTaskInDay() {
+     vm.tasksInDay.forEach(function(element) {
+       element.timespan.isValid = checkValidityOfTimespan(element.timespan)
+     })
+     console.log(vm.tasksInDay);
+   }
 
     /* taks edition */
 

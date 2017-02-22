@@ -73,17 +73,17 @@
 
     <tbody>
 
-      <tr style="height: 3em" ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
+      <tr style="height: 3em"  ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
           ng-mouseover="hover = true" ng-mouseleave="hover = false" >
 
         <td class="table-desc">{{ item.desc }}</td>
 
-        <td class="table-updated" style="text-align: center;" ng-show="!edit" >{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;" ng-show="!edit" ng-class="item.timespan.isValid ? '':'has-error'">{{ item.timespan.startTime | date:'HH:mm'}}</td>
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
           <my-time-picker timespan="item.timespan" is-start-time="true" is-stop-time="false" on-change="vm.dayViewChanged" />
          </td>
-        <td class="table-updated" style="text-align: center;" ng-show="!edit">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
+        <td class="table-updated" style="text-align: center;" ng-show="!edit" ng-class="item.timespan.isValid ? '':'has-error'">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
         <td class="table-col" ng-show="edit" >
           <my-time-picker timespan="item.timespan" is-start-time="false" is-stop-time="true" on-change="vm.dayViewChanged" />
          </td>
@@ -107,7 +107,7 @@
               <md-icon>delete_forever</md-icon>
               <md-tooltip>Usuń</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.saveChanges(item.timespan); edit = false;">
+            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.saveChanges(item.timespan); edit = false;" ng-disabled="!item.timespan.isValid">
               <md-icon>archive</md-icon>
               <md-tooltip>Zapisz</md-tooltip>
             </md-button>

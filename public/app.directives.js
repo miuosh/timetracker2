@@ -50,16 +50,16 @@ function myTimePicker($interval, $timeout) {
 
       /* data validation */
       scope.isValid = true;
-      var checkValidity = checkValidity;
+      var isValidTimespan = isValidTimespan;
 
-      function checkValidity() {
+      function isValidTimespan() {
         var startTime = new Date(scope.timespan.startTime);
         var stopTime = new Date(scope.timespan.stopTime);
-
+        // is startTime greater
         if (startTime.getTime() > stopTime.getTime()) {
           return false;
         }
-
+        // is same day
         if (startTime.getDate() != stopTime.getDate()) {
           return false;
         }
@@ -79,7 +79,7 @@ function myTimePicker($interval, $timeout) {
         tmpTime = new Date(scope.timespan[property]);
 
         scope.property = property;
-
+        scope.timespan.isValid = isValidTimespan();
       }
 
 
@@ -102,11 +102,12 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setMinutes(tmpTime.getMinutes() + 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = checkValidity();
+          scope.isValid = isValidTimespan();
+          scope.timespan.isValid = isValidTimespan();
           if (scope.isValid) {
             initCalculateDiff();
-            scope.onChange(scope.timespan._id);
           }
+          scope.onChange(scope.timespan._id);
 
         }, ms)
       }
@@ -117,39 +118,42 @@ function myTimePicker($interval, $timeout) {
         scope.initInterval(function() {
           tmpTime.setMinutes(tmpTime.getMinutes() - 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = checkValidity();
+          scope.isValid = isValidTimespan();
+          scope.timespan.isValid = isValidTimespan();
           if (scope.isValid) {
               initCalculateDiff();
-              scope.onChange(scope.timespan._id);
           }
+          scope.onChange(scope.timespan._id);
 
         }, ms);
       }
 
       function addHour() {
-        ms = 200;
+        ms = 175;
         scope.initInterval(function() {
           tmpTime.setHours(tmpTime.getHours() + 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = checkValidity();
+          scope.isValid = isValidTimespan();
+          scope.timespan.isValid = isValidTimespan();
           if (scope.isValid) {
             initCalculateDiff();
-            scope.onChange(scope.timespan._id);
           }
+          scope.onChange(scope.timespan._id);
         }, ms);
 
       }
 
       function substractHour() {
-        ms = 200;
+        ms = 175;
         scope.initInterval(function() {
           tmpTime.setHours(tmpTime.getHours() - 1);
           scope.timespan[property] = tmpTime.toISOString();
-          scope.isValid = checkValidity();
+          scope.isValid = isValidTimespan();
+          scope.timespan.isValid = isValidTimespan();
           if (scope.isValid) {
             initCalculateDiff();
-            scope.onChange(scope.timespan._id);
           }
+          scope.onChange(scope.timespan._id);
         }, ms);
       }
 

@@ -1,10 +1,10 @@
 
-<div ng-class="isValid ? '':'has-error'">
+<div >
   <div >
     <p style="font-size: .8em;">{{timespan[property] | date: 'yyyy-MM-dd'}}</p>
   </div>
 
-  <div layout="row" layout-align="center center" >
+  <div layout="row" layout-align="center center" ng-class="timespan.isValid ? '':'has-error'">
     <div>
       <i class="material-icons" style="cursor: pointer;" ng-mousedown="addHour()" ng-mouseup="cancelInterval()" >keyboard_arrow_up</i>
       <p style="margin: 1px 1px 1px 1px" >{{ timespan[property] | date:'HH' }}</p>

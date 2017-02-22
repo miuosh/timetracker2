@@ -168,7 +168,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
 			removePromise.then(function(data) {
 				res.status(200);
-				res.send('Usunięto próbkę: ' + historyItemId);
+				res.send('Usunięto!');
 			})
 			.catch(function(err){
 				res.status(500);
