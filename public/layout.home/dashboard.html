@@ -12,13 +12,19 @@
   <caption style="padding: 0 0;"  >
     <div layout="row" layout-align="space-between stretch">
       <!-- search tasks -->
-      <md-input-container style="margin: 0em 0em 0em 6em; padding: 0 0;">
+      <md-input-container style="margin: 0em 0em 0em 3em; padding: 0 0;">
         <label>Wyszukaj...</label>
         <input type="text" name="search" ng-model="searchText" autocomplete="off">
       </md-input-container>
-      <div layout="row"  layout-align="end center" style="margin-right: 12em;">
-        <md-button class="md-primary" ng-click="vm.setAsCompleted()">Oznacz jako ukończone</md-button>
-        <md-button class="md-primary" ng-click="vm.removeTasks($event)">Usuń</md-button>
+      <div layout="row"  layout-align="end center" style="margin-right: 12em;" ng-show="vm.selectedCounter">
+        <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.setAsCompleted()">
+          <md-icon>playlist_add_check</md-icon>
+          <md-tooltip>Oznacz jako ukończone</md-tooltip>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.removeTasks($event)">
+          <md-icon>delete_forever</md-icon>
+          <md-tooltip>Usuń</md-tooltip>
+        </md-button>
       </div>
 
     </div>
@@ -60,7 +66,7 @@
   <tbody >
     <tr ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="!item.isCompleted">
       <td class="table-checkbox">
-        <md-checkbox class="md-checkbox-custom" ng-model="item.selected" aria-label="checkbox_{{item._id}}" > </md-checkbox>
+        <md-checkbox class="md-checkbox-custom" ng-change="vm.change(item)" ng-model="item.selected" aria-label="checkbox_{{item._id}}" > </md-checkbox>
       </td>
       <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm' }}</td>
       <td class="table-desc">{{ item.desc }}</td>

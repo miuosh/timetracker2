@@ -20,13 +20,15 @@
     vm.setAsCompleted = setAsCompleted;
     vm.startTimer = startTimer;
     vm.stopTimer = stopTimer;
-
+    vm.selectedCounter = 0;
+    vm.change = change; // change selectedCounter
     vm.countDuration = countDuration;
 
     // filter table
     $scope.sortType = 'updated';
     $scope.sortReverse = true;
     $scope.searchType = '';
+
 
 
     console.log('Init Dashboard Controller');
@@ -43,6 +45,15 @@
     }// #loadTasks
 
 ////////////////////////////////////////////////////////
+    function change(item) {
+          if (item.selected) {
+              vm.selectedCounter++
+          } else {
+              vm.selectedCounter--
+          }
+      };
+
+
     function getTasks(){
       return dataservice.getTasks()
           .then(function(data) {

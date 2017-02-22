@@ -1,7 +1,17 @@
 <div ng-controller="DashboardCompletedController as vm">
-  <h1>Ukończone zadania</h1>
-  <md-divider><md-divider>
-    <br>
+  <div layout="column" layout-align="space-between strech">
+    <div>
+      <h1>Ukończone zadania</h1>
+    </div>
+        <md-divider><md-divider>
+      <!-- search tasks -->
+    <div>
+      <md-input-container style="margin-bottom: 0px;">
+        <label>Wyszukaj...</label>
+        <input type="text" name="search" ng-model="searchText" autocomplete="off">
+      </md-input-container>
+    </div>
+  </div>
   <!-- Tasks table -->
   <table  width="100%" layout-padding>
     <thead>
@@ -35,7 +45,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr style="height: 3em" ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse" ng-if="item.isCompleted">
+      <tr style="height: 3em" ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="item.isCompleted">
 
         <td class="table-desc">{{ item.desc }}</td>
         <td class="table-project">{{ item.project }}</td>

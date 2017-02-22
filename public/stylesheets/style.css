@@ -62,6 +62,9 @@ caption {
 th {
   text-align: center;
 }
+td {
+
+}
 
 td > ul {
   text-align: left;
@@ -88,12 +91,11 @@ md-checkbox .md-container {
 
 .table-desc {
   width: 30%;
-
 }
 
 .table-project {
   width: 10%;
-  font-weight: bold;
+  /*font-weight: bold;*/
   text-align: center;
 }
 
