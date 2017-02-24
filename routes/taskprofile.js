@@ -56,8 +56,9 @@ router.get('/:name', function(req, res) {
 
 router.post('/', isAuthenticated, function(req, res) {
     var profile = req.body;
+		var userId = req.user.id;
 		// profile has unique name
-    var addProfilePromise = query.addProfile(profile);
+    var addProfilePromise = query.addProfile(profile, userId);
 
     addProfilePromise.then(function(data) {
       res.status(200);
@@ -73,6 +74,7 @@ router.post('/', isAuthenticated, function(req, res) {
 */
 router.put('/', isAuthenticated, function(req, res) {
     var profile = req.body;
+		var userId = req.user.id;
 		console.log(profile);
     var editProfilePromise = query.editProfile(profile);
 		console.log('editProfilePromise');

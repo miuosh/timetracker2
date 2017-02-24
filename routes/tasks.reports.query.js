@@ -6,21 +6,28 @@ module.exports = {
 }
 
 
-function getCompletedTasksBetweenDate (from, to, userId) {
+function getCompletedTasksBetweenDate (from, to, userId, excludeFields) {
 
   var fromDate = new Date(from).toISOString();
   var toDate  = new Date(to).toISOString();
+
+  // fromDate.setMinutes(fromDate.getMinutes() - fromDate.getTimezoneOffset());
+  // fromDate = fromDate.toISOString();
+  //
+  // toDate.setMinutes(toDate.getMinutes() - toDate.getTimezoneOffset());
+  // toDate = toDate.toISOString();
+
 
   console.log(fromDate);
   console.log(toDate);
 
   return Task.find( {
-    'isCompleted' : true,
     '_creator'  : userId,
+    'isPerforming': false,
      'updated'  : {
          '$gte': fromDate,
-         '$lt' : toDate
+         '$lte' : toDate
      }
-   }).exec();
+   }, excludeFields).exec();
 
 }

@@ -1,15 +1,66 @@
-<div ng-controller="ChartController as chc">
+<div ng-controller="ChartController as vm" ng-cloak>
 
-<h1>w budowie... :)</h1>
-<!-- <md-button ng-click="chc.getData()">
+<div layout="row" layout-align="start center">
+  <div >
+    <h2>Zakres dat</h2>
+  </div>
+
+  <!-- <div>
+    <md-datepicker id="fromDate" style="visibility: hidden" ng-model="vm.fromDate" md-placeholder="Enter date"
+      ng-change="vm.getData()"
+      md-hide-icons="all"
+      md-is-open="vm.isOpen">
+    </md-datepicker>
+
+        <md-button class="md-flat" ng-click="vm.isOpen = true">{{ vm.fromDate | date: 'yyyy-MM-dd'}}</md-button>
+  </div>
+
+
+  <div>
+    <md-datepicker id="toDate" style="visibility: hidden" ng-model="vm.toDate" md-placeholder="Enter date"
+      ng-change="vm.getData()"
+      md-hide-icons="all"
+      md-is-open="vm.isOpen">
+    </md-datepicker>
+
+        <md-button class="md-flat" ng-click="vm.isOpen = true">{{ vm.toDate | date: 'yyyy-MM-dd'}}</md-button>
+  </div>
+</div> -->
+
+
+</div>
+<md-button ng-click="vm.getData()">
   Pobierz dane
 </md-button>
+<h4>Sumaryczny czas: {{ vm.summaryTime | formatDuration }}</h4>
 
-<div style="max-width: 300px;">
-  <canvas id="pie" class="chart chart-pie" width="300" height="300"
-    chart-data="data" chart-labels="labels" chart-options="options" chart-dataset-override="dataOverride">
-  </canvas>
-</div> -->
+<div layout="row">
+
+
+  <div>
+    <md-checkbox ng-model="vm.projectData.options.legend.display ">Legenda</md-checkbox>
+    <!-- project chart -->
+    <div style="max-width: 400px;">
+      <canvas id="pie" class="chart chart-doughnut" width="400" height="400"
+        chart-data="vm.projectData.data" chart-labels="vm.projectData.labels" chart-options="vm.projectData.options" chart-dataset-override="vm.projectData.dataOverride">
+      </canvas>
+    </div>
+  </div>
+
+
+
+  <div>
+    <md-checkbox ng-model="vm.categoryData.options.legend.display ">Legenda</md-checkbox>
+    <!-- category chart -->
+    <div style="max-width: 400px;">
+      <canvas id="pie" class="chart chart-doughnut" width="400" height="400"
+        chart-data="vm.categoryData.data" chart-labels="vm.categoryData.labels" chart-options="vm.categoryData.options" chart-dataset-override="vm.categoryData.dataOverride">
+      </canvas>
+    </div>
+  </div>
+
+
+</div>
 
 
 </div>

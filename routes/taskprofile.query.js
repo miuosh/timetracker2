@@ -22,11 +22,12 @@ function getProfileByName(name) {
   return TaskProfile.find( {'name': name} ).exec();
 }
 
-function addProfile(profile) {
+function addProfile(profile, userId) {
   var profile = new TaskProfile( {
     name: profile.name,
     projects: profile.projects,
-    categories: profile.categories
+    categories: profile.categories,
+    _creator: userId
   })
 
   return profile.save();
@@ -37,9 +38,9 @@ function editProfile(profile) {
 
   return promise.then(function(data) {
     var taskprofile = data[0];
-    taskprofile.name = profile.name;
-    taskprofile.projects = profile.projects;
-    taskprofile.categories = profile.categories;
+      taskprofile.name       = profile.name;
+      taskprofile.projects   = profile.projects;
+      taskprofile.categories = profile.categories;
 
     return taskprofile.save();
   });
