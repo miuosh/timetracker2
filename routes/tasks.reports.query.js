@@ -1,12 +1,12 @@
 var Task = require('../models/task');
 
 module.exports = {
-  getCompletedTasksBetweenDate : getCompletedTasksBetweenDate
+  getTasksBetweenDate : getTasksBetweenDate
 
 }
 
 
-function getCompletedTasksBetweenDate (from, to, userId, excludeFields) {
+function getTasksBetweenDate (from, to, userId, excludeFields, isCompleted = false) {
 
   var fromDate = new Date(from).toISOString();
   var toDate  = new Date(to).toISOString();
@@ -20,14 +20,19 @@ function getCompletedTasksBetweenDate (from, to, userId, excludeFields) {
 
   console.log(fromDate);
   console.log(toDate);
-
-  return Task.find( {
+  var queryObj = {
     '_creator'  : userId,
     'isPerforming': false,
      'updated'  : {
          '$gte': fromDate,
          '$lte' : toDate
      }
-   }, excludeFields).exec();
+   };
+
+  if (isCompleted === true) {
+    console.log('find completed tasks');
+    queryObj['isCompleted'] = true;
+  }
+  return Task.find( queryObj, excludeFields).exec();
 
 }

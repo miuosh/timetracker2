@@ -19,12 +19,17 @@ var isAuthenticated = function (req, res, next) {
 router.get('/:from-:to', isAuthenticated, function(req, res) {
 	console.log('From: ' + req.params.from);
 	console.log('To: ' + req.params.to);
+	console.log(req.query);
+	var isCompleted = false;
+	if(req.query.completed === 'true') {
+		isCompleted = true;
+	}
 	var excludeFields = {
 		history : 0 // 0 - exclude, 1 - include
 	}
-		var getCompletedTasksBetweenDatePromise = query.getCompletedTasksBetweenDate(Number(req.params.from), Number(req.params.to), req.user.id, excludeFields);
+		var getTasksBetweenDatePromise = query.getTasksBetweenDate(Number(req.params.from), Number(req.params.to), req.user.id, excludeFields, isCompleted);
 
-		getCompletedTasksBetweenDatePromise.then( function(data) {
+		getTasksBetweenDatePromise.then( function(data) {
 			res.status(200);
 			res.send(data);
 		})

@@ -191,8 +191,8 @@
 
       /* Reports data */
 
-    function getCompletedTasksBetweenDate(from, to) {
-      return $http.get(reportsUrl.url + from + '-' + to)
+    function getCompletedTasksBetweenDate(from, to, completed) {
+      return $http.get(reportsUrl.url + from + '-' + to + '?completed=' + completed)
                     .then(successCallback)
                     .catch(errorCallback);
     }

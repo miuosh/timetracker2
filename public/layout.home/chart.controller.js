@@ -16,6 +16,9 @@
       vm.toDate = new Date();
       //vm.fromDate = vm.toDate - (24 * 3600 * 30 * 1000);
       vm.fromDate = new Date(vm.toDate.getFullYear(), vm.toDate.getMonth(), vm.toDate.getDate() - 30, 0, 0, 0, 0);
+      //completed tasks
+      vm.completed = false;
+
 
       console.log('Init ChartController...');
       getData();
@@ -25,13 +28,18 @@
         // var to = new Date().getTime();
         // var from = to - (24 * 3600 * 30 * 1000);
 
-        return dataservice.getCompletedTasksBetweenDate(vm.fromDate.getTime(), vm.toDate.getTime())
+        return dataservice.getCompletedTasksBetweenDate(vm.fromDate.getTime(), vm.toDate.getTime(), vm.completed)
           .then(function(data) {
             console.log('Pobrano dane.');
             console.log(data);
             prepareCategoryDataset(data);
             prepareProjectDataset(data);
-            vm.summaryTime = sumByProperty(data, 'duration')
+            vm.summaryTime = sumByProperty(data, 'duration');
+            vm.projectData.count = countProjects(data);
+            vm.categoryData.count = countCategories(data);
+            console.log( vm.projectData);
+            console.log( vm.categoryData);
+
           })
       }
 
@@ -141,6 +149,25 @@
       //   return map;
       // }
       //
+
+      function countProjects(tasks) {
+        var result = tasks.reduce(function(prev, curr) {
+          prev[curr.project] = (prev[curr.project] || 0) + 1
+          return prev;
+        }, {});
+
+        return result;
+      }
+
+      function countCategories(tasks) {
+        var result = tasks.reduce(function(prev, curr) {
+          prev[curr.category] = (prev[curr.category] || 0) + 1
+          return prev;
+        }, {});
+
+        return result;
+      }
+
       function sumByProperty(items, property) {
         if (items === 0) return 0;
         return items.reduce(function(previous, current) {

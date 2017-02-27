@@ -3,6 +3,7 @@
 <div layout="row" layout-align="start center">
   <div >
     <h2>Statystki zadań</h2>
+    <md-checkbox ng-model="vm.completed" ng-change="vm.getData()">tylko ukończone zadania </md-checkbox>
   </div>
 </div>
 <md-divider> </md-divider>

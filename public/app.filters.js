@@ -9,7 +9,6 @@
 
   function formatDuration() {
     return function formatTime(duration, sec) {
-      console.log('---sec: ' + sec);
       var seconds_num,
           seconds_float,
           seconds,
