@@ -144,6 +144,13 @@ md-checkbox .md-container {
     width: 25%;
 }
 
+.table-statistic-col {
+  width: auto;
+  text-align: center;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
+
 md-input-container:not(.md-input-has-value) {
   color:red;
 }
