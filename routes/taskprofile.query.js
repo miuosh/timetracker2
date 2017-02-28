@@ -48,6 +48,6 @@ function editProfile(profile, userId) {
 }
 
 function removeProfile(id) {
-
+  var promise =
   return TaskProfile.remove({ '_id': id }).exec();
 }

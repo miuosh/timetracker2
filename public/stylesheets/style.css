@@ -110,13 +110,14 @@ md-checkbox .md-container {
 }
 
 .table-creation-date {
-  width: 10%;
+  width: 8%;
   text-align: center;
+  white-space:nowrap;
 }
 
 .table-updated {
   width: 10%;
-  text-align: left;
+  text-align: right;
   white-space:nowrap;
 }
 .table-duration {
@@ -131,7 +132,12 @@ md-checkbox .md-container {
 
 .table-edit-btn {
   width: 6%;
-  text-align: center;
+  text-align: right;
+}
+
+.table-completed-edit-btn {
+  width: 10%;
+  text-align: right;
 }
 
 .table-col {

@@ -70,13 +70,13 @@
           });
   }// #getTasks
 
-    function removeTasks(ev) {
+    function removeTasks(ev, item) {
 
       /* Confirm remove tasks */
 
          // Appending dialog to document.body to cover sidenav in docs app
          var confirm = $mdDialog.confirm()
-               .title('Czy na pewno usunąć zaznaczone zadania?')
+               .title('Czy na pewno usunąć zadanie?')
                .textContent('')
                .ariaLabel('Usuń zadania')
                .targetEvent(ev)
@@ -84,8 +84,9 @@
                .cancel('Anuluj');
 
          $mdDialog.show(confirm).then(function() {
-            var ids = getSelectedTasks();
-           return dataservice.removeTasks(ids)
+            //var ids = getSelectedTasks(); // kopia z kontroler DashboardController
+            //tutaj usuwamy 1 element
+           return dataservice.removeTasks([item._id])
                      .then(getTasks);
          }, function() {
            console.log('Anulowano usuwanie');
