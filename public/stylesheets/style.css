@@ -117,7 +117,12 @@ md-checkbox .md-container {
 
 .table-updated {
   width: 10%;
-  text-align: right;
+  text-align: left;
+  white-space:nowrap;
+}
+.table-updated-completed {
+  width: 10%;
+  text-align: center;
   white-space:nowrap;
 }
 .table-duration {
