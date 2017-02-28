@@ -2,7 +2,7 @@
 
 <div layout="row" layout-align="start center">
   <div >
-    <h2>Statystki zadań</h2>
+    <h1>Statystki zadań</h1>
     <md-checkbox ng-model="vm.completed" ng-change="vm.getData()">tylko ukończone zadania </md-checkbox>
   </div>
 </div>
@@ -40,9 +40,9 @@
 </div>
 
 <md-divider> </md-divider>
-<h4>Sumaryczny czas: {{ vm.summaryTime | formatDuration }}</h4>
+<h3>Sumaryczny czas: {{ vm.summaryTime | formatDuration }}</h3>
 
-<div layout="row" layout-align="space-around center">
+<div layout="row" layout-align="space-around center" layout-xs="column" layout-sm="column">
 
   <div>
     <!-- <md-checkbox ng-model="vm.projectData.options.legend.display ">Legenda</md-checkbox> -->

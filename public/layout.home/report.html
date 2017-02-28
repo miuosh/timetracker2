@@ -1,0 +1,75 @@
+<div ng-controller="ReportController as vm" ng-cloak>
+
+<div layout="row" layout-align="start center">
+  <div >
+    <h1>Raport z wykonywanych zadań</h1>
+    <md-checkbox ng-model="vm.completed" ng-change="vm.getData()">tylko zakończone zadania </md-checkbox>
+  </div>
+</div>
+<md-divider> </md-divider>
+<div layout="row">
+  <div layout="column">
+    <div style="height: 5px;">
+      <md-datepicker id="fromDate" style="visibility: hidden" ng-model="vm.fromDate" md-placeholder="Enter date"
+        ng-change="vm.getData()"
+        md-hide-icons="all"
+        md-is-open="vm.isOpenFromDate">
+      </md-datepicker>
+    </div>
+    <div layout="row">
+      <h3>Od</h3>
+      <md-button class="md-flat" ng-click="vm.isOpenFromDate = true">{{ vm.fromDate | date: 'yyyy-MM-dd'}}</md-button>
+    </div>
+  </div>
+
+  <div layout="column">
+
+    <div style="height: 5px;">
+      <md-datepicker id="toDate" style="visibility: hidden" ng-model="vm.toDate" md-placeholder="Enter date"
+        ng-change="vm.getData()"
+        md-hide-icons="all"
+        md-is-open="vm.isOpenToDate">
+      </md-datepicker>
+    </div>
+  <div layout="row">
+    <h3>Do</h3>
+    <md-button class="md-flat" ng-click="vm.isOpenToDate = true">{{ vm.toDate | date: 'yyyy-MM-dd'}}</md-button>
+  </div>
+  </div>
+
+</div>
+
+<md-divider> </md-divider>
+
+<table ng-repeat="(key, value) in vm.groupedProjects" class="table-report" >
+
+  <caption class="table-report-caption">
+
+    <h3>{{ key }}</h3>
+
+  </caption>
+  <thead>
+    <tr class="table-report-row">
+      <th class="table-index">L.p.</th>
+      <th class="table-desc">Opis</th>
+      <th class="table-category">Kategoria</th>
+      <th class="table-duration">Czas</th>
+    </tr>
+  </thead>
+  <tbody ng-init="total = 0;">
+    <tr ng-repeat="item in value" class="table-report-row">
+      <td class="table-index">{{$index + 1}}</td>
+      <td class="table-desc">{{item.desc}}</td>
+      <td class="table-category">{{item.category}}</td>
+      <td class="table-duration" >{{item.duration | formatDuration:false }}</td>
+    </tr>
+    <tr class="table-report-row-sum" >
+      <td class="table-index"></td>
+      <td class="table-desc"></td>
+      <td class="table-category">Suma:</td>
+      <td class="table-duration-sum" >{{ sumValue(value) | formatDuration:false }}</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>

@@ -17,7 +17,12 @@ a {
 
 @media screen and (max-width: 600px){
   #left-navmenu, #left-sidebar {
-    visibility: hidden;
+    display:none;
+  }
+}
+@media screen and (max-width: 1280px){
+  #left-navmenu, #left-sidebar {
+    min-width: 200px;
   }
 }
 
@@ -51,7 +56,7 @@ a {
 }
 
 table {
-
+border-collapse: collapse;
 }
 
 caption {
@@ -149,6 +154,47 @@ md-checkbox .md-container {
   text-align: center;
   padding-left: 0.8em;
   padding-right: 0.8em;
+}
+/* Dayview */
+.table-dayview-desc {
+  max-width: 60%;
+}
+
+/*
+  Reports
+*/
+.table-index {
+  text-align: left;
+  width: 1%;
+  white-space:nowrap
+}
+
+.table-report {
+  margin-top: 2em;
+}
+.table-report:nth-child(odd) {
+
+}
+
+.table-report-caption {
+  background-color: #616161;
+  border-radius: 5px;
+  padding-left: 3em;
+  color: #FAFAFA;
+}
+.table-report-row {
+  height: 2.4em;
+}
+
+.table-report-row-sum {
+  border-top: 1px solid #9E9E9E;
+  font-weight: bold;
+}
+
+.table-duration-sum {
+  height: 2.4em;
+  text-align: center;
+
 }
 
 md-input-container:not(.md-input-has-value) {

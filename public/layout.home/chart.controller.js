@@ -21,7 +21,16 @@
 
 
       console.log('Init ChartController...');
-      getData();
+      init()
+
+
+      function init() {
+        var now = new Date();
+        vm.fromDate = new Date(now.getFullYear(), now.getMonth(), 1, 23, 59, 59, 0);
+        vm.toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 0, 0, 0, 0);
+        getData();
+      }
+
 
       function getData(to, from) {
         console.log('Pobieranie danych...')
@@ -39,6 +48,8 @@
             vm.categoryData.count = countCategories(data);
             console.log( vm.projectData);
             console.log( vm.categoryData);
+
+
 
           })
       }
@@ -135,20 +146,6 @@
         return chartData;
       }//#prepareChartData
 
-
-      // function groupBy(list, property) {
-      //   var map = new Map();
-      //   list.forEach(function(item) {
-      //       const key = property;
-      //       if(!map.has(key)) {
-      //         map.set(key, [item[key]])
-      //       } else {
-      //         map.get(key).push(item[key])
-      //       }
-      //   })
-      //   return map;
-      // }
-      //
 
       function countProjects(tasks) {
         var result = tasks.reduce(function(prev, curr) {

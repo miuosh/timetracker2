@@ -13,7 +13,7 @@
     </div>
   </div>
   <!-- Tasks table -->
-  <table  width="100%" layout-padding>
+  <table width="100%" layout-padding>
     <thead>
       <tr>
 
@@ -33,7 +33,7 @@
           Data utworzenia
           <span class="sortorder" ng-show="sortType === 'creationDate'" ng-class="{sortReverse: sortReverse}"></span>
         </th>
-        <th class="pointer" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">
+        <th class="table-updated pointer" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">
           Data modyfikacji
           <span class="sortorder" ng-show="sortType === 'updated'" ng-class="{sortReverse: sortReverse}"></span>
         </th>
@@ -50,8 +50,8 @@
         <td class="table-desc">{{ item.desc }}</td>
         <td class="table-project">{{ item.project }}</td>
         <td class="table-category">{{ item.category }}</td>
-        <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-        <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm'}}</td>
+        <td class="table-updated">{{ item.updated | date:'yyyy-MM-dd HH:mm' }}</td>
         <td class="table-duration">{{ item.duration | formatDuration }}</td>
         <td class="table-edit-btn">
           <div ng-show="edit">

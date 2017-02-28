@@ -49,7 +49,7 @@
     </caption>
     <thead>
       <tr>
-        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
+        <th class="pointer table-dayview-desc" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
           Opis
           <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
         </th>
@@ -76,7 +76,7 @@
       <tr style="height: 3em"  ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
           ng-mouseover="hover = true" ng-mouseleave="hover = false" >
 
-        <td class="table-desc">{{ item.desc }}</td>
+        <td class="table-dayview-desc">{{ item.desc }}</td>
 
         <td class="table-updated" style="text-align: center;" ng-show="!edit" ng-class="item.timespan.isValid ? '':'has-error'">{{ item.timespan.startTime | date:'HH:mm'}}</td>
         <!-- table cell when edit mode is enabled -->
