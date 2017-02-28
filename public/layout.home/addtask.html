@@ -1,7 +1,7 @@
 <!-- add new task form -->
 <div ng-controller="AddTaskController as at">
   <form name="taskForm" ng-submit="at.addTask(at.newTask)" autocomplete="off">
-    <md-content id="taskBar" layout-gt-sm="row" layout-align="center center">
+    <md-content id="taskBar" layout-gt-sm="row" layout-align="start center" style="margin-left: 2em;">
       <!-- project autocomplete -->
 
         <md-autocomplete required md-no-asterisk
