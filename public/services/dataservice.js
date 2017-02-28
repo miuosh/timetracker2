@@ -65,8 +65,12 @@
       return err;
     }
 
-    function getTasks() {
-      return $http.get(dataUrl.url)
+    function getTasks(param) {
+      //param is a string like ?=completed=false
+      if (param === undefined || param === null) {
+        param = ''
+      }
+      return $http.get(dataUrl.url + param)
                     .then(successCallback)
                     .catch(errorCallback);
     }

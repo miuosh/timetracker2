@@ -44,7 +44,8 @@
 
 ////////////////////////////////////////////////////////
     function getTasks(){
-      return dataservice.getTasks()
+      var param = '?completed=true';
+      return dataservice.getTasks(param)
           .then(function(data) {
             vm.tasks = data;
             return vm.tasks;
@@ -171,23 +172,32 @@
     }
 
     function editTask(ev, item) {
-      $mdDialog.show({
-        locals: {
-          task: item
-        },
-        controller: EditTaskDialogController,
-        controllerAs: 'edc',
-        templateUrl: '/layout.home/edit.completed.task.dialog.html',
-        parent: angular.element(document.body),
-        targetEvent: ev,
-        clickOutsideToClose: true,
-        fullscreen: true
+      dataservice.getTasks(item._id)
+      .then(function(data) {
+        console.log(data);
+
+        $mdDialog.show({
+          locals: {
+            task: data[0]
+          },
+          controller: EditTaskDialogController,
+          controllerAs: 'edc',
+          templateUrl: '/layout.home/edit.completed.task.dialog.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true
+        })
+        .then(function(answer) {
+          console.log('Dialog OK: ' + answer);
+        }, function(){
+          console.log('Cancel dialog.');
+        });
       })
-      .then(function(answer) {
-        console.log('Dialog OK: ' + answer);
-      }, function(){
-        console.log('Cancel dialog.');
-      });
+      .catch(function(err) {
+        console.log(err);
+      })
+
     }// #editTask
 
 

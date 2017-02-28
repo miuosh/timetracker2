@@ -18,7 +18,8 @@ var isAuthenticated = function (req, res, next) {
 /** GET all tasks */
 router.get('/', isAuthenticated, function(req, res) {
 
-	var getTasksPromise = query.getUserTasks(req.user.id );
+	var getTasksPromise = query.getUserTasks(req.user.id, req.query);
+
 	getTasksPromise.then(function(data){
 		res.send(data);
 	})

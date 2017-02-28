@@ -55,9 +55,12 @@
 
 
     function getTasks(){
-      return dataservice.getTasks()
+      var param = '?completed=false'
+      return dataservice.getTasks(param)
           .then(function(data) {
             vm.tasks = data;
+            console.log('Tasks: ');
+            console.log(data);
             return vm.tasks;
           })
           .then(function(data) {
@@ -128,14 +131,17 @@
                   return data;
                 })
                 .then(function(data) {
-                  // var index = vm.tasks.findIndex(element => element._id === item._id);
-                  // console.log(index);
-                  // if (data._id === item._id) {
-                  //   vm.tasks[index] = data;
-                  //   vm.countDuration(vm.tasks[index]);
-                  //   vm.startTimer(vm.tasks[index]);
-                  // }
-                  getTasks();
+
+                  console.log(data);
+                  var index = vm.tasks.findIndex(element => element._id === data._id)
+                  vm.tasks[index] = data;
+                  vm.stopTimer();
+                  if(data.isPerforming) {
+                    vm.stopTimer();
+                    vm.countDuration(data);
+                    vm.startTimer(data);
+                  }
+
                 })
                 .catch(function(err) {
                   console.log(err);
@@ -199,23 +205,31 @@
     }
 
     function editTask(ev, item) {
-      $mdDialog.show({
-        locals: {
-          task: item
-        },
-        controller: EditTaskDialogController,
-        controllerAs: 'edc',
-        templateUrl: '/layout.home/edit.task.dialog.html',
-        parent: angular.element(document.body),
-        targetEvent: ev,
-        clickOutsideToClose: true,
-        fullscreen: true
+      dataservice.getTasks(item._id)
+      .then(function(data) {
+        console.log(data);
+        $mdDialog.show({
+          locals: {
+            task: data[0]
+          },
+          controller: EditTaskDialogController,
+          controllerAs: 'edc',
+          templateUrl: '/layout.home/edit.task.dialog.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true
+        })
+        .then(function(answer) {
+          console.log('Dialog OK: ' + answer);
+        }, function(){
+          console.log('Cancel dialog.');
+        });
       })
-      .then(function(answer) {
-        console.log('Dialog OK: ' + answer);
-      }, function(){
-        console.log('Cancel dialog.');
-      });
+      .catch(function(err) {
+        console.log(err);
+      })
+
     }// #editTask
 
 

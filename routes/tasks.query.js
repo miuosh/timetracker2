@@ -44,9 +44,23 @@ module.exports = {
     return promise;
   }
 
-  function getUserTasks(userId) {
-    var promise = Task.find({'_creator': userId}).exec();
-    return promise;
+  function getUserTasks(userId, queryParam) {
+
+    var queryObj = {
+      '_creator': userId
+    }
+
+    var excludeFields = {
+      history: 0
+    }
+
+    if(queryParam.completed === 'false') {
+      queryObj['isCompleted'] = false;
+    } else if(queryParam.completed === 'true') {
+      queryObj['isCompleted'] = true;
+    }
+
+    return Task.find(queryObj, excludeFields).exec();
   }
 
   function getTask(taskId) {
