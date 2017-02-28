@@ -33,14 +33,15 @@ function addProfile(profile, userId) {
   return profile.save();
 }
 
-function editProfile(profile) {
-  var promise = TaskProfile.find({ '_id': profile._id }).exec();
+function editProfile(profile, userId) {
+  var promise = TaskProfile.find({ '_id': profile._id}).exec();
 
   return promise.then(function(data) {
     var taskprofile = data[0];
       taskprofile.name       = profile.name;
       taskprofile.projects   = profile.projects;
       taskprofile.categories = profile.categories;
+
 
     return taskprofile.save();
   });

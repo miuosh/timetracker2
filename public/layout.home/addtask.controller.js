@@ -4,9 +4,9 @@
   angular.module('app.layout')
   .controller('AddTaskController', AddTaskController);
 
-  AddTaskController.$inject = ['$scope', '$log', 'dataservice'];
+  AddTaskController.$inject = ['$scope', '$log', '$mdToast', 'dataservice'];
 
-  function AddTaskController($scope, $log, dataservice) {
+  function AddTaskController($scope, $log, $mdToast, dataservice) {
 
     $scope.taskForm = {};
 
@@ -55,6 +55,12 @@
                   })
                 .then(function(data) {
                   //clear new task fields
+                  console.log(data);
+                  $mdToast.show(
+                    $mdToast.simple()
+                    .textContent(data.data.message)
+                    .position('top right')
+                  );
                   angular.copy({}, vm.newTask);
                   vm.searchCategory = null;
                   vm.searchProject  = null;

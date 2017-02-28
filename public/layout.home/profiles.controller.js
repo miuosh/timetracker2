@@ -165,7 +165,7 @@
                 .then(function(data) {
                   vm.loadProfiles();
                   if(data.status >= 400) {
-                    self.errmsg = "Wystąpił błąd. Sprawdź wprowadzone dane";
+                    self.errmsg = "Wystąpił błąd. Sprawdź wprowadzone dane.";
                   } else {
                     self.hide();
                   }

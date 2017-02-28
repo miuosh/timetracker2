@@ -62,6 +62,7 @@ router.post('/', isAuthenticated, function(req, res) {
 
     addProfilePromise.then(function(data) {
       res.status(200);
+			console.log('Użytkownik: ' + req.user.username + ' dodał profil: ' + profile.name );
       res.send(data);
     })
     .catch(function(err) {
@@ -76,10 +77,10 @@ router.put('/', isAuthenticated, function(req, res) {
     var profile = req.body;
 		var userId = req.user.id;
 		console.log(profile);
+
     var editProfilePromise = query.editProfile(profile);
-		console.log('editProfilePromise');
-		console.log(editProfilePromise);
     editProfilePromise.then(function(data) {
+			console.log('Użytkownik: ' + req.user.username + ' zmodyfikował profil: ' + profile.name );
       res.status(200);
       res.send(data);
     })
@@ -96,6 +97,7 @@ router.delete('/:id', isAuthenticated, function(req, res) {
     var removeProfilePromise = query.removeProfile(req.params.id);
 
     removeProfilePromise.then(function(data) {
+			console.log('Użytkownik: ' + req.user.username + ' usunał profil: ' + profile.name );
       res.status(200);
       res.send(data);
     })

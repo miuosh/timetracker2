@@ -88,7 +88,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 			console.log(body);
 			if(typeof body.desc != 'string'||	typeof body.category!='string' || typeof body.project!='string') {
 				res.status(400);
-				res.send({message: 'Fill all required data in form!'});
+				res.send({message: 'Wypełnij wszystkie pola. Sprawdz swój profil podpowiedzi.'});
 			} else {
 					var addTaskPromise = query.addTask(body, userId);
 					addTaskPromise.then(function(data) {
