@@ -58,7 +58,7 @@
                   console.log(data);
                   $mdToast.show(
                     $mdToast.simple()
-                    .textContent(data.data.message)
+                    .textContent('Dodano nowe zadanie!')
                     .position('top right')
                   );
                   angular.copy({}, vm.newTask);

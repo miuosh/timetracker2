@@ -133,14 +133,18 @@
                 .then(function(data) {
 
                   console.log(data);
-                  var index = vm.tasks.findIndex(element => element._id === data._id)
-                  vm.tasks[index] = data;
-                  vm.stopTimer();
-                  if(data.isPerforming) {
-                    vm.stopTimer();
-                    vm.countDuration(data);
-                    vm.startTimer(data);
-                  }
+                  getTasks();
+
+                  // var currentTaskIndex =  vm.tasks.findIndex(element => element.isPerforming === true);
+                  // vm.tasks[currentTaskIndex].isPerforming = false;
+                  // var index = vm.tasks.findIndex(element => element._id === data._id)
+                  // vm.tasks[index] = data;
+                  //
+                  // if(data.isPerforming) {
+                  //   vm.stopTimer();
+                  //   vm.countDuration(data);
+                  //   vm.startTimer(data);
+                  // }
 
                 })
                 .catch(function(err) {

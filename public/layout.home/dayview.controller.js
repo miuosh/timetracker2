@@ -106,10 +106,10 @@
         vm.filteredTasks[i].history = vm.filteredTasks[i].history.filter(isCurrentDayTimespan);
       }
     }
-
+    
     function isCurrentDayTimespan(timespan) {
       var startTime = new Date(timespan.startTime);
-      if (startTime.getDate() === vm.viewDate.getDate()) return timespan;
+      if (startTime.getDate() === vm.viewDate.getDate() && startTime.getMonth() === vm.viewDate.getMonth() && startTime.getFullYear() === vm.viewDate.getFullYear()  ) return timespan;
     }
 
 
