@@ -41,7 +41,18 @@
 
 
 
-    function removeProfile(id) {
+    function removeProfile(ev, id) {
+      /* Confirm remove tasks */
+
+         // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+               .title('Czy na pewno usunąć zaznaczone zadania?')
+               .textContent('')
+               .ariaLabel('Usuń zadania')
+               .targetEvent(ev)
+               .ok('Tak, usuń')
+               .cancel('Anuluj');
+    $mdDialog.show(confirm).then(function() {
       return dataservice.removeProfile(id)
               .then(function(data) {
                 vm.loadProfiles();
@@ -50,6 +61,11 @@
               .catch(function(err){
                 console.error(err);
               });
+    }, function() {
+      console.log('Anulowano usuwanie');
+    })
+
+
     }
 
     function addNewProfile(ev) {

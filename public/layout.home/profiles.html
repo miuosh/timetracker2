@@ -22,7 +22,7 @@
         <td><ul ng-repeat="project in item.projects">{{project}}</ul></td>
         <td><ul ng-repeat="category in item.categories">{{category}}</ul></td>
         <td>
-          <md-button ng-click="pc.removeProfile(item._id)" name="removeButton-$index">Usuń</md-button>
+          <md-button ng-click="pc.removeProfile($event, item._id)" name="removeButton-$index">Usuń</md-button>
           <md-button ng-click="editProfile($event, item)" name="editButton-$index">Edytuj</md-button>
         </td>
       </tr>
