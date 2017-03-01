@@ -47,7 +47,18 @@ function editProfile(profile, userId) {
   });
 }
 
-function removeProfile(id) {
+function removeProfile(id, userId) {
+  var removePromise = TaskProfile.findOne({ '_id': id, "_creator" : userId }).exec();
 
-  return TaskProfile.remove({ '_id': id }).exec();
+return removePromise.then(function(data) {
+        console.log(data);
+        if (data === null || data === undefined) {
+          return {};
+        }
+        return data.remove();
+      })
+      .catch(function(err) {
+        console.log(err);
+        return err;
+      });
 }

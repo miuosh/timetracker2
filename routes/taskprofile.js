@@ -94,14 +94,23 @@ router.put('/', isAuthenticated, function(req, res) {
   DELETE - remove existing TaskProfile
 */
 router.delete('/:id', isAuthenticated, function(req, res) {
-    var removeProfilePromise = query.removeProfile(req.params.id);
+	  var userId = req.user.id;
+    var removeProfilePromise = query.removeProfile(req.params.id, userId);
 
     removeProfilePromise.then(function(data) {
-			console.log('Użytkownik: ' + req.user.username + ' usunał profil: ' + profile.name );
-      res.status(200);
-      res.send(data);
+			if(data._id === undefined || data === {}) {
+				console.log('Nie można usunc profilu');
+				res.status(200);
+				res.send(JSON.stringify({ message: 'Nie można usunac profilu. Nie jesteś właścicielem profilu.'}));
+			} else {
+				console.log('Użytkownik: ' + req.user.username + ' usunał profil: ' + req.params.id );
+				res.status(200);
+				res.send(data);
+			}
+
     })
     .catch(function(err) {
+			console.log(err);
       res.status(400);
       res.send(JSON.stringify(err));
     });

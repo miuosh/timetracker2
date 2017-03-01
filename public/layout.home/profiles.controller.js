@@ -6,8 +6,8 @@
   .controller('ProfilesController', ProfilesController);
 
   /* @ngInject */
-  ProfilesController.$inject = ['$scope', '$mdDialog', 'dataservice'];
-  function ProfilesController($scope, $mdDialog, dataservice) {
+  ProfilesController.$inject = ['$scope', '$mdDialog', '$mdToast', 'dataservice'];
+  function ProfilesController($scope, $mdDialog, $mdToast, dataservice) {
     var vm = this;
     vm.name = "ProfilesController";
     vm.profiles = {};
@@ -55,6 +55,14 @@
     $mdDialog.show(confirm).then(function() {
       return dataservice.removeProfile(id)
               .then(function(data) {
+                if(data.message) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                    .textContent(data.message)
+                    .toastClass("has-error")
+                    .position('top right')
+                  );
+                }
                 vm.loadProfiles();
                 return data;
               })
