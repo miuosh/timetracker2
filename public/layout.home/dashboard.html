@@ -1,13 +1,11 @@
 <div  layout-padding ng-controller="DashboardController as vm">
   <br />
 
-  <div ng-include="'./layout.home/addtask.html'" ></div>
-
-
+  <div id="newTask" ng-include="'./layout.home/addtask.html'" ></div>
 
 
 <!-- Tasks table -->
-<table cellspacing="0" width="100%" layout-padding >
+<table cellspacing="0" width="100%" layout-padding id="dashboard-table">
 
   <caption style="padding: 0 0;"  >
     <div layout="row" layout-align="space-between stretch">
@@ -25,14 +23,12 @@
           <md-icon>delete_forever</md-icon>
           <md-tooltip>Usuń</md-tooltip>
         </md-button>
-      </div>
-
     </div>
   </caption>
 
   <thead >
     <tr>
-      <th>
+      <th class="table-checkbox">
 
       </th>
       <th class="pointer table-updated" ng-click="sortType = 'updated'; sortReverse = !sortReverse ">

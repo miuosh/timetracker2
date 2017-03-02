@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+
 body {
   padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -16,15 +17,69 @@ a {
 }
 
 @media screen and (max-width: 600px){
-  #left-navmenu, #left-sidebar {
+  #left-navmenu, #left-sidebarn, #newTask {
     display:none;
   }
+  html {
+    margin: 0px 0px;
+    padding: 0px 0px;
+  }
+  body {
+    margin: 0px 0px;
+    padding: 0px 0px;
+  }
+  .table-checkbox, .table-updated,.table-updated, .table-project, .table-category, .table-duration, .table-edit-btn {
+    display: none;
+  }
+  .table-desc {
+    width: 70%;
+
+  }
+  .table-toggle {
+    width: 20%;
+  }
+  .table-checkbox {
+    width: 10%;
+  }
+  #dashboard-table {
+    position: absolute;
+    top: 70px;
+    left: 0px;
+  }
+  #dashboard-table > tbody > tr {
+    border: 1px solid #9E9E9E;
+  }
+  #dashboard-table > thead {
+    display: none;
+
+  }
+  #dashboard-table > tbody > tr > td:nth-last-child(even) {
+    border-right: 1px solid #9E9E9E;
+
+  }
 }
+@media screen and (max-width: 768px) and (min-width: 600px) {
+  #left-navmenu, #left-sidebarn {
+    display:none;
+  }
+  #main-body{
+    position: absolute;
+    top: 70px;
+    left: 0px;
+  }
+
+}
+
 @media screen and (max-width: 1280px){
   #left-navmenu, #left-sidebar {
     min-width: 200px;
   }
+
 }
+
+/* md-tooltip */
+
+
 
 
 .nav-header {

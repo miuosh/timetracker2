@@ -29,7 +29,7 @@
     $scope.sortReverse = true;
     $scope.searchType = '';
 
-
+    vm.getSelectedTasksObject = getSelectedTasksObject;
 
     console.log('Init Dashboard Controller');
     loadTasks();
@@ -209,7 +209,7 @@
     }
 
     function editTask(ev, item) {
-      dataservice.getTasks(item._id)
+      return dataservice.getTasks(item._id)
       .then(function(data) {
         console.log(data);
         $mdDialog.show({
@@ -235,6 +235,19 @@
       })
 
     }// #editTask
+
+    function getSelectedTasksObject() {
+      var tasks = [];
+      var len = vm.tasks.length;
+      for (var i = len; i--; ) {
+        if (vm.tasks[i].selected){
+          tasks.push( vm.tasks[i]);
+        }
+      }
+      return tasks;
+    }
+
+
 
 
     //-------------------------------------------------
