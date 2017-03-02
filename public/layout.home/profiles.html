@@ -1,7 +1,8 @@
-<h2>Profile</h2>
-<md-divider><md-divider>
-<div ng-controller="ProfilesController as pc">
 
+
+<div ng-controller="ProfilesController as pc">
+  <h2>Profile</h2>
+  <md-divider><md-divider>
 
   <md-button class="md-primary" ng-click="addNewProfile($event)">Dodaj nowy profil</md-button>
   <md-divider><md-divider>
@@ -22,7 +23,7 @@
         <td><ul ng-repeat="project in item.projects">{{project}}</ul></td>
         <td><ul ng-repeat="category in item.categories">{{category}}</ul></td>
         <td>
-          <md-button ng-click="pc.removeProfile(item._id)" name="removeButton-$index">Usuń</md-button>
+          <md-button ng-click="pc.removeProfile($event, item._id)" name="removeButton-$index">Usuń</md-button>
           <md-button ng-click="editProfile($event, item)" name="editButton-$index">Edytuj</md-button>
         </td>
       </tr>

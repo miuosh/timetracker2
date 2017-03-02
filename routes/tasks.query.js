@@ -5,13 +5,23 @@ module.exports = {
   getUserTasks             : getUserTasks,
   getTask                  : getTask,
   getUserTask              : getUserTask,
+  getUserTasksByDate       : getUserTasksByDate, // used in dayView
+
   startUserTask            : startUserTask,
   stopUserTask             : stopUserTask,
   stopAllPerfomingUserTasks: stopAllPerfomingUserTasks,
+
   toggleUserTask           : toggleUserTask,
   setAsCompleted           : setAsCompleted,
+
   editTask                 : editTask,
-  addTask                  : addTask
+  editTaskHistoryItem      : editTaskHistoryItem,
+  removeTaskHistoryItem    : removeTaskHistoryItem,
+
+  addTask                  : addTask,
+
+  /* dayView */
+  editDayView              : editDayView
 }
 
 /*
@@ -20,6 +30,7 @@ module.exports = {
 
   var sumByProperty     = sumByProperty;
   var modifyStoppedTask = modifyStoppedTask; // calculate duration and add timespan to history
+  var calcDuration = calcDuration;
 
 
 //------------------------------------------------------------------------------
@@ -33,9 +44,23 @@ module.exports = {
     return promise;
   }
 
-  function getUserTasks(userId) {
-    var promise = Task.find({'_creator': userId}).exec();
-    return promise;
+  function getUserTasks(userId, queryParam) {
+
+    var queryObj = {
+      '_creator': userId
+    }
+
+    var excludeFields = {
+      history: 0
+    }
+
+    if(queryParam.completed === 'false') {
+      queryObj['isCompleted'] = false;
+    } else if(queryParam.completed === 'true') {
+      queryObj['isCompleted'] = true;
+    }
+
+    return Task.find(queryObj, excludeFields).exec();
   }
 
   function getTask(taskId) {
@@ -132,9 +157,9 @@ module.exports = {
 
       // loop tasks
       for(var i = len; i--; ) {
-        var task = data[i];
+        var task          = data[i];
         task.isPerforming = false;
-        task = modifyStoppedTask(task);
+        task              = modifyStoppedTask(task);
         saveTaskPromises.unshift(task.save());
       }
 
@@ -219,6 +244,91 @@ function addTask(item, creatorID) {
     return task.save();
 }
 
+function getUserTasksByDate(userID, date) {
+  var _date = new Date(date);
+  _date.setHours(0);
+  _date.setMinutes(0);
+  _date.setSeconds(0);
+  _date.setMilliseconds(0);
+
+  var endDay = new Date(date);
+  endDay.setHours(23);
+  endDay.setMinutes(59);
+  endDay.setSeconds(59);
+  endDay.setMilliseconds(999);
+
+  var fromDate = _date.toISOString();
+  var toDate = endDay.toISOString();
+  //console.log('fromDate: ' + fromDate);
+ //console.log('toDate: ' + toDate);
+
+  var promise = Task.find({
+    '_creator' : userID,
+    'history' : {
+      '$elemMatch' : {
+        'startTime' : {
+          '$gte' : fromDate,
+          '$lt' : toDate
+        }
+      }
+    }
+  }).exec();
+
+  return promise;
+}
+
+/* dayView */
+
+function editDayView(items) {
+  console.log(items);
+}
+
+function removeTaskHistoryItem(userID, historyItemId) {
+  var promise = Task.find({
+    '_creator' : userID,
+    'history' : {
+      '$elemMatch' : {
+        '_id' : historyItemId
+      }
+    }
+  }).exec();
+
+  return promise.then(function(data) {
+        var prevItem      = data[0];
+        var index         = prevItem.history.findIndex(item => item.id === historyItemId);
+        prevItem.history.splice(index, 1);
+        prevItem.duration = Math.round(sumByProperty(prevItem.history, 'dt'), 0);
+        prevItem.updated  = new Date();
+        return prevItem.save();
+      })
+      .catch(function(err) {
+        return err;
+      })
+}//#
+
+function editTaskHistoryItem(userId, newItem) {
+  var promise = Task.find({
+    '_creator' : userId,
+    'history' : {
+      '$elemMatch' : {
+        '_id' : newItem._id
+      }
+    }
+  }).exec();
+
+  return promise.then(function(data) {
+      var prevItem            = data[0];
+      var index               = prevItem.history.findIndex(item => item.id === newItem._id);
+      prevItem.history[index] = newItem; //assume that client calculate dt
+      prevItem.duration       = Math.round(sumByProperty(prevItem.history, 'dt'), 0); // round to full sek
+
+      return prevItem.save();
+    })
+    .catch(function(err) {
+      return err;
+    })
+}
+
 //------------------------------------------------------------------------------
 /*
     INTERNAL FUNCTIONS
@@ -254,6 +364,18 @@ function modifyStoppedTask(task) {
   return task;
 }
 
-function modifyTaskHistory(task) {
+function calcDuration(starTime, stopTime) {
+  if (typeof starTime === 'string' && typeof stopTime === 'string') {
+    var start = new Date(starTime);
+    var stop = new Date(stopTime);
+    return Math.round((stop.getTime() - start.getTime()) / 1000, 1);
 
+  } else if (typeof starTime === 'string' && !isNaN(starTime) && !isNaN(stopTime) ) {
+    var start = new Date(Number(starTime));
+    var stop = new Date(Number(stopTime));
+
+      return Math.round((stop.getTime() - start.getTime()) / 1000, 1);
+  } else {
+    return -1;
+  }
 }

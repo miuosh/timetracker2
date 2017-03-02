@@ -6,8 +6,8 @@
   .controller('ProfilesController', ProfilesController);
 
   /* @ngInject */
-  ProfilesController.$inject = ['$scope', '$mdDialog', 'dataservice'];
-  function ProfilesController($scope, $mdDialog, dataservice) {
+  ProfilesController.$inject = ['$scope', '$mdDialog', '$mdToast', 'dataservice'];
+  function ProfilesController($scope, $mdDialog, $mdToast, dataservice) {
     var vm = this;
     vm.name = "ProfilesController";
     vm.profiles = {};
@@ -41,15 +41,39 @@
 
 
 
-    function removeProfile(id) {
+    function removeProfile(ev, id) {
+      /* Confirm remove tasks */
+
+         // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+               .title('Czy na pewno usunąć zaznaczone zadania?')
+               .textContent('')
+               .ariaLabel('Usuń zadania')
+               .targetEvent(ev)
+               .ok('Tak, usuń')
+               .cancel('Anuluj');
+    $mdDialog.show(confirm).then(function() {
       return dataservice.removeProfile(id)
               .then(function(data) {
+                if(data.message) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                    .textContent(data.message)
+                    .toastClass("has-error")
+                    .position('top right')
+                  );
+                }
                 vm.loadProfiles();
                 return data;
               })
               .catch(function(err){
                 console.error(err);
               });
+    }, function() {
+      console.log('Anulowano usuwanie');
+    })
+
+
     }
 
     function addNewProfile(ev) {
@@ -165,7 +189,7 @@
                 .then(function(data) {
                   vm.loadProfiles();
                   if(data.status >= 400) {
-                    self.errmsg = "Wystąpił błąd. Sprawdź wprowadzone dane";
+                    self.errmsg = "Wystąpił błąd. Sprawdź wprowadzone dane.";
                   } else {
                     self.hide();
                   }

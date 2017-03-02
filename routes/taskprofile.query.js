@@ -22,30 +22,43 @@ function getProfileByName(name) {
   return TaskProfile.find( {'name': name} ).exec();
 }
 
-function addProfile(profile) {
+function addProfile(profile, userId) {
   var profile = new TaskProfile( {
     name: profile.name,
     projects: profile.projects,
-    categories: profile.categories
+    categories: profile.categories,
+    _creator: userId
   })
 
   return profile.save();
 }
 
-function editProfile(profile) {
-  var promise = TaskProfile.find({ '_id': profile._id }).exec();
+function editProfile(profile, userId) {
+  var promise = TaskProfile.find({ '_id': profile._id}).exec();
 
   return promise.then(function(data) {
     var taskprofile = data[0];
-    taskprofile.name = profile.name;
-    taskprofile.projects = profile.projects;
-    taskprofile.categories = profile.categories;
+      taskprofile.name       = profile.name;
+      taskprofile.projects   = profile.projects;
+      taskprofile.categories = profile.categories;
+
 
     return taskprofile.save();
   });
 }
 
-function removeProfile(id) {
+function removeProfile(id, userId) {
+  var removePromise = TaskProfile.findOne({ '_id': id, "_creator" : userId }).exec();
 
-  return TaskProfile.remove({ '_id': id }).exec();
+return removePromise.then(function(data) {
+        console.log(data);
+        if (data === null || data === undefined) {
+          return {};
+        }
+        return data.remove();
+      })
+      .catch(function(err) {
+        console.log(err);
+        return err;
+      });
 }

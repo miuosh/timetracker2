@@ -14,10 +14,11 @@ var helmet = require('helmet')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var tasks = require('./routes/tasks')
-var addtask = require('./routes/addtask')
-var edittask = require('./routes/edittask')
-var taskprofile = require('./routes/taskprofile')
+var tasks = require('./routes/tasks');
+var addtask = require('./routes/addtask');
+var edittask = require('./routes/edittask');
+var taskprofile = require('./routes/taskprofile');
+var reports = require('./routes/tasks.reports');
 
 var Account = require('./models/account');
 var Task = require('./models/task');
@@ -46,7 +47,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'node_modules')));
 // passport config
 
 passport.use(new LocalStrategy(Account.authenticate()));
@@ -58,6 +59,7 @@ app.use('/tasks/', tasks);
 app.use('/addtask/', addtask);
 app.use('/edittask/', edittask);
 app.use('/profiles/', taskprofile);
+app.use('/reports/', reports);
 
 // MongoDB
     var dbConfig = {

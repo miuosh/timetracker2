@@ -11,31 +11,43 @@
   .constant('userUrl', {
     'url': '/users/'
   })
+  .constant('reportsUrl', {
+    'url' : '/reports/'
+  })
+
   .factory('dataservice', dataservice);
 
   /* @ngInject */
 //  dataservice.$inject = ['$http', 'dataUrl'];
 
-  function dataservice($http, dataUrl, profileUrl, userUrl) {
+  function dataservice($http, dataUrl, profileUrl, userUrl, reportsUrl) {
     return {
-      getTasks: getTasks,
-      getTask: getTask,
-      addTask: addTask,
-      removeTasks: removeTasks,
-      toggleTask: toggleTask,
-      getCategories: getCategories,
-      getProjects: getProjects,
-      setAsCompleted: setAsCompleted,
-      editTask: editTask,
+      getTasks                    : getTasks,
+      getTask                     : getTask,
+      addTask                     : addTask,
+      removeTasks                 : removeTasks,
+      toggleTask                  : toggleTask,
+      getCategories               : getCategories,
+      getProjects                 : getProjects,
+      setAsCompleted              : setAsCompleted,
+      editTask                    : editTask,
+      editTaskHistoryItem         : editTaskHistoryItem, // POST timespan object
+      removeTaskHistoryItem       : removeTaskHistoryItem, //remove timespan of given ID
+      getTasksByDate              : getTasksByDate,
       /* Task profiles */
-      getProfiles: getProfiles,
-      getProfile: getProfile, // by name
-      addProfile: addProfile,
-      editProfile: editProfile,
-      removeProfile: removeProfile,
+      getProfiles                 : getProfiles,
+      getProfile                  : getProfile, // by name
+      addProfile                  : addProfile,
+      editProfile                 : editProfile,
+      removeProfile               : removeProfile,
       /* User settings */
-      saveUserSettings: saveUserSettings,
-      getUserSettings: getUserSettings,
+      saveUserSettings            : saveUserSettings,
+      getUserSettings             : getUserSettings,
+
+      /* dayView */
+
+      /* Reports data */
+      getCompletedTasksBetweenDate: getCompletedTasksBetweenDate
 
     };
 
@@ -53,14 +65,18 @@
       return err;
     }
 
-    function getTasks() {
-      return $http.get(dataUrl.url)
+    function getTasks(param) {
+      //param is a string like ?=completed=false
+      if (param === undefined || param === null) {
+        param = ''
+      }
+      return $http.get(dataUrl.url + param)
                     .then(successCallback)
                     .catch(errorCallback);
     }
 
     function getTask(id) {
-      return $http.get(dataUrl.url + ':' + id)
+      return $http.get(dataUrl.url + id)
                     .then(successCallback)
                     .catch(errorCallback);
     }
@@ -108,6 +124,18 @@
                     .catch(errorCallback);
     }
 
+    function editTaskHistoryItem(item) {
+      return $http.post('/edit/history/' + item._id, item, { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function getTasksByDate(date) {
+      return $http.get(dataUrl.url + '/dayView/' + date)
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
     /* Task Profiles */
 
     function getProfiles() {
@@ -149,6 +177,26 @@
     function saveUserSettings(config) {
       console.log(config);
       return $http.post(userUrl.url + '/settings/', JSON.stringify(config), { headers: {'Content-Type': 'application/json' }})
+                    .then(successCallback)
+                    .catch(errorCallback);
+    }
+
+    function editTaskHistoryItem(item) {
+      return $http.post(dataUrl.url + 'edit/history/', JSON.stringify(item), { headers: {'Content-Type': 'application/json' }})
+                .then(successCallback)
+                .catch(errorCallback);
+    }
+
+    function removeTaskHistoryItem(id) {
+      return $http.delete(dataUrl.url + 'edit/history/' + id)
+              .then(successCallback)
+              .catch(errorCallback);
+    }
+
+      /* Reports data */
+
+    function getCompletedTasksBetweenDate(from, to, completed) {
+      return $http.get(reportsUrl.url + from + '-' + to + '?completed=' + completed)
                     .then(successCallback)
                     .catch(errorCallback);
     }

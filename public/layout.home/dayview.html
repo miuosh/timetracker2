@@ -1,0 +1,123 @@
+<div ng-controller="DayViewController as vm">
+
+
+  <div layout="column" layout-align="start start">
+    <div layout="row">
+      <h1>Widok dnia</h1>
+
+      <md-datepicker style="visibility: hidden" ng-model="vm.viewDate" md-placeholder="Enter date"
+        ng-change="vm.getTasksByDate(vm.viewDate)"
+        md-hide-icons="all"
+        md-is-open="vm.isOpen">
+      </md-datepicker>
+
+      <!-- prev day -->
+      <md-button class="md-icon-button" style="margin-top: 1em;" aria-label="Edycja" ng-click="vm.prevDay()">
+        <md-icon>chevron_left</md-icon>
+        <md-tooltip>Poprzedni dzień</md-tooltip>
+      </md-button>
+      <!-- custom date picker -->
+          <md-button class="md-flat" ng-click="vm.isOpen = true">{{ vm.viewDate | date: 'yyyy-MM-dd'}}</md-button>
+        <!-- next day -->
+        <md-button class="md-icon-button" style="margin-top: 1em;" aria-label="Edycja" ng-click="vm.nextDay()">
+          <md-icon>chevron_right</md-icon>
+          <md-tooltip>Następny dzień</md-tooltip>
+        </md-button>
+    </div>
+
+  </div>
+
+
+<div>
+  <h4 ng-hide="vm.tasksInDay.length">Brak wyników</h4>
+  <table ng-show="vm.tasksInDay.length">
+    <caption>
+      <md-divider></md-divider>
+      <div layout="row" layout-align="space-between center">
+        <h3>Sumaryczny czas: {{ vm.tasksInDay.duration | formatDuration}}</h3>
+        <div layout="row">
+          <md-button class="md-icon-button" aria-label="dayViewRefresh" ng-click="vm.cancelEdit()">
+            <md-icon>refresh</md-icon>
+            <md-tooltip>Odśwież widok</md-tooltip>
+          </md-button>
+        </div>
+
+      </div>
+
+      <md-divider></md-divider>
+      <br />
+    </caption>
+    <thead>
+      <tr>
+        <th class="pointer table-dayview-desc" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
+          Opis
+          <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.startTime'; sortReverse = !sortReverse ">
+          Od
+          <span class="sortorder" ng-show="sortType === 'timespan.startTime'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.stopTime'; sortReverse = !sortReverse ">
+          Do
+          <span class="sortorder" ng-show="sortType === 'timespan.stopTime'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'timespan.dt'; sortReverse = !sortReverse ">
+          Czas
+          <span class="sortorder" ng-show="sortType === 'timespan.dt'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th>
+
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr style="height: 3em"  ng-repeat="item in vm.tasksInDay | orderBy:sortType:sortReverse"
+          ng-mouseover="hover = true" ng-mouseleave="hover = false" >
+
+        <td class="table-dayview-desc">{{ item.desc }}</td>
+
+        <td class="table-updated" style="text-align: center;" ng-show="!edit" ng-class="item.timespan.isValid ? '':'has-error'">{{ item.timespan.startTime | date:'HH:mm'}}</td>
+        <!-- table cell when edit mode is enabled -->
+        <td class="table-col" ng-show="edit">
+          <my-time-picker timespan="item.timespan" is-start-time="true" is-stop-time="false" on-change="vm.dayViewChanged" />
+         </td>
+        <td class="table-updated" style="text-align: center;" ng-show="!edit" ng-class="item.timespan.isValid ? '':'has-error'">{{ item.timespan.stopTime | date:'HH:mm'}}</td>
+        <td class="table-col" ng-show="edit" >
+          <my-time-picker timespan="item.timespan" is-start-time="false" is-stop-time="true" on-change="vm.dayViewChanged" />
+         </td>
+
+        <td class="table-duration">{{ item.timespan.dt | formatDuration }}</td>
+        <td class="table-col-edit">
+          <!-- mousehover edit off -->
+          <div ng-show="hover && !edit">
+            <md-button class="md-icon-button" aria-label="dayViewEdycja" ng-click="edit = true; vm.editMode()">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Edycja</md-tooltip>
+            </md-button>
+          </div>
+          <!-- edit ON -->
+          <div ng-show="edit">
+            <md-button class="md-icon-button" aria-label="dayViewAnuluj" ng-click="edit = false">
+              <md-icon>mode_edit</md-icon>
+              <md-tooltip>Wyłącz edycję</md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.removeItem($event, item.timespan._id)">
+              <md-icon>delete_forever</md-icon>
+              <md-tooltip>Usuń</md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="dayViewZapisz" ng-click="vm.saveChanges(item.timespan); edit = false;" ng-disabled="!item.timespan.isValid">
+              <md-icon>archive</md-icon>
+              <md-tooltip>Zapisz</md-tooltip>
+            </md-button>
+          </div>
+
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+
+</div>

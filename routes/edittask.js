@@ -44,6 +44,7 @@ router.post('/setAsCompleted', isAuthenticated, function(req, res) {
 		var user = req.user;
 		if (task._creator === user.id || !task.isPerforming) {
 			var editTaskPromise = query.editTask(task);
+
 			editTaskPromise.then(function(data) {
 				res.status(200);
 				res.send(data);
@@ -57,7 +58,7 @@ router.post('/setAsCompleted', isAuthenticated, function(req, res) {
 				console.log('edit task...Cannot modify task.');
 			res.status(400);
 			res.send(JSON.stringify({
-				message: "Cannot modify task. Possible cause: task is runnig or you not created this task."
+				message: "Cannot modify task. Possible cause: task is runnig or you not owner of this task."
 			}))
 		}
 

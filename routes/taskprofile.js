@@ -56,11 +56,13 @@ router.get('/:name', function(req, res) {
 
 router.post('/', isAuthenticated, function(req, res) {
     var profile = req.body;
+		var userId = req.user.id;
 		// profile has unique name
-    var addProfilePromise = query.addProfile(profile);
+    var addProfilePromise = query.addProfile(profile, userId);
 
     addProfilePromise.then(function(data) {
       res.status(200);
+			console.log('Użytkownik: ' + req.user.username + ' dodał profil: ' + profile.name );
       res.send(data);
     })
     .catch(function(err) {
@@ -73,11 +75,12 @@ router.post('/', isAuthenticated, function(req, res) {
 */
 router.put('/', isAuthenticated, function(req, res) {
     var profile = req.body;
+		var userId = req.user.id;
 		console.log(profile);
+
     var editProfilePromise = query.editProfile(profile);
-		console.log('editProfilePromise');
-		console.log(editProfilePromise);
     editProfilePromise.then(function(data) {
+			console.log('Użytkownik: ' + req.user.username + ' zmodyfikował profil: ' + profile.name );
       res.status(200);
       res.send(data);
     })
@@ -91,13 +94,23 @@ router.put('/', isAuthenticated, function(req, res) {
   DELETE - remove existing TaskProfile
 */
 router.delete('/:id', isAuthenticated, function(req, res) {
-    var removeProfilePromise = query.removeProfile(req.params.id);
+	  var userId = req.user.id;
+    var removeProfilePromise = query.removeProfile(req.params.id, userId);
 
     removeProfilePromise.then(function(data) {
-      res.status(200);
-      res.send(data);
+			if(data._id === undefined || data === {}) {
+				console.log('Nie można usunc profilu');
+				res.status(200);
+				res.send(JSON.stringify({ message: 'Nie można usunac profilu. Nie jesteś właścicielem profilu.'}));
+			} else {
+				console.log('Użytkownik: ' + req.user.username + ' usunał profil: ' + req.params.id );
+				res.status(200);
+				res.send(data);
+			}
+
     })
     .catch(function(err) {
+			console.log(err);
       res.status(400);
       res.send(JSON.stringify(err));
     });

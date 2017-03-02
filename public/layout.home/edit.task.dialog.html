@@ -9,17 +9,6 @@
 <form name="taskForm" ng-submit="$event.preventDefault()" ng-controller="AddTaskController as at">
 
 <div class="md-dialog-content" layout="row" layout-align="center start">
-
-  <div flex="50">
-    <md-input-container>
-      <label>Opis</label>
-      <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
-      <div ng-messages="taskForm.desc.$error" role="alert">
-          <div ng-message="required">Pole nie może być puste.</div>
-      </div>
-    <md-input-container>
-  </div>
-
   <!-- autocomplete fields -->
   <div layout="row">
     <!-- project autocomplete -->
@@ -54,9 +43,9 @@
                         md-input-name="category"
                         md-selected-item="edc.task.category"
                         md-search-text-change="at.searchCategoryChange(edc.task.category)"
-                        md-search-text="edc.task.category"
+                        md-search-text="searchCategory"
                         md-selected-item-change="at.selectedCategoryChange(item)"
-                        md-items="item in at.profile.categories "
+                        md-items="item in at.profile.categories | filter:searchCategory"
                         md-item-text="item"
                         md-min-length="0"
                         md-input-minlength="0"
@@ -73,6 +62,18 @@
     </div>
 
 </div>
+
+<!-- task description  -->
+  <div flex="50">
+    <md-input-container>
+      <label>Opis</label>
+      <input style="min-width:300px;" name="desc" ng-model="edc.task.desc" required md-no-asterisk autocomplete="off">
+      <div ng-messages="taskForm.desc.$error" role="alert">
+          <div ng-message="required">Pole nie może być puste.</div>
+      </div>
+    <md-input-container>
+  </div>
+
 
 
 </div>
@@ -95,7 +96,7 @@
       <tr ng-class="item.isValid ? '':'has-error'" class="timespan-row" ng-repeat="item in edc.task.history" ng-mouseover="hover = true" ng-mouseleave="hover = false">
         <td class="table-col">{{ item.startTime | date:'yyyy-MM-dd'}}</td>
         <!-- table cell when edit mode is disabled -->
-        <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm:ss'}}</td>
+        <td  class="table-col" ng-hide="edit">{{ item.startTime | date:'HH:mm'}}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
@@ -123,7 +124,7 @@
 
          </td>
         <!-- table cell when edit mode is disabled -->
-        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm:ss' }}</td>
+        <td class="table-col" ng-hide="edit">{{ item.stopTime | date:'HH:mm' }}</td>
 
         <!-- table cell when edit mode is enabled -->
         <td class="table-col" ng-show="edit">
@@ -199,7 +200,7 @@
   <div>
     <span>Sumaryczny czas: <b>{{edc.task.duration | formatDuration}}</b></span>
     <md-button ng-click="edc.cancel()" name="cancelTaskButton">Anuluj</md-button>
-    <md-button ng-click="edc.save(edc.task)" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
+    <md-button ng-click="edc.save(edc.task)" class="md-accent" name="saveTaskButton" ng-disabled="edc.task.history.isValid.error == true">Zapisz</md-button>
   </div>
 
 </md-dialog-actions>

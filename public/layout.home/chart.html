@@ -1,0 +1,115 @@
+<div ng-controller="ChartController as vm" ng-cloak>
+
+<div layout="row" layout-align="start center">
+  <div >
+    <h1>Statystki zadań</h1>
+    <md-checkbox ng-model="vm.completed" ng-change="vm.getData()">tylko ukończone zadania </md-checkbox>
+  </div>
+</div>
+<md-divider> </md-divider>
+<div layout="row">
+  <div layout="column">
+    <div style="height: 5px;">
+      <md-datepicker id="fromDate" style="visibility: hidden" ng-model="vm.fromDate" md-placeholder="Enter date"
+        ng-change="vm.getData()"
+        md-hide-icons="all"
+        md-is-open="vm.isOpenFromDate">
+      </md-datepicker>
+    </div>
+    <div layout="row">
+      <h3>Od</h3>
+      <md-button class="md-flat" ng-click="vm.isOpenFromDate = true">{{ vm.fromDate | date: 'yyyy-MM-dd'}}</md-button>
+    </div>
+  </div>
+
+  <div layout="column">
+
+    <div style="height: 5px;">
+      <md-datepicker id="toDate" style="visibility: hidden" ng-model="vm.toDate" md-placeholder="Enter date"
+        ng-change="vm.getData()"
+        md-hide-icons="all"
+        md-is-open="vm.isOpenToDate">
+      </md-datepicker>
+    </div>
+  <div layout="row">
+    <h3>Do</h3>
+    <md-button class="md-flat" ng-click="vm.isOpenToDate = true">{{ vm.toDate | date: 'yyyy-MM-dd'}}</md-button>
+  </div>
+  </div>
+
+</div>
+
+<md-divider> </md-divider>
+<h3>Sumaryczny czas: {{ vm.summaryTime | formatDuration }}</h3>
+
+<div layout="row" layout-align="space-around center" layout-xs="column" layout-sm="column">
+
+  <div>
+    <!-- <md-checkbox ng-model="vm.projectData.options.legend.display ">Legenda</md-checkbox> -->
+
+    <!-- project chart -->
+    <div style="max-width: 400px;">
+      <canvas id="pie" class="chart chart-doughnut" width="400" height="400"
+        chart-data="vm.projectData.data" chart-labels="vm.projectData.labels" chart-options="vm.projectData.options" chart-dataset-override="vm.projectData.dataOverride">
+      </canvas>
+    </div>
+  </div>
+
+
+
+  <div>
+    <!-- <md-checkbox ng-model="vm.categoryData.options.legend.display ">Legenda</md-checkbox> -->
+    <!-- category chart -->
+    <div style="max-width: 400px;">
+      <canvas id="pie" class="chart chart-doughnut" width="400" height="400"
+        chart-data="vm.categoryData.data" chart-labels="vm.categoryData.labels" chart-options="vm.categoryData.options" chart-dataset-override="vm.categoryData.dataOverride">
+      </canvas>
+    </div>
+  </div>
+
+
+</div>
+
+
+<div layout="row" layout-align="space-around center">
+  <div >
+    <table>
+      <thead>
+        <tr>
+          <th class="table-statistic-col">Projekt</th>
+          <th class="table-statistic-col">Czas</th>
+          <th class="table-statistic-col">[%]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="height: 2em" ng-repeat="(key, value) in vm.projectData.rawData ">
+          <td class="table-statistic-col">{{ key }}</td>
+          <td class="table-statistic-col">{{ value | formatDuration : false }}</td>
+          <td class="table-statistic-col">{{ (value / vm.summaryTime) * 100.0 | number : 1 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th class="table-statistic-col">Kategoria</th>
+          <th class="table-statistic-col">Czas</th>
+          <th class="table-statistic-col">[%]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="height: 2em" ng-repeat="(key, value) in vm.categoryData.rawData ">
+          <td class="table-statistic-col">{{ key }}</td>
+          <td class="table-statistic-col">{{ value | formatDuration : false }}</td>
+          <td class="table-statistic-col">{{ (value / vm.summaryTime) * 100.0 | number : 1 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</div>

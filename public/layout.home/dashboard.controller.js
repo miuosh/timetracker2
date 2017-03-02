@@ -20,7 +20,8 @@
     vm.setAsCompleted = setAsCompleted;
     vm.startTimer = startTimer;
     vm.stopTimer = stopTimer;
-
+    vm.selectedCounter = 0;
+    vm.change = change; // change selectedCounter
     vm.countDuration = countDuration;
 
     // filter table
@@ -28,6 +29,7 @@
     $scope.sortReverse = true;
     $scope.searchType = '';
 
+    vm.getSelectedTasksObject = getSelectedTasksObject;
 
     console.log('Init Dashboard Controller');
     loadTasks();
@@ -43,10 +45,22 @@
     }// #loadTasks
 
 ////////////////////////////////////////////////////////
+    function change(item) {
+          if (item.selected) {
+              vm.selectedCounter++
+          } else {
+              vm.selectedCounter--
+          }
+      };
+
+
     function getTasks(){
-      return dataservice.getTasks()
+      var param = '?completed=false'
+      return dataservice.getTasks(param)
           .then(function(data) {
             vm.tasks = data;
+            console.log('Tasks: ');
+            console.log(data);
             return vm.tasks;
           })
           .then(function(data) {
@@ -85,12 +99,18 @@
 
          $mdDialog.show(confirm).then(function() {
             var ids = getSelectedTasks();
-           return dataservice.removeTasks(ids)
-                     .then(getTasks);
-         }, function() {
-           console.log('Anulowano usuwanie');
-         });
+            return dataservice.removeTasks(ids)
+                     .then(function(data) {
+                       console.log('Usunięto zaznaczone zadania.');
+                       console.log(data);
+                       getTasks(); // do zmiany
+                     });
+
+             }, function() {
+               console.log('Anulowano usuwanie');
+             });
     }// #removeTasks
+
 
     function getSelectedTasks() {
       var ids = [];
@@ -107,10 +127,29 @@
     function toggleTask(item) {
       return dataservice.toggleTask(item._id)
                 .then(function(data) {
+                  console.log(data);
                   return data;
-                }).then(function(data) {
-                  return getTasks();
-                });
+                })
+                .then(function(data) {
+
+                  console.log(data);
+                  getTasks();
+
+                  // var currentTaskIndex =  vm.tasks.findIndex(element => element.isPerforming === true);
+                  // vm.tasks[currentTaskIndex].isPerforming = false;
+                  // var index = vm.tasks.findIndex(element => element._id === data._id)
+                  // vm.tasks[index] = data;
+                  //
+                  // if(data.isPerforming) {
+                  //   vm.stopTimer();
+                  //   vm.countDuration(data);
+                  //   vm.startTimer(data);
+                  // }
+
+                })
+                .catch(function(err) {
+                  console.log(err);
+                })
 
     }// #toogleTask
 
@@ -170,24 +209,45 @@
     }
 
     function editTask(ev, item) {
-      $mdDialog.show({
-        locals: {
-          task: item
-        },
-        controller: EditTaskDialogController,
-        controllerAs: 'edc',
-        templateUrl: '/layout.home/edit.task.dialog.html',
-        parent: angular.element(document.body),
-        targetEvent: ev,
-        clickOutsideToClose: true,
-        fullscreen: true
+      return dataservice.getTasks(item._id)
+      .then(function(data) {
+        console.log(data);
+        $mdDialog.show({
+          locals: {
+            task: data[0]
+          },
+          controller: EditTaskDialogController,
+          controllerAs: 'edc',
+          templateUrl: '/layout.home/edit.task.dialog.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true
+        })
+        .then(function(answer) {
+          console.log('Dialog OK: ' + answer);
+        }, function(){
+          console.log('Cancel dialog.');
+        });
       })
-      .then(function(answer) {
-        console.log('Dialog OK: ' + answer);
-      }, function(){
-        console.log('Cancel dialog.');
-      });
+      .catch(function(err) {
+        console.log(err);
+      })
+
     }// #editTask
+
+    function getSelectedTasksObject() {
+      var tasks = [];
+      var len = vm.tasks.length;
+      for (var i = len; i--; ) {
+        if (vm.tasks[i].selected){
+          tasks.push( vm.tasks[i]);
+        }
+      }
+      return tasks;
+    }
+
+
 
 
     //-------------------------------------------------

@@ -18,7 +18,8 @@ var isAuthenticated = function (req, res, next) {
 /** GET all tasks */
 router.get('/', isAuthenticated, function(req, res) {
 
-	var getTasksPromise = query.getUserTasks(req.user.id );
+	var getTasksPromise = query.getUserTasks(req.user.id, req.query);
+
 	getTasksPromise.then(function(data){
 		res.send(data);
 	})
@@ -42,15 +43,6 @@ router.get('/:id', function(req, res) {
 
 router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
-		// var toggleTaskPromise = query.toggleUserTask(req.user.id, req.params.id);
-		// console.log(toggleTaskPromise);
-		// toggleTaskPromise.then(function(data) {
-		// 	res.send(JSON.stringify(data));
-		// })
-		// .catch(function(err) {
-		// 	res.send(JSON.stringify({err: {message: 'Cannot toggle task of given id.'}}))
-		// })
-		// stopAllUserTasks działa
 		var stop = query.toggleUserTask(req.user.id, req.params.id);
 		stop.then(function(data) {
 				console.log('tooggle resolved: ');
@@ -68,33 +60,22 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 });
 
  /**
-  *  GET Report
+  *  GET - dayView
   */
 
-  router.get('/report/:year-:month', function(req, res) {
+  router.get('/dayView/:date', function(req, res) {
 
-      var userID = req.session.passport.user;
-      // moth - from 0 - 11
-      // date - day on the month - 1-31
-      var year = parseInt(req.params.year);
-      var month = parseInt(req.params.month);
-      var fromDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-      var lastDayOfMonth = new Date(year, month, 0, 23, 59, 59, 0);
-      //fromDate = fromDate.toISOString();
-     // lastDayOfMonth = lastDayOfMonth.toISOString();
-      console.log('fd: ' +  fromDate);
-     // console.log('ld: ' +  lastDayOfMonth.toISOString());
-      console.log(userID);
+		var promise = query.getUserTasksByDate(req.user.id, Number(req.params.date));
 
-      Task.find( { "_creator": userID ,"updated":  { "$gte": fromDate, "$lte": lastDayOfMonth } }, function(err, data) {
-          if (err) {
-              console.log(err);
-              res.send('error - cannot get report');
-          } else {
-              console.log(data);
-            res.send(data);
-          }
-      })
+		promise.then(function(data) {
+			res.status(200);
+			res.send(JSON.stringify(data))
+		})
+		.catch(function(err) {
+			console.log(err);
+			res.status(500);
+			res.send(err);
+		});
 
   });
 
@@ -108,7 +89,7 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 			console.log(body);
 			if(typeof body.desc != 'string'||	typeof body.category!='string' || typeof body.project!='string') {
 				res.status(400);
-				res.send({message: 'Fill all required data in form!'});
+				res.send({message: 'Wypełnij wszystkie pola. Sprawdz swój profil podpowiedzi.'});
 			} else {
 					var addTaskPromise = query.addTask(body, userId);
 					addTaskPromise.then(function(data) {
@@ -122,6 +103,14 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 					})
 			}
   });
+
+	// dayView POST
+	router.post('/dayViewEdit/', isAuthenticated, function(req, res) {
+		console.log(req.body);
+
+		res.status(200);
+		res.send('OK');
+	})
 
 
 
@@ -156,22 +145,36 @@ router.post('/toggle/:id', isAuthenticated, function(req, res) {
 
     });
 
+		router.post('/edit/history/', function (req, res) {
 
-    /**
-     *  GET categories
-     */
-
-    router.get('/categories/', function(req, res) {
-        var cat = [ "Instalacja",
-            "Konfiguracja",
-            "Testy"];
-
-
+			var userId = req.user.id;
+			var newItem = req.body;
+			var editHistoryItemPromise = query.editTaskHistoryItem(userId, newItem);
+			editHistoryItemPromise.then(function(data) {
 				res.status(200);
-        res.send(JSON.stringify(cat));
-    });
+				res.send('Zapisano wprowadzone zmiany!');
+			})
+			.catch(function(err) {
+				res.status(500);
+				res.send(err);
+			})
 
-		router.get('/projects/', function(req, res) {
+		});
+
+		router.delete('/edit/history/:id',isAuthenticated, function(req, res) {
+			var userId = req.user.id;
+			var historyItemId = req.params.id;
+
+			var removePromise = query.removeTaskHistoryItem(userId, historyItemId);
+
+			removePromise.then(function(data) {
+				res.status(200);
+				res.send('Usunięto!');
+			})
+			.catch(function(err){
+				res.status(500);
+				res.send(err.message);
+			})
 
 		})
 
