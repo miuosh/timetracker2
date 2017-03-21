@@ -28,7 +28,7 @@ a {
     margin: 0px 0px;
     padding: 0px 0px;
   }
-  .table-checkbox, .table-updated,.table-updated, .table-project, .table-category, .table-duration, .table-edit-btn {
+  .table-checkbox, .table-updated,.table-updated, .table-project, .table-category, .table-duration, .table-edit-btn, .logout-btn {
     display: none;
   }
   .table-desc {
