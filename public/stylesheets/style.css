@@ -226,6 +226,7 @@ md-checkbox .md-container {
 
 .table-dayview-desc {
   max-width: 60%;
+  padding-bottom: 2px;
 }
 .table-dayview-project {
   width: 10%;
