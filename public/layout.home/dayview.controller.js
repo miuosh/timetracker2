@@ -106,7 +106,7 @@
         vm.filteredTasks[i].history = vm.filteredTasks[i].history.filter(isCurrentDayTimespan);
       }
     }
-    
+
     function isCurrentDayTimespan(timespan) {
       var startTime = new Date(timespan.startTime);
       if (startTime.getDate() === vm.viewDate.getDate() && startTime.getMonth() === vm.viewDate.getMonth() && startTime.getFullYear() === vm.viewDate.getFullYear()  ) return timespan;
@@ -123,6 +123,8 @@
             tmp.push({
               _id : vm.filteredTasks[i]._id,
               desc: vm.filteredTasks[i].desc,
+              project: vm.filteredTasks[i].project,
+              category: vm.filteredTasks[i].category,
               isCompleted: vm.filteredTasks[i].isCompleted,
               timespan: vm.filteredTasks[i].history[j],
               duration: vm.filteredTasks[i].history[j].dt,
