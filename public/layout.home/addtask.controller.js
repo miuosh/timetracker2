@@ -77,6 +77,8 @@
               .then(function(data) {
                 if(data[0] !== undefined) {
                   vm.profile = data[0];
+                  vm.profile.categories.sort();
+                  vm.profile.projects.sort();
                   return data[0];
                 } else {
                   vm.profile.categories = [];

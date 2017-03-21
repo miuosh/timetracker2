@@ -16,11 +16,6 @@
   <table width="100%" layout-padding>
     <thead>
       <tr>
-
-        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
-          Opis
-          <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
-        </th>
         <th class="pointer" ng-click="sortType = 'project'; sortReverse = !sortReverse ">
           Projekt
           <span class="sortorder" ng-show="sortType === 'project'" ng-class="{sortReverse: sortReverse}"></span>
@@ -28,6 +23,10 @@
         <th class="pointer" ng-click="sortType = 'category'; sortReverse = !sortReverse ">
           Kategoria
           <span class="sortorder" ng-show="sortType === 'category'" ng-class="{sortReverse: sortReverse}"></span>
+        </th>
+        <th class="pointer" ng-click="sortType = 'desc'; sortReverse = !sortReverse ">
+          Opis
+          <span class="sortorder" ng-show="sortType === 'desc'" ng-class="{sortReverse: sortReverse}"></span>
         </th>
         <th class="table-creation-date pointer" ng-click="sortType = 'creationDate'; sortReverse = !sortReverse ">
           Data utworzenia
@@ -46,10 +45,9 @@
     </thead>
     <tbody>
       <tr style="height: 3em" ng-mouseover="edit = true" ng-mouseleave="edit = false" ng-repeat="item in vm.tasks | orderBy:sortType:sortReverse | filter:searchText" ng-if="item.isCompleted">
-
-        <td class="table-desc">{{ item.desc }}</td>
         <td class="table-project">{{ item.project }}</td>
         <td class="table-category">{{ item.category }}</td>
+        <td class="table-desc">{{ item.desc }}</td>
         <td class="table-creation-date">{{ item.creationDate | date:'yyyy-MM-dd HH:mm'}}</td>
         <td class="table-updated-completed">{{ item.updated | date:'yyyy-MM-dd HH:mm' }}</td>
         <td class="table-duration">{{ item.duration | formatDuration }}</td>
