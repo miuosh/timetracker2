@@ -14,6 +14,11 @@ a {
 }
 #left-navmenu, #left-sidebar {
   background-color:#303F9F;
+  min-width: 200px;
+}
+#left-navmenu {
+  position: fixed;
+  min-width: 200px;
 }
 
 @media screen and (max-width: 600px){

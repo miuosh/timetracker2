@@ -1,12 +1,18 @@
 <!-- home page -->
 
-<div layout="row"   layout-align="start start" ng-controller="LayoutController as lvm" >
-  <!-- left side nav -->
-  <div id="left-sidebar" layout="column" flex="15" class="md-whiteframe-4dp" ng-include="'layout.home/sidenav.html'" ng-controller="SideNavController as vm"></div>
+<div layout="column"   layout-align="start stretch" ng-controller="LayoutController as lvm" >
 
-  <!-- home dashboard -->
-  <!-- <div layout="column" flex="80" layout-margin ng-include="'layout.home/dashboard.html'" ng-controller="DashboardController as vm"></div> -->
-  <div id="main-body"  layout="column" flex="100" layout-margin layout-padding layout-fill ng-include="lvm.subPage" ></div>
-  <!-- alternative use $routeparams -->
+  <div ng-include="'partials/topnav.html'"></div>
+
+  <div layout="row">
+    <!-- left side nav -->
+    <div id="left-sidebar" layout="column"   ng-include="'layout.home/sidenav.html'" ng-controller="SideNavController as vm"></div>
+
+    <!-- home dashboard -->
+    <!-- <div layout="column" flex="80" layout-margin ng-include="'layout.home/dashboard.html'" ng-controller="DashboardController as vm"></div> -->
+    <div id="main-body"  layout="column" flex="100" layout-margin layout-padding layout-fill ng-include="lvm.subPage" ></div>
+    <!-- alternative use $routeparams -->
+
+  </div>
 
 </div>
