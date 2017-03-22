@@ -19,11 +19,16 @@
       //completed tasks
       vm.completed = false;
 
+      vm.groupedProjects = {};
 
+      vm.groupedDatasetByCategory = [];
+
+      var initDatasetByCategory = initDatasetByCategory; // group tasks by project and then each project by category
+//-----------------------------------------------------------------------------------
       console.log('Init ChartController...');
       init()
 
-
+//-----------------------------------------------------------------------------------
       function init() {
         var now = new Date();
         vm.fromDate = new Date(now.getFullYear(), now.getMonth(), 1, 23, 59, 59, 0);
@@ -49,12 +54,63 @@
             console.log( vm.projectData);
             console.log( vm.categoryData);
 
-
-
+            /* reduce to single object with key (name) = <name of project>
+            and value => array of tasks with the same project name
+            */
+            initDatasetByCategory(data);
           })
       }
 
+      function initDatasetByCategory(data) {
+        vm.groupedProjects = {};
+        vm.groupedDatasetByCategory = [];
 
+        vm.groupedProjects = groupBy(data, 'project');
+        console.log(vm.groupedProjects);
+        console.log('--------------- Chart dataset ------------------');
+
+        for (var key in vm.groupedProjects) {
+          console.log('----------------- ' + key + '------------------');
+          var dataset = getCategoryDataset(vm.groupedProjects[key]);
+
+          vm.groupedDatasetByCategory.push({
+            chartDataset : dataset,
+            project : key
+          })
+        }
+        console.log('---- groupedDatasetByCategory ----');
+        console.log(vm.groupedDatasetByCategory);
+      }//#initDatasetByCategory
+
+      function groupBy(xs, key) {
+        return xs.reduce(function(rv, x) {
+          (rv[x[key]] = rv[x[key]] || []).push(x);
+          return rv;
+        }, {});
+      };
+
+      function getCategoryDataset(tasks) {
+        var result = getCategoryReducedObject(tasks); //group by category
+        var categoryDataset = prepareChartData(result); //
+        categoryDataset.options = {
+          responsive : true,
+          title : {
+            display : true,
+            text: 'Kategorie [%]',
+            position: 'top'
+          },
+          legend: {
+              display: true,
+              labels: {
+                  fontColor: 'rgb(255, 99, 132)'
+              },
+              position: 'bottom',
+              fullWidth : true,
+              reverse: true
+          }
+        }
+        return categoryDataset;
+      }
 
       function prepareCategoryDataset(data) {
        var result = getCategoryReducedObject(data);
@@ -120,7 +176,12 @@
         return result;
       }//#
 
-
+      /*
+      Convert function argument - object - pair <key> : <value> to chart data.
+      label -> array of <keys>
+      rawData -> array of coresponding <values>
+      data -> % values of rawData
+      */
       function prepareChartData(result) {
         console.log('Prepare chart data..');
         var summaryDuration = 0;
@@ -142,7 +203,7 @@
           chartData.dataOverride.push(result[key]);
         }
         chartData.rawData = result;
-        console.log(chartData);
+        chartData.summaryDuration = summaryDuration;
         return chartData;
       }//#prepareChartData
 

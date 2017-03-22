@@ -238,6 +238,19 @@ md-checkbox .md-container {
   width: 10%;
   text-align: center;
 }
+
+/*
+ Statistics
+*/
+
+.project-details {
+  padding-top:1.6em;
+  padding-bottom: 2em;
+  border-top: 1px solid black;
+  border-top-color: rgba(0,0,0,0.12);
+
+}
+
 /*
   Reports
 */
