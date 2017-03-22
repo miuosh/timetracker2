@@ -14,10 +14,15 @@ a {
 }
 #left-navmenu, #left-sidebar {
   background-color:#303F9F;
+  min-width: 200px;
+}
+#left-navmenu {
+  position: fixed;
+  min-width: 200px;
 }
 
 @media screen and (max-width: 600px){
-  #left-navmenu, #left-sidebarn, #newTask {
+  #left-navmenu, #left-sidebar, #newTask {
     display:none;
   }
   html {
@@ -28,7 +33,7 @@ a {
     margin: 0px 0px;
     padding: 0px 0px;
   }
-  .table-checkbox, .table-updated,.table-updated, .table-project, .table-category, .table-duration, .table-edit-btn {
+  .table-checkbox, .table-updated,.table-updated, .table-project, .table-category, .table-duration, .table-edit-btn, .logout-btn {
     display: none;
   }
   .table-desc {
@@ -154,7 +159,7 @@ md-checkbox .md-container {
 }
 
 .table-project {
-  width: 10%;
+  width: 8%;
   /*font-weight: bold;*/
   text-align: center;
 }
@@ -238,6 +243,19 @@ md-checkbox .md-container {
   width: 10%;
   text-align: center;
 }
+
+/*
+ Statistics
+*/
+
+.project-details {
+  padding-top:1.6em;
+  padding-bottom: 2em;
+  border-top: 1px solid black;
+  border-top-color: rgba(0,0,0,0.12);
+
+}
+
 /*
   Reports
 */

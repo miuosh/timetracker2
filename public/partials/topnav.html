@@ -1,4 +1,4 @@
-<nav class="md-whiteframe-2dp" style="background-color:#1A237E; color: white" layout="row" layout-align="end start" >
+<nav class="md-whiteframe-2dp" style="background-color:#1A237E; color: white" layout="row" >
     <!-- column 1 -->
       <div flex="20" layout="row" >
         <h4 style="margin: 0px; padding: 20px">TimeTracker</h4>
@@ -8,9 +8,9 @@
       </div>
     <!-- column 3 -->
 
-        <div ng-controller="LogoutController as vm" >
+        <div ng-controller="LogoutController as vm" class="logout-btn">
 
-          <h5 ng-if="!vm.isLoggedIn()" style="margin-right: 10px;">ver 0.6.0</h5>
+          <h5 ng-if="!vm.isLoggedIn()" style="margin-right: 10px;">ver 0.6.1</h5>
           <div ng-if="vm.isLoggedIn()" layout-align="end none" >
             <md-button ng-click='vm.logout()' class="md-raised md-primary">Wyloguj</md-button>
           </div>

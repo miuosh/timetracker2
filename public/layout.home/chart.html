@@ -70,7 +70,7 @@
 
 </div>
 
-
+<!-- overall projects, categories - tables -->
 <div layout="row" layout-align="space-around center">
   <div >
     <table>
@@ -82,7 +82,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr style="height: 2em" ng-repeat="(key, value) in vm.projectData.rawData ">
+        <tr style="height: 2em" ng-repeat="(key, value) in vm.projectData.rawData">
           <td class="table-statistic-col">{{ key }}</td>
           <td class="table-statistic-col">{{ value | formatDuration : false }}</td>
           <td class="table-statistic-col">{{ (value / vm.summaryTime) * 100.0 | number : 1 }}</td>
@@ -109,7 +109,46 @@
       </tbody>
     </table>
   </div>
-
 </div>
 
+<br />
+
+
+<!-- category chart and table - group by project -->
+<div layout="column" layout-align="space-between stretch">
+  <div layout="column" ng-repeat="item in vm.groupedDatasetByCategory" class="project-details" layout-align="center center">
+    <!-- section header -->
+    <div>
+        <h2>{{ item.project }}</h2>
+    </div>
+
+    <div layout="row">
+      <!-- chart -->
+      <div style="max-width: 300px;">
+        <canvas id="pie" class="chart chart-doughnut" width="400" height="400"
+          chart-data="item.chartDataset.data" chart-labels="item.chartDataset.labels" chart-options="item.chartDataset.options" chart-dataset-override="vm.categoryData.dataOverride">
+        </canvas>
+      </div>
+      <!-- table -->
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th class="table-statistic-col">Kategoria</th>
+              <th class="table-statistic-col">Czas</th>
+              <th class="table-statistic-col">[%]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="height: 2em" ng-repeat="(key, value) in item.chartDataset.rawData ">
+              <td class="table-statistic-col">{{ key }}</td>
+              <td class="table-statistic-col">{{ value | formatDuration : false }}</td>
+              <td class="table-statistic-col">{{ (value / item.chartDataset.summaryDuration) * 100.0 | number : 1 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
